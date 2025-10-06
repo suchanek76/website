@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>suchanci</title>
+    <title>Suchánci na horách</title>
     <style>
         * {
             margin: 0;
@@ -15,126 +15,166 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             line-height: 1.6;
             color: #333;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
+        }
+        
+        .header {
+            height: 400px;
+            background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.5)), 
+                        url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1600') center/cover;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+        
+        .header h1 {
+            font-size: 4rem;
+            animation: fadeIn 1.5s ease;
+        }
+        
+        .container {
+            display: flex;
+            min-height: calc(100vh - 400px);
+        }
+        
+        .sidebar {
+            width: 300px;
+            background: #2c3e50;
+            color: white;
+            padding: 2rem 0;
+            overflow-y: auto;
+            position: sticky;
+            top: 0;
+            height: calc(100vh - 400px);
+        }
+        
+        .sidebar h2 {
+            padding: 0 1.5rem 1rem;
+            font-size: 1.3rem;
+            border-bottom: 2px solid #34495e;
+            margin-bottom: 1rem;
+        }
+        
+        .mountain-list {
+            list-style: none;
+        }
+        
+        .mountain-item {
+            padding: 1rem 1.5rem;
+            cursor: pointer;
+            transition: background 0.3s;
+            border-left: 3px solid transparent;
+        }
+        
+        .mountain-item:hover {
+            background: #34495e;
+            border-left-color: #3498db;
+        }
+        
+        .mountain-item.active {
+            background: #34495e;
+            border-left-color: #3498db;
+        }
+        
+        .mountain-name {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 0.3rem;
+        }
+        
+        .mountain-meta {
+            font-size: 0.85rem;
+            color: #bdc3c7;
+        }
+        
+        .content {
+            flex: 1;
+            padding: 3rem;
+        }
+        
+        .mountain-detail {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        .mountain-detail.active {
+            display: block;
+        }
+        
+        .mountain-detail h2 {
+            color: #2c3e50;
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .mountain-info {
+            background: #ecf0f1;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+        
+        .info-item {
             display: flex;
             flex-direction: column;
         }
         
-        header {
-            background: rgba(255, 255, 255, 0.95);
-            padding: 2rem;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-        
-        nav {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        
-        .logo {
-            font-size: 1.5rem;
+        .info-label {
             font-weight: bold;
-            color: #667eea;
+            color: #7f8c8d;
+            font-size: 0.9rem;
         }
         
-        nav ul {
-            list-style: none;
-            display: flex;
-            gap: 2rem;
+        .info-value {
+            font-size: 1.1rem;
+            color: #2c3e50;
         }
         
-        nav a {
-            text-decoration: none;
-            color: #333;
-            transition: color 0.3s;
-        }
-        
-        nav a:hover {
-            color: #667eea;
-        }
-        
-        main {
-            flex: 1;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 4rem 2rem;
+        .mountain-image {
             width: 100%;
-        }
-        
-        .hero {
-            text-align: center;
-            color: white;
-            margin-bottom: 4rem;
-        }
-        
-        .hero h1 {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-            animation: fadeInUp 1s ease;
-        }
-        
-        .hero p {
-            font-size: 1.3rem;
+            max-height: 500px;
+            object-fit: cover;
+            border-radius: 12px;
             margin-bottom: 2rem;
-            animation: fadeInUp 1s ease 0.2s backwards;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
         }
         
-        .btn {
-            display: inline-block;
-            padding: 1rem 2rem;
-            background: white;
-            color: #667eea;
-            text-decoration: none;
-            border-radius: 5px;
-            font-weight: bold;
-            transition: transform 0.3s, box-shadow 0.3s;
-            animation: fadeInUp 1s ease 0.4s backwards;
+        .mountain-description {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: #555;
         }
         
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+        .about-section {
+            display: block;
+            animation: fadeIn 0.5s ease;
         }
         
-        .content {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-            margin-top: 3rem;
+        .about-section.hidden {
+            display: none;
         }
         
-        .card {
-            background: white;
-            padding: 2rem;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            transition: transform 0.3s;
+        .about-section h2 {
+            color: #2c3e50;
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
         }
         
-        .card:hover {
-            transform: translateY(-5px);
-        }
-        
-        .card h2 {
-            color: #667eea;
+        .about-section p {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: #555;
             margin-bottom: 1rem;
         }
         
-        footer {
-            background: rgba(255, 255, 255, 0.95);
-            text-align: center;
-            padding: 2rem;
-            margin-top: auto;
-        }
-        
-        @keyframes fadeInUp {
+        @keyframes fadeIn {
             from {
                 opacity: 0;
-                transform: translateY(30px);
+                transform: translateY(20px);
             }
             to {
                 opacity: 1;
@@ -143,55 +183,193 @@
         }
         
         @media (max-width: 768px) {
-            .hero h1 {
-                font-size: 2rem;
+            .header h1 {
+                font-size: 2.5rem;
             }
             
-            nav ul {
-                gap: 1rem;
+            .container {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+            }
+            
+            .content {
+                padding: 1.5rem;
             }
         }
     </style>
 </head>
 <body>
-    <header>
-        <nav>
-            <div class="logo">MůjWeb</div>
-            <ul>
-                <li><a href="#home">Domů</a></li>
-                <li><a href="#about">O nás</a></li>
-                <li><a href="#contact">Kontakt</a></li>
+    <div class="header">
+        <h1>Suchánci na horách</h1>
+    </div>
+    
+    <div class="container">
+        <aside class="sidebar">
+            <h2>Koruna Evropy</h2>
+            <ul class="mountain-list" id="mountainList">
+                <li class="mountain-item" data-mountain="about">
+                    <span class="mountain-name">🏠 O nás</span>
+                </li>
             </ul>
-        </nav>
-    </header>
-    
-    <main>
-        <section class="hero">
-            <h1>Suchánci na horách</h1>
-            <p>výstupy na Korunu Evropy a Alpské čtyřtisícovky</p>
-            <a href="#about" class="btn">Zjistit více</a>
-        </section>
+        </aside>
         
-        <div class="content">
-            <div class="card">
-                <h2>Mont Blanc</h2>
-                <p>Stránka vypadá skvěle na všech zařízeních - od mobilů po velké obrazovky.</p>
+        <main class="content">
+            <div class="about-section" id="aboutSection">
+                <h2>Něco o nás</h2>
+                <p>Vítejte na našich stránkách! Jsme rodina Suchánků a naší vášní je horolezectví a poznávání nejvyšších vrcholů Evropy.</p>
+                <p>Náš cíl je zdolat všechny vrcholy Koruny Evropy - sedmi nejvyšších hor sedmi evropských pohoří. Tato výzva nás spojuje a motivuje k novým dobrodružstvím.</p>
+                <p>Na těchto stránkách najdete informace o jednotlivých vrcholech, naše zážitky a fotografie z našich výprav. Sledujte naši cestu a nechte se inspirovat k vlastním dobrodružstvím v horách!</p>
             </div>
             
-            <div class="card">
-                <h2>Dufourspitze</h2>
-                <p>Čistý a profesionální design s plynulými animacemi a přechody.</p>
-            </div>
-            
-            <div class="card">
-                <h2>Grossglockner</h2>
-                <p>Žádné externí závislosti - vše je součástí jednoho HTML souboru.</p>
-            </div>
-        </div>
-    </main>
+            <div class="mountain-detail" id="mountainDetail"></div>
+        </main>
+    </div>
     
-    <footer>
-        <p>&copy; 2025 MůjWeb. Vytvořeno s pomocí Claude.</p>
-    </footer>
+    <script>
+        const mountains = [
+            {
+                id: 'elbrus',
+                name: 'Elbrus',
+                country: 'Rusko',
+                height: '5642 m',
+                range: 'Kavkaz',
+                image: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200',
+                description: 'Elbrus je nejvyšší horou Evropy a nachází se v pohoří Kavkaz na hranici mezi Ruskem a Gruzií. Jedná se o neaktivní sopku s dvěma vrcholy, přičemž západní vrchol je o něco vyšší. Elbrus je pokryt věčným sněhem a ledovci a jeho zdolání je jednou z výzev Koruny Evropy.'
+            },
+            {
+                id: 'mont-blanc',
+                name: 'Mont Blanc',
+                country: 'Francie/Itálie',
+                height: '4808 m',
+                range: 'Alpy',
+                image: 'https://images.unsplash.com/photo-1531366936337-7c912a4589a7?w=1200',
+                description: 'Mont Blanc, "Bílá hora", je nejvyšší horou Alp a západní Evropy. Nachází se na hranici mezi Francií a Itálií. První zdokumentovaný výstup proběhl v roce 1786. Hora je velmi populární mezi horolezci a turisty z celého světa.'
+            },
+            {
+                id: 'grossglockner',
+                name: 'Grossglockner',
+                country: 'Rakousko',
+                height: '3798 m',
+                range: 'Východní Alpy',
+                image: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200',
+                description: 'Grossglockner je nejvyšší horou Rakouska a nachází se v Vysokých Taurách. Jeho název znamená "Velký zvoník". První výstup byl proveden v roce 1800. Hora je obklopena ledovci, z nichž nejznámější je Pasterze, největší ledovec východních Alp.'
+            },
+            {
+                id: 'mulhacen',
+                name: 'Mulhacén',
+                country: 'Španělsko',
+                height: '3479 m',
+                range: 'Sierra Nevada',
+                image: 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=1200',
+                description: 'Mulhacén je nejvyšší horou španělského kontinentu a celého Iberského poloostrova. Nachází se v pohoří Sierra Nevada v Andalusii. Hora je pojmenována podle maurského krále Muley Hacena. Z vrcholu je za dobrého počasí vidět Středozemní moře a severní Afriku.'
+            },
+            {
+                id: 'gerlach',
+                name: 'Gerlachovský štít',
+                country: 'Slovensko',
+                height: '2655 m',
+                range: 'Vysoké Tatry',
+                image: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200',
+                description: 'Gerlachovský štít je nejvyšší horou Slovenska a celých Karpat. Nachází se ve Vysokých Tatrách. První výstup na vrchol byl proveden v roce 1834. Hora je oblíbená mezi horolezci a nabízí nádherné výhledy na tatranskou krajinu.'
+            },
+            {
+                id: 'musala',
+                name: 'Musala',
+                country: 'Bulharsko',
+                height: '2925 m',
+                range: 'Rila',
+                image: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200',
+                description: 'Musala je nejvyšší horou Bulharska a celého pohoří Balkán. Nachází se v pohoří Rila. Název hory pochází z arabského "má ša alláh", což znamená "jak Bůh chtěl". V zimě je vrchol pokryt sněhem, v létě nabízí krásné výhledy na okolní krajinu.'
+            },
+            {
+                id: 'olympus',
+                name: 'Olymp',
+                country: 'Řecko',
+                height: '2918 m',
+                range: 'Olymp',
+                image: 'https://images.unsplash.com/photo-1601485175726-38840db1abe8?w=1200',
+                description: 'Olymp je nejvyšší horou Řecka a v řecké mytologii sídlem bohů. Nachází se v severním Řecku blízko pobřeží Egejského moře. Hora má několik vrcholů, přičemž nejvyšším je Mytikas. První oficiální výstup byl proveden v roce 1913.'
+            }
+        ];
+        
+        const mountainList = document.getElementById('mountainList');
+        const mountainDetail = document.getElementById('mountainDetail');
+        const aboutSection = document.getElementById('aboutSection');
+        
+        mountains.forEach(mountain => {
+            const li = document.createElement('li');
+            li.className = 'mountain-item';
+            li.dataset.mountain = mountain.id;
+            li.innerHTML = `
+                <span class="mountain-name">${mountain.name}</span>
+                <span class="mountain-meta">${mountain.country} • ${mountain.height}</span>
+            `;
+            mountainList.appendChild(li);
+        });
+        
+        function showMountain(mountainId) {
+            const mountain = mountains.find(m => m.id === mountainId);
+            if (!mountain) return;
+            
+            mountainDetail.innerHTML = `
+                <h2>${mountain.name}</h2>
+                <div class="mountain-info">
+                    <div class="info-item">
+                        <span class="info-label">Výška</span>
+                        <span class="info-value">${mountain.height}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Stát</span>
+                        <span class="info-value">${mountain.country}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Pohoří</span>
+                        <span class="info-value">${mountain.range}</span>
+                    </div>
+                </div>
+                <img src="${mountain.image}" alt="${mountain.name}" class="mountain-image">
+                <div class="mountain-description">
+                    <p>${mountain.description}</p>
+                </div>
+            `;
+            
+            aboutSection.classList.add('hidden');
+            mountainDetail.classList.add('active');
+            
+            document.querySelectorAll('.mountain-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            document.querySelector(`[data-mountain="${mountainId}"]`).classList.add('active');
+        }
+        
+        function showAbout() {
+            mountainDetail.classList.remove('active');
+            aboutSection.classList.remove('hidden');
+            
+            document.querySelectorAll('.mountain-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            document.querySelector('[data-mountain="about"]').classList.add('active');
+        }
+        
+        mountainList.addEventListener('click', (e) => {
+            const item = e.target.closest('.mountain-item');
+            if (!item) return;
+            
+            const mountainId = item.dataset.mountain;
+            if (mountainId === 'about') {
+                showAbout();
+            } else {
+                showMountain(mountainId);
+            }
+        });
+        
+        document.querySelector('[data-mountain="about"]').classList.add('active');
+    </script>
 </body>
 </html>
