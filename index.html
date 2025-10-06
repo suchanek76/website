@@ -654,7 +654,7 @@
             li.dataset.mountain = mountain.id;
             li.innerHTML = `
                 <span class="mountain-name">${mountain.name}</span>
-                <span class="mountain-meta">${mountain.country} • ${mountain.height} • ${mountain.date}</span>
+                <span class="mountain-meta">${mountain.country} • ${mountain.height}</span>
             `;
             mountainList.appendChild(li);
         });
@@ -677,6 +677,10 @@
                     <div class="info-item">
                         <span class="info-label">Pohoří</span>
                         <span class="info-value">${mountain.range}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Datum Výstupu</span>
+                        <span class="info-value">${mountain.date}</span>
                     </div>
                 </div>
                 <img src="${mountain.image}" alt="${mountain.name}" class="mountain-image">
