@@ -15,6 +15,43 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             line-height: 1.6;
             color: #333;
+            padding-top: 60px;
+        }
+        
+        .top-nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            display: flex;
+            gap: 0;
+            background: #2c3e50;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        }
+        
+        .top-nav a {
+            color: white;
+            text-decoration: none;
+            font-size: 1rem;
+            font-weight: 500;
+            padding: 1.2rem 2rem;
+            transition: all 0.3s;
+            flex: 1;
+            text-align: center;
+            border-right: 1px solid #34495e;
+        }
+        
+        .top-nav a:last-child {
+            border-right: none;
+        }
+        
+        .top-nav a:hover {
+            background: #34495e;
+        }
+        
+        .top-nav a.active {
+            background: #3498db;
         }
         
         .header {
@@ -22,6 +59,7 @@
             background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.5)), 
                         url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1600') center/cover;
             display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
             color: white;
@@ -149,22 +187,22 @@
             color: #555;
         }
         
-        .about-section {
-            display: block;
+        .section-content {
+            display: none;
             animation: fadeIn 0.5s ease;
         }
         
-        .about-section.hidden {
-            display: none;
+        .section-content.active {
+            display: block;
         }
         
-        .about-section h2 {
+        .section-content h2 {
             color: #2c3e50;
             font-size: 2.5rem;
             margin-bottom: 1.5rem;
         }
         
-        .about-section p {
+        .section-content p {
             font-size: 1.1rem;
             line-height: 1.8;
             color: #555;
@@ -187,6 +225,16 @@
                 font-size: 2.5rem;
             }
             
+            .top-nav {
+                flex-wrap: wrap;
+            }
+            
+            .top-nav a {
+                flex: 1 1 50%;
+                padding: 1rem;
+                font-size: 0.9rem;
+            }
+            
             .container {
                 flex-direction: column;
             }
@@ -204,466 +252,103 @@
     </style>
 </head>
 <body>
+    <nav class="top-nav">
+        <a href="#home" class="nav-link active" data-section="home">Domů</a>
+        <a href="#koruna-evropy" class="nav-link" data-section="koruna-evropy">Koruna Evropy</a>
+        <a href="#alpske-ctyrtisicovky" class="nav-link" data-section="alpske-ctyrtisicovky">Alpské čtyřtisícovky</a>
+        <a href="#nepal" class="nav-link" data-section="nepal">Nepál</a>
+        <a href="#stezky" class="nav-link" data-section="stezky">Stezky</a>
+    </nav>
+    
     <div class="header">
         <h1>Suchánci na horách</h1>
     </div>
     
     <div class="container">
-        <aside class="sidebar">
-            <h2>Koruna Evropy</h2>
-            <ul class="mountain-list" id="mountainList">
-                <li class="mountain-item" data-mountain="about">
-                    <span class="mountain-name">🏠 O nás</span>
-                </li>
-            </ul>
+        <aside class="sidebar" id="sidebar">
+            <h2 id="sidebarTitle">Menu</h2>
+            <ul class="mountain-list" id="mountainList"></ul>
         </aside>
         
         <main class="content">
-            <div class="about-section" id="aboutSection">
+            <div class="section-content active" id="home-section">
                 <h2>Něco o nás</h2>
                 <p>Vítejte na našich stránkách! Jsme rodina Suchánků a naší vášní je horolezectví a poznávání nejvyšších vrcholů Evropy.</p>
                 <p>Náš cíl je zdolat všechny vrcholy Koruny Evropy - sedmi nejvyšších hor sedmi evropských pohoří. Tato výzva nás spojuje a motivuje k novým dobrodružstvím.</p>
                 <p>Na těchto stránkách najdete informace o jednotlivých vrcholech, naše zážitky a fotografie z našich výprav. Sledujte naši cestu a nechte se inspirovat k vlastním dobrodružstvím v horách!</p>
             </div>
             
-            <div class="mountain-detail" id="mountainDetail"></div>
+            <div class="section-content" id="koruna-evropy-section"></div>
+            <div class="section-content" id="alpske-ctyrtisicovky-section">
+                <h2>Alpské čtyřtisícovky</h2>
+                <p>Sekce alpských čtyřtisícovek je ve vývoji. Zde najdete informace o všech alpských vrcholech přesahujících 4000 metrů.</p>
+            </div>
+            <div class="section-content" id="nepal-section">
+                <h2>Nepál</h2>
+                <p>Sekce věnovaná našim výpravám do Nepálu je ve vývoji.</p>
+            </div>
+            <div class="section-content" id="stezky-section">
+                <h2>Stezky</h2>
+                <p>Zde najdete informace o našich oblíbených turistických stezkách.</p>
+            </div>
         </main>
     </div>
     
     <script>
-        const mountains = [
-            {
-    id: 'mont-blanc',
-    name: 'Mont Blanc',
-    country: 'Francie/Itálie',
-    height: '4808 m',
-    range: 'Alpy',
-    date: '25.8.2007',
-    image: 'https://images.unsplash.com/photo-1531366936337-7c912a4589a7?w=1200',
-    description: 'Mont Blanc, "Bílá hora", je nejvyšší horou Alp a západní Evropy. Nachází se na hranici mezi Francií a Itálií. První zdokumentovaný výstup proběhl v roce 1786. Hora je velmi populární mezi horolezci a turisty z celého světa.'
-},
-{
-    id: 'dufourspitze',
-    name: 'Dufourspitze',
-    country: 'Švýcarsko',
-    height: '4634 m',
-    range: 'Pennine Alpy',
-    date: '1.1.2000',
-    image: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200',
-    description: 'Dufourspitze je nejvyšší horou Švýcarska a součástí masívu Monte Rosa. Nachází se na hranici mezi Švýcarskem a Itálií v Pennine Alpách. První výstup proběhl v roce 1855. Hora je pojmenována po švýcarském generálu Guillaume-Henri Dufourovi.'
-},
-{
-    id: 'grossglockner',
-    name: 'Grossglockner',
-    country: 'Rakousko',
-    height: '3798 m',
-    range: 'Východní Alpy',
-    date: '1.1.2000',
-    image: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200',
-    description: 'Grossglockner je nejvyšší horou Rakouska a nachází se v Vysokých Taurách. Jeho název znamená "Velký zvoník". První výstup byl proveden v roce 1800. Hora je obklopena ledovci, z nichž nejznámější je Pasterze, největší ledovec východních Alp.'
-},
-{
-    id: 'teide',
-    name: 'Teide',
-    country: 'Španělsko',
-    height: '3718 m',
-    range: 'Kanárské ostrovy',
-    date: '1.1.2000',
-    image: 'https://images.unsplash.com/photo-1551632811-561732d1e306?w=1200',
-    description: 'Teide je nejvyšší horou Španělska a nachází se na ostrově Tenerife na Kanárských ostrovech. Jedná se o aktivní sopku, která je zároveň třetí největší sopečnou strukturou na světě. Je nejnavštěvovanější národní park ve Španělsku a od roku 2007 je součástí světového dědictví UNESCO.'
-},
-{
-    id: 'mulhacen',
-    name: 'Mulhacén',
-    country: 'Španělsko',
-    height: '3479 m',
-    range: 'Sierra Nevada',
-    date: '1.1.2000',
-    image: 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=1200',
-    description: 'Mulhacén je nejvyšší horou španělského kontinentu a celého Iberského poloostrova. Nachází se v pohoří Sierra Nevada v Andalusii. Hora je pojmenována podle maurského krále Muley Hacena. Z vrcholu je za dobrého počasí vidět Středozemní moře a severní Afriku.'
-},
-{
-    id: 'zugspitze',
-    name: 'Zugspitze',
-    country: 'Německo',
-    height: '2962 m',
-    range: 'Wetterstein',
-    date: '1.1.2000',
-    image: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200',
-    description: 'Zugspitze je nejvyšší horou Německa a nachází se v Bavorských Alpách na hranici s Rakouskem. Vrchol je přístupný lanovkou i ozubnicovou dráhou. První zdokumentovaný výstup proběhl v roce 1820. Z vrcholu jsou nádherné výhledy na čtyři země: Německo, Rakousko, Itálii a Švýcarsko.'
-},
-{
-    id: 'coma-pedrosa',
-    name: 'Coma Pedrosa',
-    country: 'Andorra',
-    height: '2943 m',
-    range: 'Pyreneje',
-    date: '1.1.2000',
-    image: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200',
-    description: 'Coma Pedrosa je nejvyšší horou Andorry a nachází se v severozápadní části země v Pyrenejích. Výstup na vrchol je relativně nenáročný a oblíbený mezi turisty. Z vrcholu jsou krásné výhledy na pyrenejskou krajinu a údolí Andorry.'
-},
-{
-    id: 'musala',
-    name: 'Musala',
-    country: 'Bulharsko',
-    height: '2925 m',
-    range: 'Rila',
-    date: '1.1.2000',
-    image: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200',
-    description: 'Musala je nejvyšší horou Bulharska a celého pohoří Balkán. Nachází se v pohoří Rila. Název hory pochází z arabského "má ša alláh", což znamená "jak Bůh chtěl". V zimě je vrchol pokryt sněhem, v létě nabízí krásné výhledy na okolní krajinu.'
-},
-{
-    id: 'olympus',
-    name: 'Olymp',
-    country: 'Řecko',
-    height: '2918 m',
-    range: 'Olymp',
-    date: '1.1.2000',
-    image: 'https://images.unsplash.com/photo-1601485175726-38840db1abe8?w=1200',
-    description: 'Olymp je nejvyšší horou Řecka a v řecké mytologii sídlem bohů. Nachází se v severním Řecku blízko pobřeží Egejského moře. Hora má několik vrcholů, přičemž nejvyšším je Mytikas. První oficiální výstup byl proveden v roce 1913.'
-},
-{
-    id: 'triglav',
-    name: 'Triglav',
-    country: 'Slovinsko',
-    height: '2864 m',
-    range: 'Julské Alpy',
-    date: '1.1.2000',
-    image: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200',
-    description: 'Triglav je nejvyšší horou Slovinska a národním symbolem země, zobrazený i na slovinské vlajce. Nachází se v Julských Alpách v Triglavském národním parku. Název znamená "tříhlavý" podle tří vrcholů. První výstup byl proveden v roce 1778.'
-},
-{
-    id: 'korab',
-    name: 'Korab',
-    country: 'Albánie/Severní Makedonie',
-    height: '2764 m',
-    range: 'Šar planina',
-    date: '1.1.2000',
-    image: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200',
-    description: 'Korab je nejvyšší horou Albánie a Severní Makedonie a nachází se na hranici mezi těmito dvěma státy. Je součástí pohoří Šar planina. Hora nabízí náročné horolezecké výzvy a krásné přírodní scenérie s bohatou flórou a faunou.'
-},
-{
-    id: 'gerlach',
-    name: 'Gerlachovský štít',
-    country: 'Slovensko',
-    height: '2655 m',
-    range: 'Vysoké Tatry',
-    date: '1.1.2000',
-    image: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200',
-    description: 'Gerlachovský štít je nejvyšší horou Slovenska a celých Karpat. Nachází se ve Vysokých Tatrách. První výstup na vrchol byl proveden v roce 1834. Hora je oblíbená mezi horolezci a nabízí nádherné výhledy na tatranskou krajinu.'
-},
-{
-    id: 'grauspitz',
-    name: 'Grauspitz',
-    country: 'Lichtenšteinsko',
-    height: '2599 m',
-    range: 'Rätikon',
-    date: '1.1.2000',
-    image: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200',
-    description: 'Grauspitz je nejvyšší horou Lichtenšteinska a nachází se na hranici se Švýcarskem v pohoří Rätikon. Výstup na vrchol je nenáročný a vhodný pro turisty. Z vrcholu jsou krásné výhledy na Alpy a údolí Rýna.'
-},
-{
-    id: 'moldoveanu',
-    name: 'Moldoveanu',
-    country: 'Rumunsko',
-    height: '2544 m',
-    range: 'Fagaraš',
-    date: '1.1.2000',
-    image: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200',
-    description: 'Moldoveanu je nejvyšší horou Rumunska a nachází se v pohoří Fagaraš, části Jižních Karpat. Hora je pojmenována po řece Moldoveanu. Výstup na vrchol je oblíbený mezi rumunským i turisty a nabízí nádherné výhledy na karpatskou krajinu.'
-},
-{
-    id: 'bobotov-kuk',
-    name: 'Bobotov Kuk',
-    country: 'Černá Hora',
-    height: '2522 m',
-    range: 'Durmitor',
-    date: '1.1.2000',
-    image: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200',
-    description: 'Bobotov Kuk je nejvyšší horou Černé Hory a součástí masivu Durmitor, který je zapsán na seznamu světového dědictví UNESCO. Hora nabízí spektakulární výhledy na okolní hory a kaňony. Je oblíbeným cílem turistů i horolezců.'
-},
-{
-    id: 'rysy',
-    name: 'Rysy',
-    country: 'Polsko/Slovensko',
-    height: '2499 m',
-    range: 'Vysoké Tatry',
-    date: '1.1.2000',
-    image: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200',
-    description: 'Rysy jsou nejvyšší horou Polska a nachází se na hranici se Slovenskem ve Vysokých Tatrách. Jedná se o třívrcholovou horu, přičemž severozápadní vrchol leží v Polsku. Výstup na Rysy je jedním z nejoblíbenějších turistických cílů v Tatrách.'
-},
-{
-    id: 'galdhopiggen',
-    name: 'Galdhøpiggen',
-    country: 'Norsko',
-    height: '2469 m',
-    range: 'Jotunheimen',
-    date: '1.1.2000',
-    image: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200',
-    description: 'Galdhøpiggen je nejvyšší horou Norska a celé Skandinávie. Nachází se v pohoří Jotunheimen. Název znamená "vrchol nad Galdesåen". První výstup byl proveden v roce 1850. Hora je pokryta ledovci a nabízí úžasné výhledy na norskou krajinu.'
-},
-{
-    id: 'maglic',
-    name: 'Maglić',
-    country: 'Bosna a Hercegovina',
-    height: '2386 m',
-    range: 'Sutjeska',
-    date: '1.1.2000',
-    image: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200',
-    description: 'Maglić je nejvyšší horou Bosny a Hercegoviny a nachází se na hranici se Černou Horou v národním parku Sutjeska. Hora je součástí Dinarských Alp. U jejího úpatí se nachází ledovcové jezero Trnovačko, jedno z nejkrásnějších v regionu.'
-},
-{
-    id: 'pico',
-    name: 'Ponta do Pico',
-    country: 'Portugalsko',
-    height: '2351 m',
-    range: 'Azory',
-    date: '1.1.2000',
-    image: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200',
-    description: 'Ponta do Pico je nejvyšší horou Portugalska a nachází se na ostrově Pico na Azorách. Jedná se o stratovulkán, který je stále považován za aktivní. Výstup na vrchol je oblíbený mezi turisty a nabízí úžasné výhledy na Atlantský oceán a okolní ostrovy.'
-},
-{
-    id: 'midizor',
-    name: 'Midžor',
-    country: 'Srbsko',
-    height: '2169 m',
-    range: 'Stara planina',
-    date: '1.1.2000',
-    image: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200',
-    description: 'Midžor je nejvyšší horou Srbska (mimo Kosovo) a nachází se na hranici s Bulharskem v pohoří Stara planina (Balkán). Hora je pokryta sněhem velkou část roku a je oblíbeným cílem pro turistiku i zimní sporty.'
-},
-{
-    id: 'hvannadalshnukur',
-    name: 'Hvannadalshnúkur',
-    country: 'Island',
-    height: '2110 m',
-    range: 'Öræfajökull',
-    date: '1.1.2000',
-    image: 'https://images.unsplash.com/photo-1504233529578-6d46baba6d34?w=1200',
-    description: 'Hvannadalshnúkur je nejvyšší horou Islandu a nachází se v národním parku Vatnajökull. Jedná se o vrchol sopečného masívu Öræfajökull, který je pokryt ledovcem. Poslední erupce sopky byla v roce 1727.'
-},
-{
-    id: 'kebnekaise',
-    name: 'Kebnekaise',
-    country: 'Švédsko',
-    height: '2097 m',
-    range: 'Skandinávské pohoří',
-    date: '1.1.2000',
-    image: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200',
-    description: 'Kebnekaise je nejvyšší horou Švédska a nachází se v Laponsku severně od polárního kruhu. Hora má dva vrcholy - jižní ledovcový a severní skalní. Výška ledovcového vrcholu kolísá v závislosti na množství sněhu a ledu.'
-},
-{
-    id: 'hoverla',
-    name: 'Hoverla',
-    country: 'Ukrajina',
-    height: '2061 m',
-    range: 'Černohora',
-    date: '1.1.2000',
-    image: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200',
-    description: 'Hoverla je nejvyšší horou Ukrajiny a nachází se v Karpatech v pohoří Černohora. Hora je velmi populární turistickou destinací a výstup na vrchol je relativně nenáročný. Z vrcholu jsou krásné výhledy na okolní karpatskou krajinu.'
-},
-{
-    id: 'olympos',
-    name: 'Olympos',
-    country: 'Kypr',
-    height: '1952 m',
-    range: 'Troodos',
-    date: '1.1.2000',
-    image: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200',
-    description: 'Olympos (nebo Chionistra) je nejvyšší horou Kypru a nachází se v pohoří Troodos v centru ostrova. V zimních měsících je vrchol pokryt sněhem a funguje zde menší lyžařské středisko. Hora má vojenské a telekomunikační zařízení na vrcholu.'
-},
-{
-    id: 'serra-da-estrela',
-    name: 'Serra da Estrela',
-    country: 'Portugalsko',
-    height: '1993 m',
-    range: 'Serra da Estrela',
-    date: '1.1.2000',
-    image: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200',
-    description: 'Torre v Serra da Estrela je nejvyšším bodem kontinentálního Portugalska. Nachází se v pohoří Serra da Estrela, nejdelším a nejvyšším pohoří v kontinentálním Portugalsku. Oblast je známá pro výrobu sýra a v zimě zde funguje lyžařské středisko.'
-},
-{
-    id: 'dinara',
-    name: 'Dinara',
-    country: 'Chorvatsko',
-    height: '1831 m',
-    range: 'Dinarské Alpy',
-    date: '1.1.2000',
-    image: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200',
-    description: 'Dinara je nejvyšší horou Chorvatska a nachází se na hranici s Bosnou a Hercegovinou v Dinarských Alpách, které jsou po ní pojmenovány. Výstup na vrchol je oblíbený mezi turisty a nabízí panoramatické výhledy na okolní oblast.'
-},
-{
-    id: 'snezka',
-    name: 'Sněžka',
-    country: 'Česko',
-    height: '1603 m',
-    range: 'Krkonoše',
-    date: '1.1.2000',
-    image: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200',
-    description: 'Sněžka je nejvyšší horou České republiky a celých Krkonoš. Nachází se na hranici s Polskem. Na vrchol vede lanovka z české strany. Hora je velmi populární turistickou destinací s charakteristickou kulatou meteorologickou stanicí na vrcholu.'
-},
-{
-    id: 'ben-nevis',
-    name: 'Ben Nevis',
-    country: 'Velká Británie',
-    height: '1345 m',
-    range: 'Grampianské hory',
-    date: '1.1.2000',
-    image: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200',
-    description: 'Ben Nevis je nejvyšší horou Velké Británie a nachází se ve Skotsku nedaleko města Fort William. Název znamená "jedovatá hora". Výstup na vrchol je oblíbený mezi turisty, přestože počasí na vrcholu bývá nepříznivé většinu roku.'
-},
-{
-    id: 'halti',
-    name: 'Halti',
-    country: 'Finsko',
-    height: '1324 m',
-    range: 'Skandinávské pohoří',
-    date: '1.1.2000',
-    image: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200',
-    description: 'Halti je nejvyšší horou Finska a nachází se na hranici s Norskem v Laponsku. Skutečný vrchol leží v Norsku, nejvyšší bod na finském území má výšku 1324 m. Hora je součástí Skandinávského pohoří.'
-},
-{
-    id: 'carrauntoohil',
-    name: 'Carrauntoohil',
-    country: 'Irsko',
-    height: '1038 m',
-    range: 'Macgillycuddy\'s Reeks',
-    date: '1.1.2000',
-    image: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200',
-    description: 'Carrauntoohil je nejvyšší horou Irska a nachází se v jihozápadní části ostrova v pohoří Macgillycuddy\'s Reeks v hrabství Kerry. Výstup na vrchol je oblíbený mezi turisty, přestože trasa může být náročná a nebezpečná při špatném počasí.'
-},
-{
-    id: 'kekes',
-    name: 'Kékes',
-    country: 'Maďarsko',
-    height: '1014 m',
-    range: 'Mátra',
-    date: '1.1.2000',
-    image: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200',
-    description: 'Kékes je nejvyšší horou Maďarska a nachází se v pohoří Mátra v severním Maďarsku. Na vrcholu se nachází televizní věž a turistické zařízení. Výstup je nenáročný a oblast je oblíbená pro turistiku a v zimě pro lyžování.'
-},
-{
-    id: 'monte-titano',
-    name: 'Monte Titano',
-    country: 'San Marino',
-    height: '739 m',
-    range: 'Apeniny',
-    date: '1.1.2000',
-    image: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200',
-    description: 'Monte Titano je nejvyšším bodem San Marina a na jeho vrcholu se nachází tři středověké věže, které jsou symbolem této nejstarší republiky na světě. Hora je součástí Apeninského pohoří a nabízí krásné výhledy na okolní italskou krajinu.'
-},
-{
-    id: 'balanesti',
-    name: 'Bălănești',
-    country: 'Moldavsko',
-    height: '430 m',
-    range: 'Kodry',
-    date: '1.1.2000',
-    image: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200',
-    description: 'Bălănești je nejvyšším bodem Moldavska a nachází se v centrální části země v pahorkatině Kodry. Moldavsko je převážně nížinná země, takže jeho nejvyšší bod není výraznou horou, ale spíše kopcem.'
-},
-{
-    id: 'suur-munamagi',
-    name: 'Suur Munamägi',
-    country: 'Estonsko',
-    height: '318 m',
-    range: 'Haanja',
-    date: '1.1.2000',
-    image: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200',
-    description: 'Suur Munamägi, "Velké Vejcové Hory", je nejvyšším bodem Estonska a nachází se na jihovýchodě země v oblasti Haanja. Na vrcholu stojí rozhledna, ze které jsou krásné výhledy na okolní estonskou krajinu.'
-},
-{
-    id: 'gaizinkalns',
-    name: 'Gaiziņkalns',
-    country: 'Lotyšsko',
-    height: '312 m',
-    range: 'Vidzeme',
-    date: '1.1.2000',
-    image: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200',
-    description: 'Gaiziņkalns je nejvyšším bodem Lotyšska a nachází se ve východní části země v oblasti Vidzeme. Jedná se spíše o kopec než horu. Na vrcholu je rozhledna a místo je oblíbené pro turistiku a v zimě pro běžkování.'
-},
-{
-    id: 'aukštojas',
-    name: 'Aukštojas',
-    country: 'Litva',
-    height: '294 m',
-    range: 'Ašmenos vysočina',
-    date: '1.1.2000',
-    image: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200',
-    description: 'Aukštojas je nejvyšším bodem Litvy a nachází se na východě země nedaleko hranic s Běloruskem. Název znamená "Vysoký". Na vrcholu stojí památník s údaji o výšce a poloze nejvyšších bodů pobaltských států.'
-},
-{
-    id: 'dzyarzhynskaya',
-    name: 'Dziaržynskaja',
-    country: 'Bělorusko',
-    height: '346 m',
-    range: 'Běloruská hřebenovka',
-    date: '1.1.2000',
-    image: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200',
-    description: 'Dziaržynskaja (dříve Dziaržynskaja hara) je nejvyšším bodem Běloruska a nachází se v západní části země. Hora je pojmenována po Felix Dziaržynskym. Bělorusko je převážně rovinou země, takže nejvyšší bod není výraznou horou.'
-},
-{
-    id: 'mollehoj',
-    name: 'Møllehøj',
-    country: 'Dánsko',
-    height: '171 m',
-    range: 'Jutský poloostrov',
-    date: '1.1.2000',
-    image: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200',
-    description: 'Møllehøj je nejvyšším přírodním bodem Dánska a nachází se v centrální části Jutského poloostrova. Dánsko je jednou z nejploššších zemí Evropy. Møllehøj převýšil dříve považovaný nejvyšší bod Yding Skovhøj až po přesnějších měřeních.'
-},
-{
-    id: 'chemin-des-revoires',
-    name: 'Chemin des Révoires',
-    country: 'Monako',
-    height: '161 m',
-    range: 'Monako',
-    date: '1.1.2000',
-    image: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200',
-    description: 'Chemin des Révoires je nejvyšším bodem Monaka, druhého nejmenšího státu světa. Nachází se v severní části knížectví v části Mont Agel. Monako je kompaktní městský stát na pobřeží Středozemního moře.'
-},
-{
-    id: 'ta-dmejrek',
-    name: 'Ta\' Dmejrek',
-    country: 'Malta',
-    height: '253 m',
-    range: 'Malta',
-    date: '1.1.2000',
-    image: 'https://images.unsplash.com/photo-1526129318478-62ed807ebdf9?w=1200',
-    description: 'Ta\' Dmejrek je nejvyšším bodem Malty a nachází se v západní části hlavního ostrova. Malta je ostrovní stát se spíše plochou krajinou. Nejvyšší bod je nenápadný kopec v zemědělské oblasti.'
-},
-{
-    id: 'vatican-gardens',
-    name: 'Vatikánské zahrady',
-    country: 'Vatikán',
-    height: '75 m',
-    range: 'Vatikán',
-    date: '1.1.2000',
-    image: 'https://images.unsplash.com/photo-1531572753322-ad063cecc140?w=1200',
-    description: 'Nejvyšší bod Vatikánu se nachází ve Vatikánských zahradách na Vatikánském pahorku. Vatikán je nejmenším uznávaným státem světa a jeho území je téměř kompletně urbanizované, takže nemá skutečné hory ani výrazné kopce.'
-}
+        const korunaEvropyMountains = [
+            {id: 'mont-blanc', name: 'Mont Blanc', country: 'Francie/Itálie', height: '4808 m', range: 'Alpy', date: '25.8.2007', image: 'https://images.unsplash.com/photo-1531366936337-7c912a4589a7?w=1200', description: 'Mont Blanc, "Bílá hora", je nejvyšší horou Alp a západní Evropy. Nachází se na hranici mezi Francií a Itálií. První zdokumentovaný výstup proběhl v roce 1786. Hora je velmi populární mezi horolezci a turisty z celého světa.'},
+            {id: 'dufourspitze', name: 'Dufourspitze', country: 'Švýcarsko', height: '4634 m', range: 'Pennine Alpy', date: '1.1.2000', image: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200', description: 'Dufourspitze je nejvyšší horou Švýcarska a součástí masívu Monte Rosa. Nachází se na hranici mezi Švýcarskem a Itálií v Pennine Alpách. První výstup proběhl v roce 1855. Hora je pojmenována po švýcarském generálu Guillaume-Henri Dufourovi.'},
+            {id: 'grossglockner', name: 'Grossglockner', country: 'Rakousko', height: '3798 m', range: 'Východní Alpy', date: '1.1.2000', image: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200', description: 'Grossglockner je nejvyšší horou Rakouska a nachází se v Vysokých Taurách. Jeho název znamená "Velký zvoník". První výstup byl proveden v roce 1800. Hora je obklopena ledovci, z nichž nejznámější je Pasterze, největší ledovec východních Alp.'},
+            {id: 'teide', name: 'Teide', country: 'Španělsko', height: '3718 m', range: 'Kanárské ostrovy', date: '1.1.2000', image: 'https://images.unsplash.com/photo-1551632811-561732d1e306?w=1200', description: 'Teide je nejvyšší horou Španělska a nachází se na ostrově Tenerife na Kanárských ostrovech. Jedná se o aktivní sopku, která je zároveň třetí největší sopečnou strukturou na světě. Je nejnavštěvovanější národní park ve Španělsku a od roku 2007 je součástí světového dědictví UNESCO.'},
+            {id: 'mulhacen', name: 'Mulhacén', country: 'Španělsko', height: '3479 m', range: 'Sierra Nevada', date: '1.1.2000', image: 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=1200', description: 'Mulhacén je nejvyšší horou španělského kontinentu a celého Iberského poloostrova. Nachází se v pohoří Sierra Nevada v Andalusii. Hora je pojmenována podle maurského krále Muley Hacena. Z vrcholu je za dobrého počasí vidět Středozemní moře a severní Afriku.'},
+            {id: 'zugspitze', name: 'Zugspitze', country: 'Německo', height: '2962 m', range: 'Wetterstein', date: '1.1.2000', image: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200', description: 'Zugspitze je nejvyšší horou Německa a nachází se v Bavorských Alpách na hranici s Rakouskem. Vrchol je přístupný lanovkou i ozubnicovou dráhou. První zdokumentovaný výstup proběhl v roce 1820. Z vrcholu jsou nádherné výhledy na čtyři země: Německo, Rakousko, Itálii a Švýcarsko.'},
+            {id: 'coma-pedrosa', name: 'Coma Pedrosa', country: 'Andorra', height: '2943 m', range: 'Pyreneje', date: '1.1.2000', image: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200', description: 'Coma Pedrosa je nejvyšší horou Andorry a nachází se v severozápadní části země v Pyrenejích. Výstup na vrchol je relativně nenáročný a oblíbený mezi turisty. Z vrcholu jsou krásné výhledy na pyrenejskou krajinu a údolí Andorry.'}
         ];
         
-        const mountainList = document.getElementById('mountainList');
-        const mountainDetail = document.getElementById('mountainDetail');
-        const aboutSection = document.getElementById('aboutSection');
+        const allEuropeMountains = [
+            ...korunaEvropyMountains,
+            {id: 'musala', name: 'Musala', country: 'Bulharsko', height: '2925 m', range: 'Rila', date: '1.1.2000', image: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200', description: 'Musala je nejvyšší horou Bulharska a celého pohoří Balkán. Nachází se v pohoří Rila. Název hory pochází z arabského "má ša alláh", což znamená "jak Bůh chtěl". V zimě je vrchol pokryt sněhem, v létě nabízí krásné výhledy na okolní krajinu.'},
+            {id: 'olympus', name: 'Olymp', country: 'Řecko', height: '2918 m', range: 'Olymp', date: '1.1.2000', image: 'https://images.unsplash.com/photo-1601485175726-38840db1abe8?w=1200', description: 'Olymp je nejvyšší horou Řecka a v řecké mytologii sídlem bohů. Nachází se v severním Řecku blízko pobřeží Egejského moře. Hora má několik vrcholů, přičemž nejvyšším je Mytikas. První oficiální výstup byl proveden v roce 1913.'},
+            {id: 'snezka', name: 'Sněžka', country: 'Česko', height: '1603 m', range: 'Krkonoše', date: '1.1.2000', image: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200', description: 'Sněžka je nejvyšší horou České republiky a celých Krkonoš. Nachází se na hranici s Polskem. Na vrchol vede lanovka z české strany. Hora je velmi populární turistickou destinací s charakteristickou kulatou meteorologickou stanicí na vrcholu.'}
+        ];
         
-        mountains.forEach(mountain => {
-            const li = document.createElement('li');
-            li.className = 'mountain-item';
-            li.dataset.mountain = mountain.id;
-            li.innerHTML = `
-                <span class="mountain-name">${mountain.name}</span>
-                <span class="mountain-meta">${mountain.country} • ${mountain.height}</span>
-            `;
-            mountainList.appendChild(li);
-        });
+        let currentSection = 'home';
+        let currentMountain = null;
+        
+        function updateSidebar(section) {
+            const sidebar = document.getElementById('sidebar');
+            const sidebarTitle = document.getElementById('sidebarTitle');
+            const mountainList = document.getElementById('mountainList');
+            
+            mountainList.innerHTML = '';
+            
+            if (section === 'home') {
+                sidebar.style.display = 'none';
+            } else if (section === 'koruna-evropy') {
+                sidebar.style.display = 'block';
+                sidebarTitle.textContent = 'Koruna Evropy';
+                
+                korunaEvropyMountains.forEach(mountain => {
+                    const li = document.createElement('li');
+                    li.className = 'mountain-item';
+                    li.dataset.mountain = mountain.id;
+                    li.innerHTML = `
+                        <span class="mountain-name">${mountain.name}</span>
+                        <span class="mountain-meta">${mountain.country} • ${mountain.height}</span>
+                    `;
+                    mountainList.appendChild(li);
+                });
+            } else {
+                sidebar.style.display = 'none';
+            }
+        }
         
         function showMountain(mountainId) {
-            const mountain = mountains.find(m => m.id === mountainId);
+            const mountain = korunaEvropyMountains.find(m => m.id === mountainId);
             if (!mountain) return;
             
-            mountainDetail.innerHTML = `
+            const section = document.getElementById('koruna-evropy-section');
+            section.innerHTML = `
                 <h2>${mountain.name}</h2>
                 <div class="mountain-info">
                     <div class="info-item">
@@ -689,38 +374,81 @@
                 </div>
             `;
             
-            aboutSection.classList.add('hidden');
-            mountainDetail.classList.add('active');
-            
             document.querySelectorAll('.mountain-item').forEach(item => {
                 item.classList.remove('active');
             });
-            document.querySelector(`[data-mountain="${mountainId}"]`).classList.add('active');
-        }
-        
-        function showAbout() {
-            mountainDetail.classList.remove('active');
-            aboutSection.classList.remove('hidden');
+            document.querySelector(`[data-mountain="${mountainId}"]`)?.classList.add('active');
             
-            document.querySelectorAll('.mountain-item').forEach(item => {
-                item.classList.remove('active');
-            });
-            document.querySelector('[data-mountain="about"]').classList.add('active');
+            currentMountain = mountainId;
+            history.pushState({section: 'koruna-evropy', mountain: mountainId}, '', `#koruna-evropy/${mountainId}`);
         }
         
-        mountainList.addEventListener('click', (e) => {
+        function showSection(section, mountainId = null) {
+            document.querySelectorAll('.section-content').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.nav-link').forEach(el => el.classList.remove('active'));
+            
+            const sectionEl = document.getElementById(`${section}-section`);
+            if (sectionEl) {
+                sectionEl.classList.add('active');
+            }
+            
+            document.querySelector(`[data-section="${section}"]`)?.classList.add('active');
+            
+            currentSection = section;
+            updateSidebar(section);
+            
+            if (section === 'koruna-evropy' && mountainId) {
+                showMountain(mountainId);
+            } else if (section === 'koruna-evropy' && !mountainId) {
+                const korunaSection = document.getElementById('koruna-evropy-section');
+                korunaSection.innerHTML = `
+                    <h2>Koruna Evropy</h2>
+                    <p>Vyberte vrchol ze seznamu vlevo pro zobrazení detailů.</p>
+                `;
+            }
+            
+            if (!mountainId) {
+                history.pushState({section}, '', `#${section}`);
+            }
+        }
+        
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const section = link.dataset.section;
+                showSection(section);
+            });
+        });
+        
+        document.getElementById('mountainList').addEventListener('click', (e) => {
             const item = e.target.closest('.mountain-item');
             if (!item) return;
             
             const mountainId = item.dataset.mountain;
-            if (mountainId === 'about') {
-                showAbout();
+            showMountain(mountainId);
+        });
+        
+        window.addEventListener('popstate', (e) => {
+            if (e.state) {
+                showSection(e.state.section, e.state.mountain);
             } else {
-                showMountain(mountainId);
+                const hash = window.location.hash.slice(1);
+                if (hash) {
+                    const parts = hash.split('/');
+                    showSection(parts[0], parts[1]);
+                } else {
+                    showSection('home');
+                }
             }
         });
         
-        document.querySelector('[data-mountain="about"]').classList.add('active');
+        const hash = window.location.hash.slice(1);
+        if (hash) {
+            const parts = hash.split('/');
+            showSection(parts[0], parts[1]);
+        } else {
+            showSection('home');
+        }
     </script>
 </body>
 </html>
