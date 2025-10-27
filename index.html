@@ -12,7 +12,7 @@
         }
         
         body {
-            font-family: 'Segoe UI', Montserrat, Geneva, Verdana, sans-serif;
+            font-family: 'Montserrat', Tahoma, Geneva, Verdana, sans-serif;
             color: white;
             background: #1a2332;
         }
@@ -328,9 +328,9 @@
     
     <script>
         const korunaEvropy = [
-            {id: 'mont-blanc', name: 'Mont Blanc', country: 'Francie/Itálie', height: '4809 m', range: 'Alpy', date: '31.8.2007', image: 'https://raw.githubusercontent.com/suchanek76/website/main/images/MontBlanc2x3.jpg', description: 'Mont Blanc je nejvyšší horou Alp a západní Evropy.', category: 'koruna-evropy'},
-            {id: 'dufourspitze', name: 'Dufourspitze', country: 'Švýcarsko', height: '4634 m', range: 'Alpy', date: null, image: null, description: 'Dufourspitze je nejvyšší hora Švýcarska.', category: 'koruna-evropy'},
-            {id: 'grossglockner', name: 'Grossglockner', country: 'Rakousko', height: '3798 m', range: 'Alpy', date: '30.6.2025', image: 'https://raw.githubusercontent.com/suchanek76/website/main/images/Grossglockner2x3.jpg', description: 'Grossglockner je nejvyšší hora Rakouska.', category: 'koruna-evropy'},
+            {id: 'mont-blanc', name: 'Mont Blanc 4.810 m', country: '1/2. Francie/Itálie', height: '4810 m', range: 'Alpy', date: '31.8.2007', image: 'https://raw.githubusercontent.com/suchanek76/website/main/images/MontBlanc2x3.jpg', description: 'Mont Blanc je nejvyšší horou Alp a západní Evropy.', category: 'koruna-evropy'},
+            {id: 'dufourspitze', name: 'Dufourspitze 4.634 m', country: '3. Švýcarsko', height: '4634 m', range: 'Alpy', date: null, image: null, description: 'Dufourspitze je nejvyšší hora Švýcarska.', category: 'koruna-evropy'},
+            {id: 'grossglockner', name: 'Grossglockner 3.798 m', country: '4. Rakousko', height: '3798 m', range: 'Alpy', date: '30.6.2025', image: 'https://raw.githubusercontent.com/suchanek76/website/main/images/Grossglockner2x3.jpg', description: 'Grossglockner je nejvyšší hora Rakouska.', category: 'koruna-evropy'},
             {id: 'mulhacen', name: 'Mulhacén', country: 'Španělsko', height: '3479 m', range: 'Sierra Nevada', date: '10.9.2022', image: 'https://raw.githubusercontent.com/suchanek76/website/main/images/Mulhacen2x3.jpg', description: 'Mulhacén je nejvyšší hora španělského kontinentu. Nejvyšší hora Tenerife je Pico de Teide (3718 m).', category: 'koruna-evropy'},
             {id: 'zugspitze', name: 'Zugspitze', country: 'Německo', height: '2962 m', range: 'Alpy', date: '21.6.2025', image: 'https://raw.githubusercontent.com/suchanek76/website/main/images/Zugspitze2x3.jpg', description: 'Zugspitze je nejvyšší hora Německa.', category: 'koruna-evropy'},
             {id: 'coma-pedrosa', name: 'Coma Pedrosa', country: 'Andorra', height: '2942 m', range: 'Pyreneje', date: null, image: null, description: 'Coma Pedrosa je nejvyšší hora Andorry.', category: 'koruna-evropy'},
@@ -456,6 +456,39 @@
             {id: 'alps-80', name: 'Punta Baretti', country: 'Itálie', height: '4006 m', range: 'Mont Blanc', date: null, image: null, description: 'Součást masívu Mont Blanc.', category: 'alpske-ctyrtisicovky'},
             {id: 'alps-81', name: 'Aiguille de Rochefort', country: 'Francie/Itálie', height: '4001 m', range: 'Mont Blanc', date: null, image: null, description: 'Součást masívu Mont Blanc.', category: 'alpske-ctyrtisicovky'},
             {id: 'alps-82', name: 'Les Droites', country: 'Francie', height: '4000 m', range: 'Aiguille Verte', date: null, image: null, description: 'Poslední čtyřtisícovka Alp.', category: 'alpske-ctyrtisicovky'}
+        ];
+ // Generování 30 karet pro Nepal
+        const Nepal = [
+            {id: 'nepal-1', name: 'Mont Blanc / Monte Bianco', country: 'Francie/Itálie', height: '4807 m', range: 'Mont Blanc', date: null, image: 'https://raw.githubusercontent.com/suchanek76/website/main/images/MontBlanc2x3.jpg', description: 'Mont Blanc je nejvyšší horou Alp.', category: 'alpske-ctyrtisicovky'},
+            {id: 'nepal-2', name: 'Mont Blanc di Courmayeur', country: 'Itálie', height: '4765 m', range: 'Mont Blanc', date: null, image: null, description: 'Součást masívu Mont Blanc.', category: 'alpske-ctyrtisicovky'},
+            {id: 'nepal-3', name: 'Dufourspitze / Punta Dufour', country: 'Švýcarsko/Itálie', height: '4634 m', range: 'Monte Rosa', date: null, image: null, description: 'Nejvyšší vrchol Monte Rosa.', category: 'alpske-ctyrtisicovky'},
+            {id: 'nepal-4', name: 'Nordend', country: 'Švýcarsko/Itálie', height: '4609 m', range: 'Monte Rosa', date: null, image: null, description: 'Součást masívu Monte Rosa.', category: 'alpske-ctyrtisicovky'},
+            {id: 'nepal-5', name: 'Zumsteinspitze / Punta Zumstein', country: 'Švýcarsko/Itálie', height: '4563 m', range: 'Monte Rosa', date: null, image: 'https://raw.githubusercontent.com/suchanek76/website/main/images/Zumsteinspitze2x3.jpg', description: 'Součást masívu Monte Rosa.', category: 'alpske-ctyrtisicovky'},
+            {id: 'nepal-6', name: 'Signalkuppe / Punta Gnifetti', country: 'Švýcarsko/Itálie', height: '4554 m', range: 'Monte Rosa', date: null, image: 'https://raw.githubusercontent.com/suchanek76/website/main/images/Margherita2x3.jpg', description: 'Součást masívu Monte Rosa.', category: 'alpske-ctyrtisicovky'},
+            {id: 'nepal-7', name: 'Dom', country: 'Švýcarsko', height: '4545 m', range: 'Mischabel', date: null, image: null, description: 'Nejvyšší hora zcela na švýcarském území.', category: 'alpske-ctyrtisicovky'},
+            {id: 'nepal-8', name: 'Liskamm E / Lyskamm orientale', country: 'Švýcarsko/Itálie', height: '4527 m', range: 'Liskamm', date: null, image: null, description: 'Východní vrchol Liskammu.', category: 'alpske-ctyrtisicovky'},
+            {id: 'nepal-9', name: 'Weisshorn', country: 'Švýcarsko', height: '4506 m', range: 'Weisshorn', date: null, image: null, description: 'Jeden z nejkrásnějších alpských vrcholů.', category: 'alpske-ctyrtisicovky'},
+            {id: 'nepal-10', name: 'Täschhorn', country: 'Švýcarsko', height: '4491 m', range: 'Mischabel', date: null, image: null, description: 'Součást Mischabelu.', category: 'alpske-ctyrtisicovky'},
+            {id: 'nepal-11', name: 'Liskamm W / Lyskamm occidentale', country: 'Švýcarsko/Itálie', height: '4479 m', range: 'Liskamm', date: null, image: null, description: 'Západní vrchol Liskammu.', category: 'alpske-ctyrtisicovky'},
+            {id: 'nepal-12', name: 'Monte Cervino / Matterhorn', country: 'Švýcarsko/Itálie', height: '4478 m', range: 'Matterhorn', date: null, image: null, description: 'Ikonická pyramidová hora Alp.', category: 'alpske-ctyrtisicovky'},
+            {id: 'nepal-13', name: 'Pic Luigi Amedeo', country: 'Francie', height: '4470 m', range: 'Mont Blanc', date: null, image: null, description: 'Součást masívu Mont Blanc.', category: 'alpske-ctyrtisicovky'},
+            {id: 'nepal-14', name: 'Mont Maudit', country: 'Francie/Itálie', height: '4468 m', range: 'Mont Blanc', date: null, image: null, description: 'Součást masívu Mont Blanc.', category: 'alpske-ctyrtisicovky'},
+            {id: 'nepal-15', name: 'Parrotspitze / Punta Parrot', country: 'Švýcarsko/Itálie', height: '4432 m', range: 'Monte Rosa', date: null, image: null, description: 'Součást masívu Monte Rosa.', category: 'alpske-ctyrtisicovky'},
+            {id: 'nepal-16', name: 'Dent Blanche', country: 'Švýcarsko', height: '4357 m', range: 'Matterhorn', date: null, image: null, description: 'Impozantní hora v oblasti Matterhornu.', category: 'alpske-ctyrtisicovky'},
+            {id: 'nepal-17', name: 'Ludwigshöhe', country: 'Švýcarsko/Itálie', height: '4341 m', range: 'Monte Rosa', date: null, image: 'https://raw.githubusercontent.com/suchanek76/website/main/images/LudwigshöheLukas2x3.jpg', description: 'Součást masívu Monte Rosa.', category: 'alpske-ctyrtisicovky'},
+            {id: 'nepal-18', name: 'Nadelhorn', country: 'Švýcarsko', height: '4327 m', range: 'Mischabel', date: null, image: null, description: 'Součást Mischabelu.', category: 'alpske-ctyrtisicovky'},
+            {id: 'nepal-19', name: 'Corno Nero', country: 'Švýcarsko/Itálie', height: '4322 m', range: 'Monte Rosa', date: null, image: null, description: 'Součást masívu Monte Rosa.', category: 'alpske-ctyrtisicovky'},
+            {id: 'nepal-20', name: 'Combin de Grafeneire', country: 'Švýcarsko', height: '4314 m', range: 'Grand Combin', date: null, image: null, description: 'Součást Grand Combin.', category: 'alpske-ctyrtisicovky'},
+            {id: 'nepal-21', name: 'Dôme du Goûter', country: 'Francie/Itálie', height: '4306 m', range: 'Mont Blanc', date: null, image: null, description: 'Součást masívu Mont Blanc.', category: 'alpske-ctyrtisicovky'},
+            {id: 'nepal-22', name: 'Lenzspitze', country: 'Švýcarsko', height: '4294 m', range: 'Mischabel', date: null, image: null, description: 'Součást Mischabelu.', category: 'alpske-ctyrtisicovky'},
+            {id: 'nepal-23', name: 'Finsteraarhorn', country: 'Švýcarsko', height: '4274 m', range: 'Jungfrau', date: null, image: null, description: 'Nejvyšší hora Bernských Alp.', category: 'alpske-ctyrtisicovky'},
+            {id: 'nepal-24', name: 'Mont Blanc du Tacul', country: 'Francie', height: '4248 m', range: 'Mont Blanc', date: null, image: null, description: 'Součást masívu Mont Blanc.', category: 'alpske-ctyrtisicovky'},
+            {id: 'nepal-25', name: 'Grande Pilier d\'Angle', country: 'Francie/Itálie', height: '4243 m', range: 'Mont Blanc', date: null, image: null, description: 'Součást masívu Mont Blanc.', category: 'alpske-ctyrtisicovky'},
+            {id: 'nepal-26', name: 'Stecknadelhorn', country: 'Švýcarsko', height: '4241 m', range: 'Mischabel', date: null, image: null, description: 'Součást Mischabelu.', category: 'alpske-ctyrtisicovky'},
+            {id: 'nepal-27', name: 'Castor / Castore', country: 'Švýcarsko/Itálie', height: '4228 m', range: 'Liskamm', date: null, image: null, description: 'Část skupiny Castor a Pollux.', category: 'alpske-ctyrtisicovky'},
+            {id: 'nepal-28', name: 'Zinalrothorn', country: 'Švýcarsko', height: '4221 m', range: 'Weisshorn', date: null, image: null, description: 'Krásná hora v oblasti Weisshornu.', category: 'alpske-ctyrtisicovky'},
+            {id: 'nepal-29', name: 'Hohbärghorn', country: 'Švýcarsko', height: '4219 m', range: 'Mischabel', date: null, image: null, description: 'Součást Mischabelu.', category: 'alpske-ctyrtisicovky'},
+            {id: 'nepal-30', name: 'Piramide Vincent', country: 'Švýcarsko/Itálie', height: '4215 m', range: 'Monte Rosa', date: null, image: 'https://raw.githubusercontent.com/suchanek76/website/main/images/Vincent2x3.jpg', description: 'Součást masívu Monte Rosa.', category: 'alpske-ctyrtisicovky'},
         ];
         
         let currentCategory = 'koruna-evropy';
