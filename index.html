@@ -315,7 +315,49 @@
 .nav-btn:hover {
     background: rgba(255,255,255,0.3);
 }
+
+.modal-content {
+  background: #1a2332;
+  color: white;
+  padding: 2rem;
+  border-radius: 10px;
+  max-width: 900px;
+  width: 90%;
+  text-align: center;
+  position: relative;
+}
+
+.close-modal {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: white;
+  color: #1a2332;
+  border: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+.modal-header-info {
+  margin-bottom: 2rem;
+}
+
+.modal-photos {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+}
+
+.modal-photos img {
+  width: 100%;
+  border-radius: 8px;
+  object-fit: cover;
+}
     </style>
+
 </head>
 <body>
     <section class="hero">
@@ -331,20 +373,20 @@
         <div class="mountains-grid" id="mountainsGrid"></div>
     </section>
     
-    <div class="modal" id="mountainModal">
-        <div class="modal-content">
-            <div class="modal-header" id="modalHeader">
-                <div class="modal-header-overlay">
-                    <button class="close-modal" onclick="closeModal()">×</button>
-                    <h2 class="mountain-name" id="modalTitle"></h2>
-                </div>
-            </div>
-            <div class="modal-body">
-                <div class="modal-stats" id="modalStats"></div>
-                <div class="modal-description" id="modalDescription"></div>
-            </div>
-        </div>
+<div class="modal" id="mountainModal">
+  <div class="modal-content">
+    <button class="close-modal" onclick="closeModal()">×</button>
+    
+    <div class="modal-header-info">
+      <h2 id="modalMountainName">Název hory</h2>
+      <p id="modalDate">📅 12. srpna 2024</p>
+      <p id="modalTeam">👥 Team: Alena, Petr, Jirka, Jana</p>
+      <p id="modalDescription">Krátký popis výstupu...</p>
     </div>
+    
+    <div class="modal-photos" id="modalPhotos"></div>
+  </div>
+</div>
     
     <script>
         const korunaEvropy = [
@@ -490,6 +532,40 @@
 let currentCategory = 'koruna-evropy';
 let mountains = [];
 
+
+
+
+        
+
+function openModal(mountainName) {
+  const modal = document.getElementById("mountainModal");
+  modal.classList.add("active");
+
+  // Nastavení obsahu podle hory (lze později napojit na data.json)
+  document.getElementById("modalMountainName").textContent = mountainName;
+  document.getElementById("modalDate").textContent = "📅 12. srpna 2024";
+  document.getElementById("modalTeam").textContent = "👥 Team: Alena, Petr, Jirka, Jana";
+  document.getElementById("modalDescription").textContent = "Krásný výstup za ideálního počasí.";
+  
+  const photos = document.getElementById("modalPhotos");
+  photos.innerHTML = ""; // vymazání předchozích
+  
+  for (let i = 1; i <= 4; i++) {
+    const img = document.createElement("img");
+    img.src = `https://raw.githubusercontent.com/suchanek76/website/main/images/${mountainName}/${mountainName}${String(i).padStart(2, "0")}.jpg`;
+    photos.appendChild(img);
+  }
+}
+
+function closeModal() {
+  document.getElementById("mountainModal").classList.remove("active");
+}
+
+
+        
+
+
+        
 function renderMountains() {
     const grid = document.getElementById('mountainsGrid');
     grid.innerHTML = '';
