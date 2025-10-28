@@ -24,9 +24,15 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
+            justify-content: flex-start; /* ← posune obsah nahoru */
+            padding-top: 8rem; /* ← nastaví vzdálenost od horního okraje */
             position: relative;
             background-position: top;
+            }
+        @media (max-width: 640px) {
+        .hero {
+            padding-top: 5rem;
+        }
         }
         
         .hero h1 {
