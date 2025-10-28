@@ -459,6 +459,7 @@
         ];
  
     // 30 fotek z Nepálu
+    
     const Nepal = Array.from({ length: 30 }, (_, i) => ({
         id: `nepal-${i + 1}`,
         image: `https://source.unsplash.com/800x600/?nepal,mountains,${i + 1}`
@@ -476,7 +477,6 @@
             card.className = `mountain-card ${mountain.image ? 'has-image' : ''}`;
             if (mountain.image) card.style.backgroundImage = `url(${mountain.image})`;
 
-            // Pro Nepál zobrazíme jen fotky bez textů
             if (currentCategory === 'Nepal') {
                 card.onclick = () => openImage(mountain.image);
             } else {
@@ -495,7 +495,6 @@
         });
     }
 
-    // Otevření modálního okna s detailem
     function openModal(mountain) {
         const modal = document.getElementById('mountainModal');
         const header = document.getElementById('modalHeader');
@@ -517,7 +516,6 @@
         document.body.style.overflow = 'hidden';
     }
 
-    // Otevření samotné fotky (Nepál)
     function openImage(imageUrl) {
         const modal = document.getElementById('mountainModal');
         const header = document.getElementById('modalHeader');
@@ -553,6 +551,14 @@
 
     document.getElementById('mountainModal').addEventListener('click', (e) => {
         if (e.target.id === 'mountainModal') closeModal();
+    });
+
+    // 🔥 Automaticky načti Korunu Evropy po otevření stránky
+    window.addEventListener('DOMContentLoaded', () => {
+        mountains = korunaEvropy;
+        currentCategory = 'koruna-evropy';
+        renderMountains();
+        document.getElementById('koruna-evropy').scrollIntoView({ behavior: 'smooth' });
     });
 </script>
 </body>
