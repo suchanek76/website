@@ -301,6 +301,20 @@
                 grid-template-columns: repeat(2, 1fr);
             }
         }
+        .nav-btn {
+    background: rgba(0,0,0,0.5);
+    border: none;
+    color: white;
+    font-size: 2rem;
+    margin: 0 1rem;
+    padding: 0.5rem 1rem;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+.nav-btn:hover {
+    background: rgba(255,255,255,0.3);
+}
     </style>
 </head>
 <body>
@@ -464,44 +478,55 @@
             {id: 'alps-82', name: 'Les Droites', country: 'Francie', height: '4000 m', range: 'Aiguille Verte', date: null, image: null, description: 'Poslední čtyřtisícovka Alp.', category: 'alpske-ctyrtisicovky'}
         ];
  
-    // 40 fotek Nepálu bez popisu
-    const Nepal = Array.from({ length: 30 }, (_, i) => ({
-        id: `nepal-${i + 1}`,
-        image: `https://github.com/suchanek76/website/blob/main/images/Nepal,${i + 1}`
-    }));
+    // 40 fotek z Nepálu (Nepal01–Nepal40)
+    const Nepal = Array.from({ length: 40 }, (_, i) => {
+        const num = String(i + 1).padStart(2, '0');
+        return {
+            id: `nepal-${num}`,
+            image: `https://raw.githubusercontent.com/suchanek76/website/main/images/Nepal${num}.jpg`
+        };
+    });
 
     let currentCategory = 'koruna-evropy';
     let mountains = korunaEvropy;
+    let currentImageIndex = 0;
 
     function renderMountains() {
         const grid = document.getElementById('mountainsGrid');
         grid.innerHTML = '';
 
-        mountains.forEach(mountain => {
+        // 4 sloupce pro Nepál
+        grid.style.gridTemplateColumns = currentCategory === 'Nepal'
+            ? 'repeat(4, 1fr)'
+            : 'repeat(3, 1fr)';
+
+        mountains.forEach((mountain, index) => {
             const card = document.createElement('div');
             card.className = `mountain-card ${mountain.image ? 'has-image' : ''}`;
             if (mountain.image) card.style.backgroundImage = `url(${mountain.image})`;
 
             if (currentCategory === 'Nepal') {
-                // Nepál – jen obrázky bez textu
-                card.onclick = () => openImage(mountain.image);
+                // Jen fotky bez textu
+                card.onclick = () => openImage(index);
             } else {
-                // Ostatní – s textem a detaily
+                // Hory s textem
                 card.innerHTML = `
                     ${!mountain.image ? '<div class="add-icon">+</div>' : ''}
                     <div class="mountain-overlay">
                         <div class="mountain-info">
                             <div class="mountain-name">${mountain.name}</div>
-                            <div class="mountain-details">${mountain.country}${mountain.date ? ' ' + mountain.date : ''}</div>
+                            <div class="mountain-details">${mountain.country || ''}${mountain.date ? ' ' + mountain.date : ''}</div>
                         </div>
                     </div>
                 `;
                 card.onclick = () => openModal(mountain);
             }
+
             grid.appendChild(card);
         });
     }
 
+    // --- Modal pro běžné hory ---
     function openModal(mountain) {
         const modal = document.getElementById('mountainModal');
         const header = document.getElementById('modalHeader');
@@ -523,20 +548,39 @@
         document.body.style.overflow = 'hidden';
     }
 
-    function openImage(imageUrl) {
+    // --- Modal pro Nepál (fotogalerie) ---
+    function openImage(index) {
+        currentImageIndex = index;
         const modal = document.getElementById('mountainModal');
         const header = document.getElementById('modalHeader');
         const title = document.getElementById('modalTitle');
         const stats = document.getElementById('modalStats');
         const description = document.getElementById('modalDescription');
 
+        const imageUrl = Nepal[index].image;
         header.style.backgroundImage = `url(${imageUrl})`;
-        title.textContent = '';
-        stats.innerHTML = '';
+        title.textContent = `${index + 1} / ${Nepal.length}`;
+        stats.innerHTML = `
+            <button id="prevImage" class="nav-btn">⟵</button>
+            <button id="nextImage" class="nav-btn">⟶</button>
+        `;
         description.textContent = '';
 
         modal.classList.add('active');
         document.body.style.overflow = 'hidden';
+
+        document.getElementById('prevImage').onclick = prevImage;
+        document.getElementById('nextImage').onclick = nextImage;
+    }
+
+    function prevImage() {
+        currentImageIndex = (currentImageIndex - 1 + Nepal.length) % Nepal.length;
+        openImage(currentImageIndex);
+    }
+
+    function nextImage() {
+        currentImageIndex = (currentImageIndex + 1) % Nepal.length;
+        openImage(currentImageIndex);
     }
 
     function closeModal() {
@@ -555,14 +599,14 @@
         document.getElementById('koruna-evropy').scrollIntoView({ behavior: 'smooth' });
     }
 
+    // Kliknutí mimo modal zavře okno
     document.getElementById('mountainModal').addEventListener('click', (e) => {
         if (e.target.id === 'mountainModal') closeModal();
     });
 
-    // ✅ Po načtení zůstaň nahoře a rovnou načti "Korunu Evropy"
+    // Načtení Koruny Evropy po otevření stránky (bez scrollu)
     window.addEventListener('DOMContentLoaded', () => {
         mountains = korunaEvropy;
-        currentCategory = 'koruna-evropy';
         renderMountains();
     });
 </script>
