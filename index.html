@@ -294,23 +294,6 @@
             .modal-stats {
                 grid-template-columns: repeat(2, 1fr);
             }
-            /* --- Animace úvodní sekce --- */
-.hero {
-  opacity: 0;
-  transition: opacity 1.5s ease-in-out;
-}
-
-/* Po načtení stránky */
-.hero.fade-in {
-  opacity: 1;
-}
-
-/* Před automatickým přesunem */
-.hero.fade-out {
-  opacity: 0.2;
-  filter: brightness(0.7);
-  transition: opacity 1.5s ease-in-out, filter 1.5s ease-in-out;
-}
         }
     </style>
 </head>
@@ -475,8 +458,7 @@
             {id: 'alps-82', name: 'Les Droites', country: 'Francie', height: '4000 m', range: 'Aiguille Verte', date: null, image: null, description: 'Poslední čtyřtisícovka Alp.', category: 'alpske-ctyrtisicovky'}
         ];
  
-    // 30 fotek z Nepálu
-    
+    // 30 fotek Nepálu bez popisu
     const Nepal = Array.from({ length: 30 }, (_, i) => ({
         id: `nepal-${i + 1}`,
         image: `https://source.unsplash.com/800x600/?nepal,mountains,${i + 1}`
@@ -495,8 +477,10 @@
             if (mountain.image) card.style.backgroundImage = `url(${mountain.image})`;
 
             if (currentCategory === 'Nepal') {
+                // Nepál – jen obrázky bez textu
                 card.onclick = () => openImage(mountain.image);
             } else {
+                // Ostatní – s textem a detaily
                 card.innerHTML = `
                     ${!mountain.image ? '<div class="add-icon">+</div>' : ''}
                     <div class="mountain-overlay">
@@ -569,22 +553,11 @@
         if (e.target.id === 'mountainModal') closeModal();
     });
 
-    // 🔥 Po načtení: fade-in hero, po 2,5 s fade-out + posun dolů
+    // ✅ Po načtení zůstaň nahoře a rovnou načti "Korunu Evropy"
     window.addEventListener('DOMContentLoaded', () => {
-        const hero = document.querySelector('.hero');
-        hero.classList.add('fade-in');
-
         mountains = korunaEvropy;
         currentCategory = 'koruna-evropy';
         renderMountains();
-
-        setTimeout(() => {
-            hero.classList.add('fade-out');
-        }, 2000);
-
-        setTimeout(() => {
-            document.getElementById('koruna-evropy').scrollIntoView({ behavior: 'smooth' });
-        }, 3000);
     });
 </script>
 </body>
