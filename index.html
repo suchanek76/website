@@ -294,6 +294,23 @@
             .modal-stats {
                 grid-template-columns: repeat(2, 1fr);
             }
+            /* --- Animace úvodní sekce --- */
+.hero {
+  opacity: 0;
+  transition: opacity 1.5s ease-in-out;
+}
+
+/* Po načtení stránky */
+.hero.fade-in {
+  opacity: 1;
+}
+
+/* Před automatickým přesunem */
+.hero.fade-out {
+  opacity: 0.2;
+  filter: brightness(0.7);
+  transition: opacity 1.5s ease-in-out, filter 1.5s ease-in-out;
+}
         }
     </style>
 </head>
@@ -545,7 +562,6 @@
         else if (sectionId === 'Nepal') mountains = Nepal;
 
         renderMountains();
-
         document.getElementById('koruna-evropy').scrollIntoView({ behavior: 'smooth' });
     }
 
@@ -553,12 +569,22 @@
         if (e.target.id === 'mountainModal') closeModal();
     });
 
-    // 🔥 Automaticky načti Korunu Evropy po otevření stránky
+    // 🔥 Po načtení: fade-in hero, po 2,5 s fade-out + posun dolů
     window.addEventListener('DOMContentLoaded', () => {
+        const hero = document.querySelector('.hero');
+        hero.classList.add('fade-in');
+
         mountains = korunaEvropy;
         currentCategory = 'koruna-evropy';
         renderMountains();
-        document.getElementById('koruna-evropy').scrollIntoView({ behavior: 'smooth' });
+
+        setTimeout(() => {
+            hero.classList.add('fade-out');
+        }, 2000);
+
+        setTimeout(() => {
+            document.getElementById('koruna-evropy').scrollIntoView({ behavior: 'smooth' });
+        }, 3000);
     });
 </script>
 </body>
