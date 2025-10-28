@@ -457,54 +457,29 @@
             {id: 'alps-81', name: 'Aiguille de Rochefort', country: 'Francie/Itálie', height: '4001 m', range: 'Mont Blanc', date: null, image: null, description: 'Součást masívu Mont Blanc.', category: 'alpske-ctyrtisicovky'},
             {id: 'alps-82', name: 'Les Droites', country: 'Francie', height: '4000 m', range: 'Aiguille Verte', date: null, image: null, description: 'Poslední čtyřtisícovka Alp.', category: 'alpske-ctyrtisicovky'}
         ];
- // Generování 30 karet pro Nepal
-        const Nepal = [
-            {id: 'nepal-1', name: 'Mont Blanc / Monte Bianco', country: 'Francie/Itálie', height: '4807 m', range: 'Mont Blanc', date: null, image: 'https://raw.githubusercontent.com/suchanek76/website/main/images/MontBlanc2x3.jpg', description: 'Mont Blanc je nejvyšší horou Alp.', category: 'alpske-ctyrtisicovky'},
-            {id: 'nepal-2', name: 'Mont Blanc di Courmayeur', country: 'Itálie', height: '4765 m', range: 'Mont Blanc', date: null, image: null, description: 'Součást masívu Mont Blanc.', category: 'alpske-ctyrtisicovky'},
-            {id: 'nepal-3', name: 'Dufourspitze / Punta Dufour', country: 'Švýcarsko/Itálie', height: '4634 m', range: 'Monte Rosa', date: null, image: null, description: 'Nejvyšší vrchol Monte Rosa.', category: 'alpske-ctyrtisicovky'},
-            {id: 'nepal-4', name: 'Nordend', country: 'Švýcarsko/Itálie', height: '4609 m', range: 'Monte Rosa', date: null, image: null, description: 'Součást masívu Monte Rosa.', category: 'alpske-ctyrtisicovky'},
-            {id: 'nepal-5', name: 'Zumsteinspitze / Punta Zumstein', country: 'Švýcarsko/Itálie', height: '4563 m', range: 'Monte Rosa', date: null, image: 'https://raw.githubusercontent.com/suchanek76/website/main/images/Zumsteinspitze2x3.jpg', description: 'Součást masívu Monte Rosa.', category: 'alpske-ctyrtisicovky'},
-            {id: 'nepal-6', name: 'Signalkuppe / Punta Gnifetti', country: 'Švýcarsko/Itálie', height: '4554 m', range: 'Monte Rosa', date: null, image: 'https://raw.githubusercontent.com/suchanek76/website/main/images/Margherita2x3.jpg', description: 'Součást masívu Monte Rosa.', category: 'alpske-ctyrtisicovky'},
-            {id: 'nepal-7', name: 'Dom', country: 'Švýcarsko', height: '4545 m', range: 'Mischabel', date: null, image: null, description: 'Nejvyšší hora zcela na švýcarském území.', category: 'alpske-ctyrtisicovky'},
-            {id: 'nepal-8', name: 'Liskamm E / Lyskamm orientale', country: 'Švýcarsko/Itálie', height: '4527 m', range: 'Liskamm', date: null, image: null, description: 'Východní vrchol Liskammu.', category: 'alpske-ctyrtisicovky'},
-            {id: 'nepal-9', name: 'Weisshorn', country: 'Švýcarsko', height: '4506 m', range: 'Weisshorn', date: null, image: null, description: 'Jeden z nejkrásnějších alpských vrcholů.', category: 'alpske-ctyrtisicovky'},
-            {id: 'nepal-10', name: 'Täschhorn', country: 'Švýcarsko', height: '4491 m', range: 'Mischabel', date: null, image: null, description: 'Součást Mischabelu.', category: 'alpske-ctyrtisicovky'},
-            {id: 'nepal-11', name: 'Liskamm W / Lyskamm occidentale', country: 'Švýcarsko/Itálie', height: '4479 m', range: 'Liskamm', date: null, image: null, description: 'Západní vrchol Liskammu.', category: 'alpske-ctyrtisicovky'},
-            {id: 'nepal-12', name: 'Monte Cervino / Matterhorn', country: 'Švýcarsko/Itálie', height: '4478 m', range: 'Matterhorn', date: null, image: null, description: 'Ikonická pyramidová hora Alp.', category: 'alpske-ctyrtisicovky'},
-            {id: 'nepal-13', name: 'Pic Luigi Amedeo', country: 'Francie', height: '4470 m', range: 'Mont Blanc', date: null, image: null, description: 'Součást masívu Mont Blanc.', category: 'alpske-ctyrtisicovky'},
-            {id: 'nepal-14', name: 'Mont Maudit', country: 'Francie/Itálie', height: '4468 m', range: 'Mont Blanc', date: null, image: null, description: 'Součást masívu Mont Blanc.', category: 'alpske-ctyrtisicovky'},
-            {id: 'nepal-15', name: 'Parrotspitze / Punta Parrot', country: 'Švýcarsko/Itálie', height: '4432 m', range: 'Monte Rosa', date: null, image: null, description: 'Součást masívu Monte Rosa.', category: 'alpske-ctyrtisicovky'},
-            {id: 'nepal-16', name: 'Dent Blanche', country: 'Švýcarsko', height: '4357 m', range: 'Matterhorn', date: null, image: null, description: 'Impozantní hora v oblasti Matterhornu.', category: 'alpske-ctyrtisicovky'},
-            {id: 'nepal-17', name: 'Ludwigshöhe', country: 'Švýcarsko/Itálie', height: '4341 m', range: 'Monte Rosa', date: null, image: 'https://raw.githubusercontent.com/suchanek76/website/main/images/LudwigshöheLukas2x3.jpg', description: 'Součást masívu Monte Rosa.', category: 'alpske-ctyrtisicovky'},
-            {id: 'nepal-18', name: 'Nadelhorn', country: 'Švýcarsko', height: '4327 m', range: 'Mischabel', date: null, image: null, description: 'Součást Mischabelu.', category: 'alpske-ctyrtisicovky'},
-            {id: 'nepal-19', name: 'Corno Nero', country: 'Švýcarsko/Itálie', height: '4322 m', range: 'Monte Rosa', date: null, image: null, description: 'Součást masívu Monte Rosa.', category: 'alpske-ctyrtisicovky'},
-            {id: 'nepal-20', name: 'Combin de Grafeneire', country: 'Švýcarsko', height: '4314 m', range: 'Grand Combin', date: null, image: null, description: 'Součást Grand Combin.', category: 'alpske-ctyrtisicovky'},
-            {id: 'nepal-21', name: 'Dôme du Goûter', country: 'Francie/Itálie', height: '4306 m', range: 'Mont Blanc', date: null, image: null, description: 'Součást masívu Mont Blanc.', category: 'alpske-ctyrtisicovky'},
-            {id: 'nepal-22', name: 'Lenzspitze', country: 'Švýcarsko', height: '4294 m', range: 'Mischabel', date: null, image: null, description: 'Součást Mischabelu.', category: 'alpske-ctyrtisicovky'},
-            {id: 'nepal-23', name: 'Finsteraarhorn', country: 'Švýcarsko', height: '4274 m', range: 'Jungfrau', date: null, image: null, description: 'Nejvyšší hora Bernských Alp.', category: 'alpske-ctyrtisicovky'},
-            {id: 'nepal-24', name: 'Mont Blanc du Tacul', country: 'Francie', height: '4248 m', range: 'Mont Blanc', date: null, image: null, description: 'Součást masívu Mont Blanc.', category: 'alpske-ctyrtisicovky'},
-            {id: 'nepal-25', name: 'Grande Pilier d\'Angle', country: 'Francie/Itálie', height: '4243 m', range: 'Mont Blanc', date: null, image: null, description: 'Součást masívu Mont Blanc.', category: 'alpske-ctyrtisicovky'},
-            {id: 'nepal-26', name: 'Stecknadelhorn', country: 'Švýcarsko', height: '4241 m', range: 'Mischabel', date: null, image: null, description: 'Součást Mischabelu.', category: 'alpske-ctyrtisicovky'},
-            {id: 'nepal-27', name: 'Castor / Castore', country: 'Švýcarsko/Itálie', height: '4228 m', range: 'Liskamm', date: null, image: null, description: 'Část skupiny Castor a Pollux.', category: 'alpske-ctyrtisicovky'},
-            {id: 'nepal-28', name: 'Zinalrothorn', country: 'Švýcarsko', height: '4221 m', range: 'Weisshorn', date: null, image: null, description: 'Krásná hora v oblasti Weisshornu.', category: 'alpske-ctyrtisicovky'},
-            {id: 'nepal-29', name: 'Hohbärghorn', country: 'Švýcarsko', height: '4219 m', range: 'Mischabel', date: null, image: null, description: 'Součást Mischabelu.', category: 'alpske-ctyrtisicovky'},
-            {id: 'nepal-30', name: 'Piramide Vincent', country: 'Švýcarsko/Itálie', height: '4215 m', range: 'Monte Rosa', date: null, image: 'https://raw.githubusercontent.com/suchanek76/website/main/images/Vincent2x3.jpg', description: 'Součást masívu Monte Rosa.', category: 'alpske-ctyrtisicovky'},
-        ];
-        
-        let currentCategory = 'koruna-evropy';
-        let mountains = korunaEvropy;
-        
-        function renderMountains() {
-            const grid = document.getElementById('mountainsGrid');
-            grid.innerHTML = '';
-            
-            mountains.forEach(mountain => {
-                const card = document.createElement('div');
-                card.className = `mountain-card ${mountain.image ? 'has-image' : ''}`;
-                if (mountain.image) {
-                    card.style.backgroundImage = `url(${mountain.image})`;
-                }
-                
+ 
+    // 30 fotek z Nepálu
+    const Nepal = Array.from({ length: 30 }, (_, i) => ({
+        id: `nepal-${i + 1}`,
+        image: `https://source.unsplash.com/800x600/?nepal,mountains,${i + 1}`
+    }));
+
+    let currentCategory = 'koruna-evropy';
+    let mountains = korunaEvropy;
+
+    function renderMountains() {
+        const grid = document.getElementById('mountainsGrid');
+        grid.innerHTML = '';
+
+        mountains.forEach(mountain => {
+            const card = document.createElement('div');
+            card.className = `mountain-card ${mountain.image ? 'has-image' : ''}`;
+            if (mountain.image) card.style.backgroundImage = `url(${mountain.image})`;
+
+            // Pro Nepál zobrazíme jen fotky bez textů
+            if (currentCategory === 'Nepal') {
+                card.onclick = () => openImage(mountain.image);
+            } else {
                 card.innerHTML = `
                     ${!mountain.image ? '<div class="add-icon">+</div>' : ''}
                     <div class="mountain-overlay">
@@ -514,80 +489,71 @@
                         </div>
                     </div>
                 `;
-                
                 card.onclick = () => openModal(mountain);
-                grid.appendChild(card);
-            });
-        }
-        
-        function openModal(mountain) {
-            const modal = document.getElementById('mountainModal');
-            const header = document.getElementById('modalHeader');
-            const title = document.getElementById('modalTitle');
-            const stats = document.getElementById('modalStats');
-            const description = document.getElementById('modalDescription');
-            
-            if (mountain.image) {
-                header.style.backgroundImage = `url(${mountain.image})`;
-            } else {
-                header.style.backgroundImage = 'url(https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200)';
             }
-            
-            title.textContent = mountain.name;
-            
-            stats.innerHTML = `
-                <div class="stat">
-                    <div class="stat-label">Výška</div>
-                    <div class="stat-value">${mountain.height}</div>
-                </div>
-                <div class="stat">
-                    <div class="stat-label">Stát</div>
-                    <div class="stat-value">${mountain.country}</div>
-                </div>
-                <div class="stat">
-                    <div class="stat-label">Pohoří</div>
-                    <div class="stat-value">${mountain.range}</div>
-                </div>
-                <div class="stat">
-                    <div class="stat-label">Datum výstupu</div>
-                    <div class="stat-value">${mountain.date || 'Plánováno'}</div>
-                </div>
-            `;
-            
-            description.textContent = mountain.description;
-            
-            modal.classList.add('active');
-            document.body.style.overflow = 'hidden';
-        }
-        
-        function closeModal() {
-            const modal = document.getElementById('mountainModal');
-            modal.classList.remove('active');
-            document.body.style.overflow = 'auto';
-        }
-        
-        function scrollToSection(sectionId) {
-            currentCategory = sectionId;
-            
-            if (sectionId === 'koruna-evropy') {
-                mountains = korunaEvropy;
-            } else if (sectionId === 'alpske-ctyrtisicovky') {
-                mountains = alpskeCtyrtisicovky;
-            }
-            
-            renderMountains();
-            
-            const section = document.getElementById(sectionId);
-            section.scrollIntoView({ behavior: 'smooth' });
-        }
-        
-        document.getElementById('mountainModal').addEventListener('click', (e) => {
-            if (e.target.id === 'mountainModal') {
-                closeModal();
-            }
+            grid.appendChild(card);
         });
-        
+    }
+
+    // Otevření modálního okna s detailem
+    function openModal(mountain) {
+        const modal = document.getElementById('mountainModal');
+        const header = document.getElementById('modalHeader');
+        const title = document.getElementById('modalTitle');
+        const stats = document.getElementById('modalStats');
+        const description = document.getElementById('modalDescription');
+
+        header.style.backgroundImage = `url(${mountain.image || 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200'})`;
+        title.textContent = mountain.name || '';
+        stats.innerHTML = `
+            <div class="stat"><div class="stat-label">Výška</div><div class="stat-value">${mountain.height || '-'}</div></div>
+            <div class="stat"><div class="stat-label">Stát</div><div class="stat-value">${mountain.country || '-'}</div></div>
+            <div class="stat"><div class="stat-label">Pohoří</div><div class="stat-value">${mountain.range || '-'}</div></div>
+            <div class="stat"><div class="stat-label">Datum výstupu</div><div class="stat-value">${mountain.date || 'Plánováno'}</div></div>
+        `;
+        description.textContent = mountain.description || '';
+
+        modal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+
+    // Otevření samotné fotky (Nepál)
+    function openImage(imageUrl) {
+        const modal = document.getElementById('mountainModal');
+        const header = document.getElementById('modalHeader');
+        const title = document.getElementById('modalTitle');
+        const stats = document.getElementById('modalStats');
+        const description = document.getElementById('modalDescription');
+
+        header.style.backgroundImage = `url(${imageUrl})`;
+        title.textContent = '';
+        stats.innerHTML = '';
+        description.textContent = '';
+
+        modal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeModal() {
+        document.getElementById('mountainModal').classList.remove('active');
+        document.body.style.overflow = 'auto';
+    }
+
+    function scrollToSection(sectionId) {
+        currentCategory = sectionId;
+
+        if (sectionId === 'koruna-evropy') mountains = korunaEvropy;
+        else if (sectionId === 'alpske-ctyrtisicovky') mountains = alpskeCtyrtisicovky;
+        else if (sectionId === 'Nepal') mountains = Nepal;
+
         renderMountains();
-    </script>
+
+        document.getElementById('koruna-evropy').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    document.getElementById('mountainModal').addEventListener('click', (e) => {
+        if (e.target.id === 'mountainModal') closeModal();
+    });
+</script>
 </body>
 </html>
