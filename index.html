@@ -16,14 +16,14 @@ body {
 
 /* ==== HERO ==== */
 .hero {
-  height: 100vh;
+  height: 90vh;
   background: linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(26,35,50,1) 100%),
               url('https://raw.githubusercontent.com/suchanek76/website/main/images/background.jpg') center/cover;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
-  padding-top: 18rem;
+  padding-top: 12rem;
   text-align: center;
 }
 .hero h1 {
@@ -57,7 +57,10 @@ body {
 }
 
 /* ==== SECTIONS ==== */
-.mountains-section { padding: 4rem 2rem; }
+.mountains-section {
+  padding: 2rem 2rem 4rem 2rem;
+  margin-top: -4rem; /* posun výš */
+}
 .section-description {
   max-width: 900px;
   margin: 0 auto 3rem;
@@ -104,12 +107,14 @@ body {
   z-index: 2000;
   align-items: center;
   justify-content: center;
+  touch-action: none;
 }
 .gallery-modal.active { display: flex; }
 .gallery-img {
   max-width: 90%;
   max-height: 90%;
   border-radius: 10px;
+  transition: opacity 0.3s ease;
 }
 .gallery-arrow {
   position: absolute;
@@ -144,7 +149,7 @@ body {
   .mountains-grid { grid-template-columns: repeat(2, 1fr); }
 }
 @media (max-width: 640px) {
-  .hero { padding-top: 8rem; }
+  .hero { padding-top: 6rem; }
   .hero h1 { font-size: 2rem; }
   .hero-buttons { flex-direction: column; gap: 1rem; }
   .mountains-grid { grid-template-columns: 1fr; }
@@ -178,7 +183,7 @@ body {
 /* ==== DATA ==== */
 const korunaEvropy = [
   {id:'mont-blanc', name:'Mont Blanc 4.810 m', country:'Francie/Itálie', date:'31.8.2007', image:'https://raw.githubusercontent.com/suchanek76/website/main/images/Koruna/MontBlanc2x3.jpg'},
-  {id:'dufourspitze', name:'Dufourspitze 4.634 m', country:'Švýcarsko', date:'', image:null},
+  {id:'dufourspitze', name:'Dufourspitze 4.634 m', country:'Švýcarsko', image:null},
   {id:'grossglockner', name:'Grossglockner 3.798 m', country:'Rakousko', date:'30.6.2025', image:'https://raw.githubusercontent.com/suchanek76/website/main/images/Koruna/Grossglockner2x3.jpg'},
 ];
 
@@ -205,7 +210,7 @@ function renderMountains() {
   if(currentCategory==='Nepal'){
     grid.insertAdjacentHTML('beforebegin',`
       <div class="section-description">
-        <p>Tady bude popis výletu do Nepálu – zážitky, trasa, atmosféra a další dojmy.</p>
+        <p>Tady bude popis výletu do Nepálu – zážitky, trasa, atmosféra, hory, lidé a dobrodružství.</p>
       </div>
     `);
   } else {
@@ -255,6 +260,17 @@ document.addEventListener('keydown',e=>{
   if(e.key==='Escape') closeGallery();
   if(e.key==='ArrowRight') nextImage();
   if(e.key==='ArrowLeft') prevImage();
+});
+
+/* ==== SWIPE PODPORA ==== */
+let touchStartX=0;
+let touchEndX=0;
+const modal=document.getElementById('galleryModal');
+modal.addEventListener('touchstart',e=>touchStartX=e.changedTouches[0].screenX);
+modal.addEventListener('touchend',e=>{
+  touchEndX=e.changedTouches[0].screenX;
+  if(touchEndX<touchStartX-50) nextImage();
+  if(touchEndX>touchStartX+50) prevImage();
 });
 
 /* ==== NAVIGACE ==== */
