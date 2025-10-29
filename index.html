@@ -17,7 +17,7 @@ body {
 
 /* ==== HERO ==== */
 .hero {
-  height: 90vh;
+  height: 100vh;
   background: linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(26,35,50,1) 100%),
               url('https://raw.githubusercontent.com/suchanek76/website/main/images/background.jpg') center/cover;
   display: flex;
@@ -64,7 +64,7 @@ body {
   position: relative;
   z-index: 2;
   padding: 2rem 2rem 4rem 2rem;
-  margin-top: -10rem; /* výraznější posun výš, překrývá pozadí */
+  margin-top: -4rem; /* jemný posun nahoru, neřeže pozadí */
 }
 .section-description {
   max-width: 900px;
@@ -267,7 +267,7 @@ document.addEventListener('keydown',e=>{
   if(e.key==='ArrowLeft') prevImage();
 });
 
-/* ==== SWIPE PODPORA ==== */
+/* ==== SWIPE ==== */
 let touchStartX=0;
 let touchEndX=0;
 const modal=document.getElementById('galleryModal');
