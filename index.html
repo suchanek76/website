@@ -1,395 +1,320 @@
 <!DOCTYPE html>
 <html lang="cs">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Suchánci na horách</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Suchánci na horách</title>
+  <style>
+    /* ===== Základ ===== */
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:Montserrat, Arial, sans-serif;background:#1a2332;color:#fff;line-height:1.4}
+    a{color:inherit}
 
-<style>
-/* ==== RESET & ZÁKLAD ==== */
-* { margin: 0; padding: 0; box-sizing: border-box; }
-body {
-  font-family: 'Montserrat', Tahoma, sans-serif;
-  background: #1a2332;
-  color: white;
-}
+    /* ===== Hero ===== */
+    .hero{
+      height:85vh;
+      background:
+        linear-gradient(to bottom, rgba(0,0,0,0.2), rgba(26,35,50,1)),
+        url('https://raw.githubusercontent.com/suchanek76/website/main/images/background.jpg') center/cover no-repeat;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:flex-start; /* posunout nahoru */
+      padding-top:12rem; /* přizpůsobit podle potřeby */
+      text-align:center;
+    }
+    .hero h1{font-size:3.2rem;margin-bottom:1.5rem;text-shadow:2px 2px 8px rgba(0,0,0,0.6)}
+    .hero-buttons{display:flex;gap:1rem;flex-wrap:wrap;justify-content:center}
+    .hero-button{
+      background:#fff;color:#1a2332;border:none;padding:0.9rem 1.8rem;border-radius:8px;
+      font-weight:700;cursor:pointer;transition:all .18s;
+    }
+    .hero-button:hover{transform:scale(1.03);background:#3498db;color:#fff}
 
-/* ==== HERO ==== */
-.hero {
-  height: 100vh;
-  background: linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(26,35,50,1) 100%),
-              url('https://raw.githubusercontent.com/suchanek76/website/main/images/background.jpg') center/cover;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;
-  padding-top: 18rem;
-  text-align: center;
-}
-.hero h1 {
-  font-size: 4rem;
-  font-weight: 600;
-  text-shadow: 2px 2px 8px rgba(0,0,0,0.8);
-  letter-spacing: 2px;
-  margin-bottom: 2rem;
-}
-.hero-buttons {
-  display: flex;
-  gap: 1.5rem;
-  flex-wrap: wrap;
-  justify-content: center;
-}
-.hero-button {
-  background: white;
-  color: #1a2332;
-  padding: 1rem 2rem;
-  border: none;
-  border-radius: 8px;
-  font-size: 1.1rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s;
-}
-.hero-button:hover {
-  background: #3498db;
-  color: white;
-  transform: scale(1.05);
-}
+    /* ===== Sekce ===== */
+    .mountains-section{padding:2rem 1.25rem 4rem 1.25rem;margin-top:-2.5rem}
+    .section-title{text-align:center;font-size:1.7rem;margin-bottom:1rem}
 
-/* ==== SECTIONS ==== */
-.mountains-section {
-  padding: 4rem 2rem;
-}
-.mountains-grid {
-  max-width: 1400px;
-  margin: 0 auto;
-  display: grid;
-  gap: 1.5rem;
-}
-.mountain-card {
-  aspect-ratio: 3/2;
-  background: #394d61;
-  border-radius: 8px;
-  overflow: hidden;
-  cursor: pointer;
-  background-size: cover;
-  background-position: center;
-  transition: transform 0.3s;
-}
-.mountain-card:hover { transform: scale(1.05); }
+    /* ===== Nepál text ===== */
+    #nepalText{
+      max-width:1100px;margin:0 auto 1.5rem auto;padding:1rem 1rem;color:#dfe6e9;
+      font-size:1rem;background:rgba(255,255,255,0.03);border-radius:8px;
+    }
 
-/* Textová vrstva jen pro Korunu a Alpy */
-.mountain-overlay {
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  padding: 1rem;
-  background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);
-}
-.mountain-name { font-size: 1.3rem; font-weight: 600; }
-.mountain-details { font-size: 0.9rem; opacity: 0.9; }
+    /* ===== Grid obecně ===== */
+    .mountains-grid{max-width:1400px;margin:0 auto;display:grid;gap:1rem}
+    /* default grid: 3 columns for normal sections */
+    .grid-3{grid-template-columns:repeat(3,1fr)}
+    /* Nepal: 4 columns on large screens */
+    .grid-nepal{grid-template-columns:repeat(4,1fr)}
 
-/* ==== MODAL ==== */
-.modal {
-  display: none;
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.9);
-  z-index: 1000;
-  align-items: center;
-  justify-content: center;
-  overflow-y: auto;
-}
-.modal.active { display: flex; }
-.modal-content {
-  background: #1a2332;
-  color: white;
-  padding: 2rem;
-  border-radius: 10px;
-  max-width: 900px;
-  width: 90%;
-  text-align: center;
-  position: relative;
-}
-.close-modal {
-  position: absolute;
-  top: 1rem;
-  right: 1rem;
-  background: white;
-  color: #1a2332;
-  border: none;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  font-size: 1.5rem;
-  cursor: pointer;
-}
-.modal-header-info { margin-bottom: 2rem; }
-.modal-photos {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 1rem;
-}
-.modal-photos img {
-  width: 100%;
-  border-radius: 8px;
-  object-fit: cover;
-}
+    .mountain-card{
+      position:relative;aspect-ratio:3/2;border-radius:10px;overflow:hidden;background:#394d61 center/cover no-repeat;
+      cursor:pointer;transition:transform .18s;
+    }
+    .mountain-card:hover{transform:scale(1.02)}
 
-/* ==== RESPONSIVE ==== */
-@media (max-width: 968px) {
-  .hero h1 { font-size: 2.8rem; }
-  .mountains-grid { grid-template-columns: repeat(2, 1fr); }
-}
-@media (max-width: 640px) {
-  .hero { padding-top: 8rem; }
-  .hero h1 { font-size: 2rem; }
-  .hero-buttons { flex-direction: column; gap: 1rem; }
-  .mountains-grid { grid-template-columns: 1fr; }
-  .modal-photos { grid-template-columns: 1fr; }
-}
-</style>
+    /* overlay text for non-Nepal cards */
+    .mountain-overlay{
+      position:absolute;left:0;right:0;bottom:0;padding:0.9rem;background:linear-gradient(to top, rgba(0,0,0,0.85), rgba(0,0,0,0.1));
+    }
+    .mountain-name{font-weight:700;font-size:1.05rem}
+    .mountain-details{font-size:0.9rem;color:#cfd8dc;margin-top:0.25rem}
+
+    /* ===== Modal (Nepal gallery + can be reused) ===== */
+    .modal {
+      display:none;position:fixed;inset:0;background:rgba(0,0,0,0.92);z-index:2200;
+      align-items:center;justify-content:center;padding:2rem;
+    }
+    .modal.active{display:flex}
+    .modal-inner{position:relative;max-width:1100px;width:96%;display:flex;align-items:center;justify-content:center}
+    .modal-img{max-width:100%;max-height:80vh;border-radius:8px;box-shadow:0 8px 30px rgba(0,0,0,0.6)}
+    .modal-close{position:absolute;top:-10px;right:-10px;background:#fff;color:#1a2332;border-radius:50%;width:44px;height:44px;border:none;font-size:1.4rem;cursor:pointer;box-shadow:0 6px 18px rgba(0,0,0,0.4)}
+    .modal-arrow{position:fixed;top:50%;transform:translateY(-50%);font-size:2.8rem;color:#fff;cursor:pointer;user-select:none;padding:0.2rem 0.6rem;border-radius:6px;background:rgba(0,0,0,0.25)}
+    .modal-arrow:hover{background:rgba(255,255,255,0.06)}
+    .modal-arrow.left{left:18px}
+    .modal-arrow.right{right:18px}
+
+    /* small caption if needed */
+    .modal-caption{position:absolute;bottom:-50px;left:0;right:0;text-align:center;color:#cfd8dc;font-size:0.95rem}
+
+    /* responsive */
+    @media(max-width:1100px){ .grid-nepal{grid-template-columns:repeat(3,1fr)} .grid-3{grid-template-columns:repeat(2,1fr)} }
+    @media(max-width:720px){ .grid-nepal{grid-template-columns:repeat(2,1fr)} .hero{padding-top:8rem} .hero h1{font-size:2rem} .mountains-section{padding-top:1rem} .modal-arrow{font-size:2rem} }
+    @media(max-width:420px){ .grid-nepal{grid-template-columns:1fr} .grid-3{grid-template-columns:1fr} .modal-inner{width:100%} .modal-img{max-height:70vh} }
+  </style>
 </head>
-
 <body>
-  <section class="hero">
+
+  <!-- HERO -->
+  <section class="hero" aria-label="Hero">
     <h1>Vzít batoh na záda a jít...</h1>
-    <div class="hero-buttons">
-      <button class="hero-button" onclick="scrollToSection('koruna-evropy')">Koruna Evropy 14/42</button>
-      <button class="hero-button" onclick="scrollToSection('alpske-ctyrtisicovky')">Alpské čtyřtisícovky 5/82</button>
-      <button class="hero-button" onclick="scrollToSection('Nepal')">Nepál</button>
+    <div class="hero-buttons" role="navigation" aria-label="Hlavní odkazy">
+      <button class="hero-button" onclick="goTo('koruna-evropy')">Koruna Evropy 14/42</button>
+      <button class="hero-button" onclick="goTo('alpske-ctyrtisicovky')">Alpské čtyřtisícovky 5/82</button>
+      <button class="hero-button" onclick="goTo('Nepal')">Nepál</button>
     </div>
   </section>
 
-  <section class="mountains-section" id="koruna-evropy">
-    <div class="mountains-grid" id="mountainsGrid"></div>
+  <!-- KORUNA EVROPY -->
+  <section id="koruna-evropy" class="mountains-section" aria-labelledby="koruna-title">
+    <h2 id="koruna-title" class="section-title">Koruna Evropy</h2>
+    <div id="korunaGrid" class="mountains-grid grid-3" aria-live="polite"></div>
   </section>
 
-  <!-- MODAL -->
-  <div class="modal" id="mountainModal">
-    <div class="modal-content">
-      <button class="close-modal" onclick="closeModal()">×</button>
-      <div class="modal-header-info">
-        <h2 id="modalMountainName">Název hory</h2>
-        <p id="modalDate">📅 12. srpna 2024</p>
-        <p id="modalTeam">👥 Team: Alena, Petr, Jirka, Jana</p>
-        <p id="modalDescription">Krátký popis výstupu...</p>
-      </div>
-      <div class="modal-photos" id="modalPhotos"></div>
+  <!-- ALPY -->
+  <section id="alpske-ctyrtisicovky" class="mountains-section" aria-labelledby="alps-title">
+    <h2 id="alps-title" class="section-title">Alpské čtyřtisícovky</h2>
+    <div id="alpsGrid" class="mountains-grid grid-3"></div>
+  </section>
+
+  <!-- NEPAL -->
+  <section id="Nepal" class="mountains-section" aria-labelledby="nepal-title">
+    <h2 id="nepal-title" class="section-title">Nepál</h2>
+
+    <!-- TEXTOVÝ PROSTOR mezi buttony a fotkami -->
+    <div id="nepalText">Zde napiš krátký popis výletu do Nepálu — trasy, datum, poznámky.</div>
+
+    <!-- GRID s 4 sloupci (desktop) -->
+    <div id="nepalGrid" class="mountains-grid grid-nepal" aria-live="polite"></div>
+  </section>
+
+  <!-- MODAL pro Nepál (sdílený modal) -->
+  <div id="imageModal" class="modal" role="dialog" aria-hidden="true">
+    <div class="modal-inner" role="document">
+      <button class="modal-close" aria-label="Zavřít" onclick="closeModal()">✕</button>
+      <img id="modalImage" class="modal-img" src="" alt="Fotografie z Nepálu">
+      <div id="modalCaption" class="modal-caption"></div>
     </div>
+
+    <div class="modal-arrow left" role="button" aria-label="Předchozí" onclick="prevImage()">❮</div>
+    <div class="modal-arrow right" role="button" aria-label="Další" onclick="nextImage()">❯</div>
   </div>
 
-    <script>
-        const korunaEvropy = [
-            {id: 'mont-blanc', name: 'Mont Blanc 4.810 m', country: '1/2. Francie/Itálie', height: '4810 m', range: 'Alpy', date: '31.8.2007', image: 'https://raw.githubusercontent.com/suchanek76/website/main/images/Koruna/MontBlanc2x3.jpg', description: 'Mont Blanc je nejvyšší horou Alp a západní Evropy.', category: 'koruna-evropy'},
-            {id: 'dufourspitze', name: 'Dufourspitze 4.634 m', country: '3. Švýcarsko', height: '4634 m', range: 'Alpy', date: null, image: null, description: 'Dufourspitze je nejvyšší hora Švýcarska.', category: 'koruna-evropy'},
-            {id: 'grossglockner', name: 'Grossglockner 3.798 m', country: '4. Rakousko', height: '3798 m', range: 'Alpy', date: '30.6.2025', image: 'https://raw.githubusercontent.com/suchanek76/website/main/images/Koruna/Grossglockner2x3.jpg', description: 'Grossglockner je nejvyšší hora Rakouska.', category: 'koruna-evropy'},
-            {id: 'mulhacen', name: 'Mulhacén 3.479 m', country: '5. Španělsko', height: '3479 m', range: 'Sierra Nevada', date: '10.9.2022', image: 'https://raw.githubusercontent.com/suchanek76/website/main/images/Koruna/Mulhacen2x3.jpg', description: 'Mulhacén je nejvyšší hora španělského kontinentu. Nejvyšší hora Tenerife je Pico de Teide (3718 m).', category: 'koruna-evropy'},
-            {id: 'zugspitze', name: 'Zugspitze 2.962 m', country: '6. Německo', height: '2962 m', range: 'Alpy', date: '21.6.2025', image: 'https://raw.githubusercontent.com/suchanek76/website/main/images/Koruna/Zugspitze2x3.jpg', description: 'Zugspitze je nejvyšší hora Německa.', category: 'koruna-evropy'},
-            {id: 'coma-pedrosa', name: 'Coma Pedrosa 2.942 m', country: '7. Andorra', height: '2942 m', range: 'Pyreneje', date: null, image: null, description: 'Coma Pedrosa je nejvyšší hora Andorry.', category: 'koruna-evropy'},
-            {id: 'musala', name: 'Musala 2.925 m', country: '8. Bulharsko', height: '2925 m', range: 'Rila', date: null, image: null, description: 'Musala je nejvyšší hora Bulharska a celého Balkánu.', category: 'koruna-evropy'},
-            {id: 'mytikas', name: 'Mytikas 2.917 m', country: '9. Řecko', height: '2917 m', range: 'Olymp', date: null, image: null, description: 'Mytikas je nejvyšší vrchol hory Olymp v Řecku.', category: 'koruna-evropy'},
-            {id: 'triglav', name: 'Triglav 2.864 m', country: '10. Slovinsko', height: '2864 m', range: 'Alpy', date: '25.7.2022', image: 'https://raw.githubusercontent.com/suchanek76/website/main/images/Koruna/Triglav2x3.jpg', description: 'Triglav je nejvyšší hora Slovinska.', category: 'koruna-evropy'},
-            {id: 'korab', name: 'Velký Korab 2.764 m', country: '11/12. Albánie/Makedonie', height: '2764 m', range: 'Korab', date: null, image: null, description: 'Velký Korab leží na hranici Albánie a Makedonie.', category: 'koruna-evropy'},
-            {id: 'gerlach', name: 'Gerlachovský štít 2.655 m', country: '13. Slovensko', height: '2655 m', range: 'Vysoké Tatry', date: '24.7.2021', image: 'https://raw.githubusercontent.com/suchanek76/website/main/images/Koruna/Gerlach2x3.jpg', description: 'Gerlachovský štít je nejvyšší hora Slovenska.', category: 'koruna-evropy'},
-            {id: 'grauspitz', name: 'Vorder Grauspitz 2.599 m', country: '14. Lichtenštejnsko', height: '2599 m', range: 'Alpy', date: '6.9.2025', image: 'https://raw.githubusercontent.com/suchanek76/website/main/images/Koruna/VorderGrauspitz2x3.jpg', description: 'Vorder Grauspitz je nejvyšší hora Lichtenštejnska.', category: 'koruna-evropy'},
-            {id: 'moldoveanu', name: 'Moldoveanu 2.544 m', country: '15. Rumunsko', height: '2544 m', range: 'Fagaraš', date: null, image: null, description: 'Moldoveanu je nejvyšší hora Rumunska.', category: 'koruna-evropy'},
-            {id: 'zla-kolata', name: 'Zla Kolata 2.534 m', country: '16. Černá Hora', height: '2534 m', range: 'Dinárské hory', date: null, image: null, description: 'Zla Kolata je nejvyšší hora Černé Hory.', category: 'koruna-evropy'},
-            {id: 'rysy', name: 'Rysy 2.499 m', country: '17. Polsko', height: '2499 m', range: 'Vysoké Tatry', date: '21.9.2024', image: 'https://raw.githubusercontent.com/suchanek76/website/main/images/Koruna/Rysy2x3.jpg', description: 'Rysy jsou nejvyšší horou Polska. Hlavní vrchol je na území Slovenska (2503 m).', category: 'koruna-evropy'},
-            {id: 'galdhopiggen', name: 'Galdhøpiggen 2.469 m', country: '18. Norsko', height: '2469 m', range: 'Skandinávské pohoří', date: '7.7.2022', image: 'https://raw.githubusercontent.com/suchanek76/website/main/images/Koruna/Galdhopiggen2x3.jpg', description: 'Galdhøpiggen je nejvyšší hora Norska a celé Skandinávie.', category: 'koruna-evropy'},
-            {id: 'maglic', name: 'Bosanski Maglić 2.386 m', country: '19. Bosna a Hercegovina', height: '2386 m', range: 'Dinárské hory', date: null, image: null, description: 'Bosanski Maglić je nejvyšší hora Bosny a Hercegoviny.', category: 'koruna-evropy'},
-            {id: 'midzor', name: 'Midžor 2.169 m', country: '20. Srbsko', height: '2169 m', range: 'Stara planina', date: null, image: null, description: 'Midžor je nejvyšší hora Srbska. Nejvyšší hora Kosova je Djeravica (2656 m).', category: 'koruna-evropy'},
-            {id: 'hvannadalshnukur', name: 'Hvannadalshnúkur 2.110 m', country: '21. Island', height: '2110 m', range: 'Öræfajökull', date: null, image: null, description: 'Hvannadalshnúkur je nejvyšší hora Islandu.', category: 'koruna-evropy'},
-            {id: 'kebnekaise', name: 'Kebnekaise 2.103 m', country: '22. Švédsko', height: '2103 m', range: 'Skandinávské hory', date: null, image: null, description: 'Kebnekaise je nejvyšší hora Švédska.', category: 'koruna-evropy'},
-            {id: 'hoverla', name: 'Hoverla 2.061 m', country: '23. Ukrajina', height: '2061 m', range: 'Čornohora', date: null, image: null, description: 'Hoverla je nejvyšší hora Ukrajiny.', category: 'koruna-evropy'},
-            {id: 'torre', name: 'Torre 1.993 m', country: '24. Portugalsko', height: '1993 m', range: 'Serra da Estrela', date: '28.3.2025', image: 'https://raw.githubusercontent.com/suchanek76/website/main/images/Koruna/Torre2x3.jpg', description: 'Torre je nejvyšší hora kontinentálního Portugalska. Nejvyšší hora Azor je Ponta do Pico (2351 m).', category: 'koruna-evropy'},
-            {id: 'narodnaja', name: 'Narodnaja 1.895 m', country: '25. Rusko', height: '1895 m', range: 'Ural', date: null, image: null, description: 'Narodnaja je nejvyšší hora Uralu. Podle jiné hranice Evropy je nejvyšší Elbrus (5642 m).', category: 'koruna-evropy'},
-            {id: 'sinjal', name: 'Sinjal 1.831 m', country: '26. Chorvatsko', height: '1831 m', range: 'Dinárské hory', date: null, image: null, description: 'Sinjal je nejvyšší hora Chorvatska.', category: 'koruna-evropy'},
-            {id: 'snezka', name: 'Sněžka 1.603 m', country: '27. Česko', height: '1603 m', range: 'Krkonoše', date: null, image: null, description: 'Sněžka je nejvyšší hora České republiky.', category: 'koruna-evropy'},
-            {id: 'ben-nevis', name: 'Ben Nevis 1.344 m', country: '28. Spojené království', height: '1344 m', range: 'Skotská vysočina', date: null, image: null, description: 'Ben Nevis je nejvyšší hora Spojeného království.', category: 'koruna-evropy'},
-            {id: 'halti', name: 'Halti 1.324 m', country: '29. Finsko', height: '1324 m', range: 'Skandinávské pohoří', date: null, image: null, description: 'Halti je nejvyšší hora Finska. Vrchol hory je na území Norska (1365 m).', category: 'koruna-evropy'},
-            {id: 'carrauntoohil', name: 'Carrauntoohil 1.041 m', country: '30. Irsko', height: '1041 m', range: 'Macgillycuddy\'s Reeks', date: null, image: null, description: 'Carrauntoohil je nejvyšší hora Irska.', category: 'koruna-evropy'},
-            {id: 'mahya-dagi', name: 'Mahya Dağı 1.031 m', country: '31. Turecko', height: '1031 m', range: 'Strandža', date: null, image: null, description: 'Mahya Dağı je nejvyšší hora evropské části Turecka. Nejvyšší hora asijské části je Ararat (5137 m).', category: 'koruna-evropy'},
-            {id: 'kekes', name: 'Kékes 1.014 m', country: '32. Maďarsko', height: '1014 m', range: 'Mátra', date: '17.8.2023', image: 'https://raw.githubusercontent.com/suchanek76/website/main/images/Koruna/Kekes2x3.jpg', description: 'Kékes je nejvyšší hora Maďarska.', category: 'koruna-evropy'},
-            {id: 'monte-titano', name: 'Monte Titano 756 m', country: '33. San Marino', height: '756 m', range: 'Apeniny', date: null, image: null, description: 'Monte Titano je nejvyšší hora San Marina.', category: 'koruna-evropy'},
-            {id: 'signal-de-botrange', name: 'Signal de Botrange 694 m', country: '34. Belgie', height: '694 m', range: 'Ardeny', date: '6.10.2024', image: 'https://raw.githubusercontent.com/suchanek76/website/main/images/Koruna/SignaldeBotrange2x3.jpg', description: 'Signal de Botrange je nejvyšší hora Belgie.', category: 'koruna-evropy'},
-            {id: 'kneiff', name: 'Kneiff 560 m', country: '35. Lucembursko', height: '560 m', range: 'Ardeny', date: '6.10.2024', image: 'https://raw.githubusercontent.com/suchanek76/website/main/images/Koruna/Kneiff2x3.jpg', description: 'Kneiff je nejvyšší hora Lucemburska.', category: 'koruna-evropy'},
-            {id: 'dealul-balanesti', name: 'Dealul Bălănești 430 m', country: '36. Moldavsko', height: '430 m', range: 'Volyňsko-podolská vyvýšenina', date: null, image: null, description: 'Dealul Bălănești je nejvyšší hora Moldavska.', category: 'koruna-evropy'},
-            {id: 'dzjarzhinskaja', name: 'Dzjaržynskaja hara 345 m', country: '37. Bělorusko', height: '345 m', range: 'Běloruské vrchy', date: null, image: null, description: 'Dzjaržynskaja hara je nejvyšší hora Běloruska.', category: 'koruna-evropy'},
-            {id: 'vaalserberg', name: 'Vaalserberg 322 m', country: '38. Nizozemsko', height: '322 m', range: 'Ardeny', date: '6.10.2024', image: 'https://raw.githubusercontent.com/suchanek76/website/main/images/Koruna/Vaalserberg2x3.jpg', description: 'Vaalserberg je nejvyšší hora evropského Nizozemska. Nejvyšší hora Saby je Mount Scenery (887 m).', category: 'koruna-evropy'},
-            {id: 'suur-munamagi', name: 'Suur Munamägi 318 m', country: '39. Estonsko', height: '318 m', range: 'Haanijská vysočina', date: null, image: null, description: 'Suur Munamägi je nejvyšší hora Estonska.', category: 'koruna-evropy'},
-            {id: 'gaizinkalns', name: 'Gaiziņkalns 312 m', country: '40. Lotyšsko', height: '312 m', range: 'Vidzemské vrchy', date: null, image: null, description: 'Gaiziņkalns je nejvyšší hora Lotyšska.', category: 'koruna-evropy'},
-            {id: 'aukstoja', name: 'Aukštoja 294 m', country: '41. Litva', height: '294 m', range: 'Běloruské vrchy', date: null, image: null, description: 'Aukštoja je nejvyšší hora Litvy.', category: 'koruna-evropy'},
-            {id: 'ta-dmejrek', name: 'Ta Dmejrek 253 m', country: '42. Malta', height: '253 m', range: 'Dingli Cliffs', date: null, image: null, description: 'Ta\' Dmejrek je nejvyšší hora Malty.', category: 'koruna-evropy'},
-            {id: 'mollehoj', name: 'Møllehøj 171 m', country: '43. Dánsko', height: '171 m', range: '—', date: null, image: null, description: 'Møllehøj je nejvyšší hora Dánska. Nejvyšší hora Grónska je Gunnbjørn (3694 m).', category: 'koruna-evropy'},
-            {id: 'chemin-revoires', name: 'Chemin des Révoires 161 m', country: '44. Monako', height: '161 m', range: 'Alpy', date: null, image: null, description: 'Chemin des Révoires je nejvyšší bod Monaka, cesta na svahu francouzské hory Mont Agel (1148 m).', category: 'koruna-evropy'},
-            {id: 'vatikan', name: 'Vatikánské zahrady 75 m', country: '45. Vatikán', height: '75 m', range: '—', date: null, image: null, description: 'Nejvyšší bod Vatikánu. Nejde o horu.', category: 'koruna-evropy'}
-        ];
-        // Generování 82 karet pro Alpské čtyřtisícovky
-        const alpskeCtyrtisicovky = [
-            {id: 'alps-1', name: 'Mont Blanc / Monte Bianco', country: 'Francie/Itálie', height: '4807 m', range: 'Mont Blanc', date: null, image: 'https://raw.githubusercontent.com/suchanek76/website/main/images/4000/MontBlanc2x3.jpg', description: 'Mont Blanc je nejvyšší horou Alp.', category: 'alpske-ctyrtisicovky'},
-            {id: 'alps-2', name: 'Mont Blanc di Courmayeur', country: 'Itálie', height: '4765 m', range: 'Mont Blanc', date: null, image: null, description: 'Součást masívu Mont Blanc.', category: 'alpske-ctyrtisicovky'},
-            {id: 'alps-3', name: 'Dufourspitze / Punta Dufour', country: 'Švýcarsko/Itálie', height: '4634 m', range: 'Monte Rosa', date: null, image: null, description: 'Nejvyšší vrchol Monte Rosa.', category: 'alpske-ctyrtisicovky'},
-            {id: 'alps-4', name: 'Nordend', country: 'Švýcarsko/Itálie', height: '4609 m', range: 'Monte Rosa', date: null, image: null, description: 'Součást masívu Monte Rosa.', category: 'alpske-ctyrtisicovky'},
-            {id: 'alps-5', name: 'Zumsteinspitze / Punta Zumstein', country: 'Švýcarsko/Itálie', height: '4563 m', range: 'Monte Rosa', date: null, image: 'https://raw.githubusercontent.com/suchanek76/website/main/images/4000/Zumsteinspitze2x3.jpg', description: 'Součást masívu Monte Rosa.', category: 'alpske-ctyrtisicovky'},
-            {id: 'alps-6', name: 'Signalkuppe / Punta Gnifetti', country: 'Švýcarsko/Itálie', height: '4554 m', range: 'Monte Rosa', date: null, image: 'https://raw.githubusercontent.com/suchanek76/website/main/images/4000/Margherita2x3.jpg', description: 'Součást masívu Monte Rosa.', category: 'alpske-ctyrtisicovky'},
-            {id: 'alps-7', name: 'Dom', country: 'Švýcarsko', height: '4545 m', range: 'Mischabel', date: null, image: null, description: 'Nejvyšší hora zcela na švýcarském území.', category: 'alpske-ctyrtisicovky'},
-            {id: 'alps-8', name: 'Liskamm E / Lyskamm orientale', country: 'Švýcarsko/Itálie', height: '4527 m', range: 'Liskamm', date: null, image: null, description: 'Východní vrchol Liskammu.', category: 'alpske-ctyrtisicovky'},
-            {id: 'alps-9', name: 'Weisshorn', country: 'Švýcarsko', height: '4506 m', range: 'Weisshorn', date: null, image: null, description: 'Jeden z nejkrásnějších alpských vrcholů.', category: 'alpske-ctyrtisicovky'},
-            {id: 'alps-10', name: 'Täschhorn', country: 'Švýcarsko', height: '4491 m', range: 'Mischabel', date: null, image: null, description: 'Součást Mischabelu.', category: 'alpske-ctyrtisicovky'},
-            {id: 'alps-11', name: 'Liskamm W / Lyskamm occidentale', country: 'Švýcarsko/Itálie', height: '4479 m', range: 'Liskamm', date: null, image: null, description: 'Západní vrchol Liskammu.', category: 'alpske-ctyrtisicovky'},
-            {id: 'alps-12', name: 'Monte Cervino / Matterhorn', country: 'Švýcarsko/Itálie', height: '4478 m', range: 'Matterhorn', date: null, image: null, description: 'Ikonická pyramidová hora Alp.', category: 'alpske-ctyrtisicovky'},
-            {id: 'alps-13', name: 'Pic Luigi Amedeo', country: 'Francie', height: '4470 m', range: 'Mont Blanc', date: null, image: null, description: 'Součást masívu Mont Blanc.', category: 'alpske-ctyrtisicovky'},
-            {id: 'alps-14', name: 'Mont Maudit', country: 'Francie/Itálie', height: '4468 m', range: 'Mont Blanc', date: null, image: null, description: 'Součást masívu Mont Blanc.', category: 'alpske-ctyrtisicovky'},
-            {id: 'alps-15', name: 'Parrotspitze / Punta Parrot', country: 'Švýcarsko/Itálie', height: '4432 m', range: 'Monte Rosa', date: null, image: null, description: 'Součást masívu Monte Rosa.', category: 'alpske-ctyrtisicovky'},
-            {id: 'alps-16', name: 'Dent Blanche', country: 'Švýcarsko', height: '4357 m', range: 'Matterhorn', date: null, image: null, description: 'Impozantní hora v oblasti Matterhornu.', category: 'alpske-ctyrtisicovky'},
-            {id: 'alps-17', name: 'Ludwigshöhe', country: 'Švýcarsko/Itálie', height: '4341 m', range: 'Monte Rosa', date: null, image: 'https://raw.githubusercontent.com/suchanek76/website/main/images/4000/LudwigshöheLukas2x3.jpg', description: 'Součást masívu Monte Rosa.', category: 'alpske-ctyrtisicovky'},
-            {id: 'alps-18', name: 'Nadelhorn', country: 'Švýcarsko', height: '4327 m', range: 'Mischabel', date: null, image: null, description: 'Součást Mischabelu.', category: 'alpske-ctyrtisicovky'},
-            {id: 'alps-19', name: 'Corno Nero', country: 'Švýcarsko/Itálie', height: '4322 m', range: 'Monte Rosa', date: null, image: null, description: 'Součást masívu Monte Rosa.', category: 'alpske-ctyrtisicovky'},
-            {id: 'alps-20', name: 'Combin de Grafeneire', country: 'Švýcarsko', height: '4314 m', range: 'Grand Combin', date: null, image: null, description: 'Součást Grand Combin.', category: 'alpske-ctyrtisicovky'},
-            {id: 'alps-21', name: 'Dôme du Goûter', country: 'Francie/Itálie', height: '4306 m', range: 'Mont Blanc', date: null, image: null, description: 'Součást masívu Mont Blanc.', category: 'alpske-ctyrtisicovky'},
-            {id: 'alps-22', name: 'Lenzspitze', country: 'Švýcarsko', height: '4294 m', range: 'Mischabel', date: null, image: null, description: 'Součást Mischabelu.', category: 'alpske-ctyrtisicovky'},
-            {id: 'alps-23', name: 'Finsteraarhorn', country: 'Švýcarsko', height: '4274 m', range: 'Jungfrau', date: null, image: null, description: 'Nejvyšší hora Bernských Alp.', category: 'alpske-ctyrtisicovky'},
-            {id: 'alps-24', name: 'Mont Blanc du Tacul', country: 'Francie', height: '4248 m', range: 'Mont Blanc', date: null, image: null, description: 'Součást masívu Mont Blanc.', category: 'alpske-ctyrtisicovky'},
-            {id: 'alps-25', name: 'Grande Pilier d\'Angle', country: 'Francie/Itálie', height: '4243 m', range: 'Mont Blanc', date: null, image: null, description: 'Součást masívu Mont Blanc.', category: 'alpske-ctyrtisicovky'},
-            {id: 'alps-26', name: 'Stecknadelhorn', country: 'Švýcarsko', height: '4241 m', range: 'Mischabel', date: null, image: null, description: 'Součást Mischabelu.', category: 'alpske-ctyrtisicovky'},
-            {id: 'alps-27', name: 'Castor / Castore', country: 'Švýcarsko/Itálie', height: '4228 m', range: 'Liskamm', date: null, image: null, description: 'Část skupiny Castor a Pollux.', category: 'alpske-ctyrtisicovky'},
-            {id: 'alps-28', name: 'Zinalrothorn', country: 'Švýcarsko', height: '4221 m', range: 'Weisshorn', date: null, image: null, description: 'Krásná hora v oblasti Weisshornu.', category: 'alpske-ctyrtisicovky'},
-            {id: 'alps-29', name: 'Hohbärghorn', country: 'Švýcarsko', height: '4219 m', range: 'Mischabel', date: null, image: null, description: 'Součást Mischabelu.', category: 'alpske-ctyrtisicovky'},
-            {id: 'alps-30', name: 'Piramide Vincent', country: 'Švýcarsko/Itálie', height: '4215 m', range: 'Monte Rosa', date: null, image: 'https://raw.githubusercontent.com/suchanek76/website/main/images/4000/Vincent2x3.jpg', description: 'Součást masívu Monte Rosa.', category: 'alpske-ctyrtisicovky'},
-            {id: 'alps-31', name: 'Punta Walker', country: 'Francie/Itálie', height: '4206 m', range: 'Grandes Jorasses', date: null, image: null, description: 'Součást Grandes Jorasses.', category: 'alpske-ctyrtisicovky'},
-            {id: 'alps-32', name: 'Alphubel', country: 'Švýcarsko', height: '4206 m', range: 'Allalinhorn', date: null, image: null, description: 'Součást skupiny Allalinhorn.', category: 'alpske-ctyrtisicovky'},
-            {id: 'alps-33', name: 'Rimpfischhorn', country: 'Švýcarsko', height: '4199 m', range: 'Allalinhorn', date: null, image: null, description: 'Součást skupiny Allalinhorn.', category: 'alpske-ctyrtisicovky'},
-            {id: 'alps-34', name: 'Aletschhorn', country: 'Švýcarsko', height: '4195 m', range: 'Jungfrau', date: null, image: null, description: 'Krásný vrchol v Bernských Alpách.', category: 'alpske-ctyrtisicovky'},
-            {id: 'alps-35', name: 'Strahlhorn', country: 'Švýcarsko', height: '4190 m', range: 'Allalinhorn', date: null, image: null, description: 'Součást skupiny Allalinhorn.', category: 'alpske-ctyrtisicovky'},
-            {id: 'alps-36', name: 'Combin de Valsorey', country: 'Švýcarsko', height: '4184 m', range: 'Grand Combin', date: null, image: null, description: 'Součást Grand Combin.', category: 'alpske-ctyrtisicovky'},
-            {id: 'alps-37', name: 'Pointe Whymper', country: 'Francie/Itálie', height: '4180 m', range: 'Grandes Jorasses', date: null, image: null, description: 'Součást Grandes Jorasses.', category: 'alpske-ctyrtisicovky'},
-            {id: 'alps-38', name: 'Dent d\'Hérens', country: 'Švýcarsko/Itálie', height: '4171 m', range: 'Matterhorn', date: null, image: null, description: 'Součást oblasti Matterhorn.', category: 'alpske-ctyrtisicovky'},
-            {id: 'alps-39', name: 'Breithorn West', country: 'Švýcarsko/Itálie', height: '4164 m', range: 'Liskamm', date: null, image: null, description: 'Západní vrchol Breithornu.', category: 'alpske-ctyrtisicovky'},
-            {id: 'alps-40', name: 'Breithorn Central', country: 'Švýcarsko/Itálie', height: '4159 m', range: 'Liskamm', date: null, image: null, description: 'Střední vrchol Breithornu.', category: 'alpske-ctyrtisicovky'},
-            {id: 'alps-41', name: 'Jungfrau', country: 'Švýcarsko', height: '4158 m', range: 'Jungfrau', date: null, image: null, description: 'Slavná hora Bernských Alp.', category: 'alpske-ctyrtisicovky'},
-            {id: 'alps-42', name: 'Bishorn', country: 'Švýcarsko', height: '4153 m', range: 'Weisshorn', date: null, image: null, description: 'Součást oblasti Weisshorn.', category: 'alpske-ctyrtisicovky'},
-            {id: 'alps-43', name: 'Combin de la Tsessette', country: 'Švýcarsko', height: '4141 m', range: 'Grand Combin', date: null, image: null, description: 'Součást Grand Combin.', category: 'alpske-ctyrtisicovky'},
-            {id: 'alps-44', name: 'Breithorn East', country: 'Švýcarsko/Itálie', height: '4139 m', range: 'Liskamm', date: null, image: null, description: 'Východní vrchol Breithornu.', category: 'alpske-ctyrtisicovky'},
-            {id: 'alps-45', name: 'Aiguille Verte', country: 'Francie', height: '4122 m', range: 'Aiguille Verte', date: null, image: null, description: 'Impozantní hora v masívu Mont Blanc.', category: 'alpske-ctyrtisicovky'},
-            {id: 'alps-46', name: 'L\'Isolée', country: 'Francie', height: '4114 m', range: 'Mont Blanc', date: null, image: null, description: 'Součást masívu Mont Blanc.', category: 'alpske-ctyrtisicovky'},
-            {id: 'alps-47', name: 'Aiguille Blanche de Peuterey', country: 'Itálie', height: '4114 m', range: 'Mont Blanc', date: null, image: null, description: 'Součást masívu Mont Blanc.', category: 'alpske-ctyrtisicovky'},
-            {id: 'alps-48', name: 'Punta Carmen', country: 'Itálie', height: '4109 m', range: 'Mont Blanc', date: null, image: null, description: 'Součást masívu Mont Blanc.', category: 'alpske-ctyrtisicovky'},
-            {id: 'alps-49', name: 'Punta Croz', country: 'Francie/Itálie', height: '4108 m', range: 'Grandes Jorasses', date: null, image: null, description: 'Součást Grandes Jorasses.', category: 'alpske-ctyrtisicovky'},
-            {id: 'alps-50', name: 'Breithornzwillinge East', country: 'Švýcarsko/Itálie', height: '4106 m', range: 'Liskamm', date: null, image: null, description: 'Východní dvojče Breithornu.', category: 'alpske-ctyrtisicovky'},
-            {id: 'alps-51', name: 'Grande Rocheuse', country: 'Francie', height: '4102 m', range: 'Aiguille Verte', date: null, image: null, description: 'Součást skupiny Aiguille Verte.', category: 'alpske-ctyrtisicovky'},
-            {id: 'alps-52', name: 'Barre des Ecrins', country: 'Francie', height: '4101 m', range: 'Barre des Ecrins', date: null, image: null, description: 'Nejvyšší hora Dauphinských Alp.', category: 'alpske-ctyrtisicovky'},
-            {id: 'alps-53', name: 'Mönch', country: 'Švýcarsko', height: '4099 m', range: 'Jungfrau', date: null, image: null, description: 'Část slavného trojúhelníku Eiger-Mönch-Jungfrau.', category: 'alpske-ctyrtisicovky'},
-            {id: 'alps-54', name: 'Pointe Médiane', country: 'Francie', height: '4097 m', range: 'Mont Blanc', date: null, image: null, description: 'Součást masívu Mont Blanc.', category: 'alpske-ctyrtisicovky'},
-            {id: 'alps-55', name: 'Pollux / Polucce', country: 'Švýcarsko/Itálie', height: '4092 m', range: 'Liskamm', date: null, image: null, description: 'Část skupiny Castor a Pollux.', category: 'alpske-ctyrtisicovky'},
-            {id: 'alps-56', name: 'Schreckhorn', country: 'Švýcarsko', height: '4078 m', range: 'Schreckhorn', date: null, image: null, description: 'Impozantní hora Bernských Alp.', category: 'alpske-ctyrtisicovky'},
-            {id: 'alps-57', name: 'Roccia Nera', country: 'Švýcarsko/Itálie', height: '4075 m', range: 'Liskamm', date: null, image: null, description: 'Součást skupiny Liskamm.', category: 'alpske-ctyrtisicovky'},
-            {id: 'alps-58', name: 'Pointe Chaubert', country: 'Francie', height: '4074 m', range: 'Mont Blanc', date: null, image: null, description: 'Součást masívu Mont Blanc.', category: 'alpske-ctyrtisicovky'},
-            {id: 'alps-59', name: 'Mont Brouillard', country: 'Itálie', height: '4068 m', range: 'Mont Blanc', date: null, image: null, description: 'Součást masívu Mont Blanc.', category: 'alpske-ctyrtisicovky'},
-            {id: 'alps-60', name: 'Punta Margherita', country: 'Francie/Itálie', height: '4065 m', range: 'Grandes Jorasses', date: null, image: null, description: 'Součást Grandes Jorasses.', category: 'alpske-ctyrtisicovky'},
-            {id: 'alps-61', name: 'Corne du Diable', country: 'Francie', height: '4064 m', range: 'Mont Blanc', date: null, image: null, description: 'Součást masívu Mont Blanc.', category: 'alpske-ctyrtisicovky'},
-            {id: 'alps-62', name: 'Ober Gabelhorn', country: 'Švýcarsko', height: '4063 m', range: 'Weisshorn', date: null, image: null, description: 'Součást oblasti Weisshorn.', category: 'alpske-ctyrtisicovky'},
-            {id: 'alps-63', name: 'Gran Paradiso', country: 'Itálie', height: '4061 m', range: 'Gran Paradiso', date: null, image: null, description: 'Nejvyšší hora zcela na italském území.', category: 'alpske-ctyrtisicovky'},
-            {id: 'alps-64', name: 'Aiguille de Bionnassay', country: 'Francie', height: '4052 m', range: 'Mont Blanc', date: null, image: null, description: 'Součást masívu Mont Blanc.', category: 'alpske-ctyrtisicovky'},
-            {id: 'alps-65', name: 'Piz Bernina', country: 'Švýcarsko', height: '4049 m', range: 'Piz Bernina', date: null, image: null, description: 'Nejvyšší hora východních Alp.', category: 'alpske-ctyrtisicovky'},
-            {id: 'alps-66', name: 'Gross Fiescherhorn', country: 'Švýcarsko', height: '4049 m', range: 'Jungfrau', date: null, image: null, description: 'Součást Bernských Alp.', category: 'alpske-ctyrtisicovky'},
-            {id: 'alps-67', name: 'Punta Giordani', country: 'Itálie', height: '4046 m', range: 'Monte Rosa', date: null, image: null, description: 'Součást masívu Monte Rosa.', category: 'alpske-ctyrtisicovky'},
-            {id: 'alps-68', name: 'Gross Grünhorn', country: 'Švýcarsko', height: '4044 m', range: 'Jungfrau', date: null, image: null, description: 'Součást Bernských Alp.', category: 'alpske-ctyrtisicovky'},
-            {id: 'alps-69', name: 'Punta Elena', country: 'Francie/Itálie', height: '4042 m', range: 'Grandes Jorasses', date: null, image: null, description: 'Součást Grandes Jorasses.', category: 'alpske-ctyrtisicovky'},
-            {id: 'alps-70', name: 'Lauteraarhorn', country: 'Švýcarsko', height: '4042 m', range: 'Schreckhorn', date: null, image: null, description: 'Součást skupiny Schreckhorn.', category: 'alpske-ctyrtisicovky'},
-            {id: 'alps-71', name: 'Aiguille du Jardin', country: 'Francie', height: '4035 m', range: 'Aiguille Verte', date: null, image: null, description: 'Součást skupiny Aiguille Verte.', category: 'alpske-ctyrtisicovky'},
-            {id: 'alps-72', name: 'Dirruhorn', country: 'Švýcarsko', height: '4035 m', range: 'Mischabel', date: null, image: null, description: 'Součást Mischabelu.', category: 'alpske-ctyrtisicovky'},
-            {id: 'alps-73', name: 'Allalinhorn', country: 'Švýcarsko', height: '4027 m', range: 'Allalinhorn', date: null, image: null, description: 'Oblíbený čtyřtisícový vrchol.', category: 'alpske-ctyrtisicovky'},
-            {id: 'alps-74', name: 'Hinter Fiescherhorn', country: 'Švýcarsko', height: '4025 m', range: 'Jungfrau', date: null, image: null, description: 'Součást Bernských Alp.', category: 'alpske-ctyrtisicovky'},
-            {id: 'alps-75', name: 'Weissmies', country: 'Švýcarsko', height: '4023 m', range: 'Weissmies', date: null, image: null, description: 'Krásná hora ve Wallisu.', category: 'alpske-ctyrtisicovky'},
-            {id: 'alps-76', name: 'Dôme de Rochefort', country: 'Francie/Itálie', height: '4015 m', range: 'Grandes Jorasses', date: null, image: null, description: 'Součást Grandes Jorasses.', category: 'alpske-ctyrtisicovky'},
-            {id: 'alps-77', name: 'Dôme de Neige des Ecrins', country: 'Francie', height: '4015 m', range: 'Barre des Ecrins', date: null, image: null, description: 'Součást Barre des Ecrins.', category: 'alpske-ctyrtisicovky'},
-            {id: 'alps-78', name: 'Dente del Gigante / Dent du Géant', country: 'Francie/Itálie', height: '4014 m', range: 'Grandes Jorasses', date: null, image: null, description: 'Dramatická skalní věž.', category: 'alpske-ctyrtisicovky'},
-            {id: 'alps-79', name: 'Lagginhorn', country: 'Švýcarsko', height: '4010 m', range: 'Weissmies', date: null, image: null, description: 'Součást skupiny Weissmies.', category: 'alpske-ctyrtisicovky'},
-            {id: 'alps-80', name: 'Punta Baretti', country: 'Itálie', height: '4006 m', range: 'Mont Blanc', date: null, image: null, description: 'Součást masívu Mont Blanc.', category: 'alpske-ctyrtisicovky'},
-            {id: 'alps-81', name: 'Aiguille de Rochefort', country: 'Francie/Itálie', height: '4001 m', range: 'Mont Blanc', date: null, image: null, description: 'Součást masívu Mont Blanc.', category: 'alpske-ctyrtisicovky'},
-            {id: 'alps-82', name: 'Les Droites', country: 'Francie', height: '4000 m', range: 'Aiguille Verte', date: null, image: null, description: 'Poslední čtyřtisícovka Alp.', category: 'alpske-ctyrtisicovky'}
-        ];
- 
-    // 40 fotek z Nepálu (Nepal01–Nepal40)
-    const Nepal = Array.from({length: 40}, (_, i) => {
-  const num = String(i + 1).padStart(2, '0');
-  return { id: `nepal-${num}`,
-           image: `https://raw.githubusercontent.com/suchanek76/website/main/images/Nepal/Nepal${num}.jpg` };
+<script>
+/* ===== DATA (přímé cesty na raw GitHub) ===== */
+const koruna = [
+  { id: 'mont-blanc', name: 'Mont Blanc 4 810 m', image: 'https://raw.githubusercontent.com/suchanek76/website/main/images/Koruna/MontBlanc2x3.jpg' },
+  { id: 'grossglockner', name: 'Grossglockner 3 798 m', image: 'https://raw.githubusercontent.com/suchanek76/website/main/images/Koruna/Grossglockner2x3.jpg' },
+  { id: 'vatikan', name: 'Vatikánské zahrady 75 m', image: 'https://raw.githubusercontent.com/suchanek76/website/main/images/Koruna/Vatikan2x3.jpg' }
+];
+
+const alps = [
+  { id: 'dufourspitze', name: 'Dufourspitze 4 634 m', image: 'https://raw.githubusercontent.com/suchanek76/website/main/images/4000/Dufourspitze2x3.jpg' },
+  { id: 'weisshorn', name: 'Weisshorn 4 506 m', image: 'https://raw.githubusercontent.com/suchanek76/website/main/images/4000/Weisshorn2x3.jpg' },
+  { id: 'matterhorn', name: 'Matterhorn 4 478 m', image: 'https://raw.githubusercontent.com/suchanek76/website/main/images/4000/Matterhorn2x3.jpg' }
+];
+
+/* Nepál: 40 fotek z GitHubu (Nepal01..Nepal40) */
+const nepalPhotos = Array.from({length:40}, (_, i) =>
+  `https://raw.githubusercontent.com/suchanek76/website/main/images/Nepal/Nepal${String(i+1).padStart(2,'0')}.jpg`
+);
+
+/* ===== RENDER GRIDY ===== */
+function createCard(imgUrl, altText) {
+  const d = document.createElement('div');
+  d.className = 'mountain-card';
+  d.style.backgroundImage = `url(${imgUrl})`;
+  d.setAttribute('role','button');
+  d.setAttribute('aria-label', altText || 'Fotografie');
+  return d;
+}
+
+function populateKoruna() {
+  const g = document.getElementById('korunaGrid');
+  g.innerHTML = '';
+  koruna.forEach(item => {
+    const card = createCard(item.image, item.name);
+    // po kliknutí otevře malý modal s 4 fotkami (pokud existují)
+    card.onclick = () => openKorunaModal(item);
+    g.appendChild(card);
+  });
+}
+
+function populateAlps() {
+  const g = document.getElementById('alpsGrid');
+  g.innerHTML = '';
+  alps.forEach(item => {
+    const card = createCard(item.image, item.name);
+    card.onclick = () => openKorunaModal(item);
+    g.appendChild(card);
+  });
+}
+
+function populateNepal() {
+  const g = document.getElementById('nepalGrid');
+  g.innerHTML = '';
+  nepalPhotos.forEach((url, idx) => {
+    const card = createCard(url, `Nepál ${idx+1}`);
+    // klik otevírá modal galerie s navigací
+    card.onclick = () => openModalAt(idx);
+    g.appendChild(card);
+  });
+}
+
+/* ===== KONTROLA A NAVIGACE NA SEKCE ===== */
+function goTo(id) {
+  document.getElementById(id).scrollIntoView({behavior:'smooth'});
+}
+
+/* ===== MODAL (Nepál gallery) ===== */
+let modal = document.getElementById('imageModal');
+let modalImage = document.getElementById('modalImage');
+let modalCaption = document.getElementById('modalCaption');
+let current = 0;
+
+function openModalAt(index){
+  current = index;
+  showModalImage();
+  modal.classList.add('active');
+  modal.setAttribute('aria-hidden','false');
+  // zabraňit scroll pozadí
+  document.body.style.overflow = 'hidden';
+}
+
+function showModalImage(){
+  modalImage.src = nepalPhotos[current];
+  modalCaption.textContent = `${current+1} / ${nepalPhotos.length}`;
+  // alt text
+  modalImage.alt = `Nepál ${current+1}`;
+}
+
+function closeModal(){
+  modal.classList.remove('active');
+  modal.setAttribute('aria-hidden','true');
+  document.body.style.overflow = '';
+  // small delay clear src to avoid background loading
+  setTimeout(()=>{ modalImage.src=''; }, 200);
+}
+
+function prevImage(){
+  current = (current - 1 + nepalPhotos.length) % nepalPhotos.length;
+  showModalImage();
+}
+function nextImage(){
+  current = (current + 1) % nepalPhotos.length;
+  showModalImage();
+}
+
+/* Close when clicking outside image */
+modal.addEventListener('click', (e)=>{
+  if(e.target === modal) closeModal();
 });
 
-/* ==== LOGIKA ==== */
-let currentCategory = 'koruna-evropy';
-let mountains = [];
+/* Keyboard support */
+document.addEventListener('keydown', (e)=>{
+  if(!modal.classList.contains('active')) return;
+  if(e.key === 'Escape') closeModal();
+  if(e.key === 'ArrowLeft') prevImage();
+  if(e.key === 'ArrowRight') nextImage();
+});
 
-function openModal(mountain) {
-  const modal = document.getElementById("mountainModal");
-  modal.classList.add("active");
-  document.getElementById("modalMountainName").textContent = mountain.name;
-  document.getElementById("modalDate").textContent = "📅 12. srpna 2024";
-  document.getElementById("modalTeam").textContent = "👥 Team: Alena, Petr, Jirka, Jana";
-  document.getElementById("modalDescription").textContent = "Krásný výstup za ideálního počasí.";
-  const photos = document.getElementById("modalPhotos");
-  photos.innerHTML = "";
-  for (let i = 1; i <= 4; i++) {
-    const img = document.createElement("img");
-    img.src = `https://raw.githubusercontent.com/suchanek76/website/main/images/${mountain.id}/${mountain.id}${String(i).padStart(2,"0")}.jpg`;
-    photos.appendChild(img);
+/* ===== Koruna modal (malá stránka s 4 fotkami + text) =====
+   Po kliknutí na kartu v Koruna/Alpy otevře se modal s 4 fotkami
+   Přidáme jednoduché řešení: pokud existují lokální obrázky v /images/{id}/{id}01..04.jpg, načtou se.
+   Pokud ne, zobrazíme hlavní obrázek jako náhradu.
+*/
+function openKorunaModal(mountain){
+  // připravíme obsah modalCaption a modalImage jako malou galerii (4 obrázky)
+  // Znovu používáme stejný modal; při otevření ukážeme první z 4 (pokud neexistují, fallback)
+  const basePath = `https://raw.githubusercontent.com/suchanek76/website/main/images/${mountain.id || mountain.name.replace(/\\s+/g,'-')}`;
+  // vytvoříme pole 4 obrázků
+  const imgs = [];
+  for(let i=1;i<=4;i++){
+    const num = String(i).padStart(2,'0');
+    imgs.push( `${basePath}/${(mountain.id || mountain.name.replace(/\\s+/g,'-'))}${num}.jpg` );
   }
-}
-function closeModal() { document.getElementById("mountainModal").classList.remove("active"); }
+  // pokud mají existovat, jednoduše zobrazíme první; uživatele upozornit nelze bez fetch
+  // Pro jednoduchost: otevřeme modal a umožníme šipky přechod mezi 4 položkami
+  // uložíme je do temporárního pole
+  window._tempGallery = imgs.slice();
+  current = 0;
+  modalImage.src = window._tempGallery[current] || mountain.image || '';
+  modalCaption.textContent = mountain.name || '';
+  modal.classList.add('active');
+  modal.setAttribute('aria-hidden','false');
+  document.body.style.overflow = 'hidden';
 
-function openImageFullscreen(imgUrl) {
-  const overlay = document.createElement('div');
-  Object.assign(overlay.style, {
-    position:'fixed', inset:'0', background:'rgba(0,0,0,0.95)',
-    display:'flex', alignItems:'center', justifyContent:'center', zIndex:'2000', cursor:'zoom-out'
-  });
-  const img = document.createElement('img');
-  Object.assign(img.style, { maxWidth:'95%', maxHeight:'95%', borderRadius:'8px' });
-  img.src = imgUrl;
-  overlay.appendChild(img);
-  overlay.onclick = () => overlay.remove();
-  document.body.appendChild(overlay);
-}
-
-function renderMountains() {
-  const grid = document.getElementById('mountainsGrid');
-  grid.innerHTML = '';
-  grid.style.gridTemplateColumns = currentCategory === 'Nepal' ? 'repeat(4, 1fr)' : 'repeat(3, 1fr)';
-  mountains.forEach(m => {
-    const card = document.createElement('div');
-    card.className = 'mountain-card';
-    if (m.image) card.style.backgroundImage = `url(${m.image})`;
-    if (currentCategory === 'Nepal') {
-      card.onclick = () => openImageFullscreen(m.image);
-    } else {
-      card.style.position = 'relative';
-      card.innerHTML = `
-        <div class="mountain-overlay">
-          <div class="mountain-name">${m.name}</div>
-          <div class="mountain-details">${m.country || ''} ${m.date || ''}</div>
-        </div>`;
-      card.onclick = () => openModal(m);
-    }
-    grid.appendChild(card);
-  });
+  // přesměruj funkce prev/next na pracování s tempGallery
+  // (zapamätáme staré funkce)
+  window._oldPrev = window._oldPrev || prevImage;
+  window._oldNext = window._oldNext || nextImage;
+  // nahrajeme do lokálních funkcí:
+  window._isTempMode = true;
+  window._showTemp = function(){
+    modalImage.src = window._tempGallery[current];
+    modalCaption.textContent = `${mountain.name} — ${current+1}/4`;
+  };
+  // přepíšeme prev/next do temp režimu
+  window.prevImage = function(){
+    current = (current - 1 + window._tempGallery.length) % window._tempGallery.length;
+    window._showTemp();
+  };
+  window.nextImage = function(){
+    current = (current + 1) % window._tempGallery.length;
+    window._showTemp();
+  };
 }
 
-function scrollToSection(sectionId) {
-  currentCategory = sectionId;
-  mountains = (sectionId === 'koruna-evropy') ? korunaEvropy :
-              (sectionId === 'alpske-ctyrtisicovky') ? alpskeCtyrtisicovky : Nepal;
-  renderMountains();
-  document.getElementById('koruna-evropy').scrollIntoView({ behavior: 'smooth' });
+function restoreNextPrev(){
+  // pokud bylo přepsáno, obnovíme původní prev/next
+  if(window._oldPrev){ window.prevImage = window._oldPrev; window.nextImage = window._oldNext; window._isTempMode = false; }
 }
 
-/* ==== INIT ==== */
-window.addEventListener('DOMContentLoaded', () => {
-  mountains = korunaEvropy;
-  renderMountains();
+/* Když se modal zavře, obnovíme původní prev/next pokud byly změněny */
+const originalClose = closeModal;
+closeModal = function(){
+  originalClose();
+  if(window._isTempMode){ restoreNextPrev(); window._tempGallery = null; }
+};
+
+/* ===== INIT ===== */
+window.addEventListener('DOMContentLoaded', ()=>{
+  populateKoruna();
+  populateAlps();
+  populateNepal();
+  // posunout výchozí na Korunu Evropy (nepřesunujeme stránku)
 });
 </script>
 </body>
 </html>
-
