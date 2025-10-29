@@ -1,165 +1,156 @@
 <!DOCTYPE html>
 <html lang="cs">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Suchánci na horách</title>
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Suchánci na horách</title>
 
-    body {
-      font-family: 'Montserrat', sans-serif;
-      color: white;
-      background: #1a2332;
-      overflow-x: hidden;
-    }
+<style>
+/* ==== RESET & ZÁKLAD ==== */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: 'Montserrat', Tahoma, sans-serif;
+  background: #1a2332;
+  color: white;
+}
 
-    /* Hero sekce */
-    .hero {
-      height: 90vh;
-      background: linear-gradient(to bottom, rgba(0,0,0,0.2), rgba(26,35,50,1)),
-        url('https://raw.githubusercontent.com/suchanek76/website/main/images/background.jpg') center/cover no-repeat;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: flex-start;
-      padding-top: 14rem;
-      text-align: center;
-    }
+/* ==== HERO ==== */
+.hero {
+  height: 100vh;
+  background: linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(26,35,50,1) 100%),
+              url('https://raw.githubusercontent.com/suchanek76/website/main/images/background.jpg') center/cover;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding-top: 18rem;
+  text-align: center;
+}
+.hero h1 {
+  font-size: 4rem;
+  font-weight: 600;
+  text-shadow: 2px 2px 8px rgba(0,0,0,0.8);
+  letter-spacing: 2px;
+  margin-bottom: 2rem;
+}
+.hero-buttons {
+  display: flex;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.hero-button {
+  background: white;
+  color: #1a2332;
+  padding: 1rem 2rem;
+  border: none;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+.hero-button:hover {
+  background: #3498db;
+  color: white;
+  transform: scale(1.05);
+}
 
-    .hero h1 {
-      font-size: 4rem;
-      margin-bottom: 2rem;
-      text-shadow: 2px 2px 8px rgba(0,0,0,0.8);
-    }
+/* ==== SECTIONS ==== */
+.mountains-section {
+  padding: 4rem 2rem;
+}
+.mountains-grid {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: grid;
+  gap: 1.5rem;
+}
+.mountain-card {
+  aspect-ratio: 3/2;
+  background: #394d61;
+  border-radius: 8px;
+  overflow: hidden;
+  cursor: pointer;
+  background-size: cover;
+  background-position: center;
+  transition: transform 0.3s;
+}
+.mountain-card:hover { transform: scale(1.05); }
 
-    .hero-buttons {
-      display: flex;
-      gap: 1.5rem;
-      flex-wrap: wrap;
-    }
+/* Textová vrstva jen pro Korunu a Alpy */
+.mountain-overlay {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  padding: 1rem;
+  background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);
+}
+.mountain-name { font-size: 1.3rem; font-weight: 600; }
+.mountain-details { font-size: 0.9rem; opacity: 0.9; }
 
-    .hero-button {
-      background: white;
-      color: #1a2332;
-      padding: 1rem 2.5rem;
-      border: none;
-      border-radius: 8px;
-      font-size: 1.1rem;
-      font-weight: 600;
-      cursor: pointer;
-      transition: 0.3s;
-    }
+/* ==== MODAL ==== */
+.modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.9);
+  z-index: 1000;
+  align-items: center;
+  justify-content: center;
+  overflow-y: auto;
+}
+.modal.active { display: flex; }
+.modal-content {
+  background: #1a2332;
+  color: white;
+  padding: 2rem;
+  border-radius: 10px;
+  max-width: 900px;
+  width: 90%;
+  text-align: center;
+  position: relative;
+}
+.close-modal {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: white;
+  color: #1a2332;
+  border: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+.modal-header-info { margin-bottom: 2rem; }
+.modal-photos {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+}
+.modal-photos img {
+  width: 100%;
+  border-radius: 8px;
+  object-fit: cover;
+}
 
-    .hero-button:hover {
-      background: #3498db;
-      color: white;
-      transform: scale(1.05);
-    }
-
-    /* Sekce */
-    .mountains-section {
-      padding: 2rem 2rem 5rem 2rem;
-      margin-top: -3rem;
-    }
-
-    .section-title {
-      font-size: 2rem;
-      text-align: center;
-      margin-bottom: 2rem;
-    }
-
-    /* Mřížka fotek */
-    .mountains-grid {
-      max-width: 1400px;
-      margin: 0 auto;
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 1.5rem;
-    }
-
-    .mountain-card {
-      position: relative;
-      aspect-ratio: 3/2;
-      background: #394d61 center/cover no-repeat;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: transform 0.3s;
-    }
-
-    .mountain-card:hover {
-      transform: scale(1.03);
-    }
-
-    /* Text sekce Nepál */
-    #nepalText {
-      max-width: 1000px;
-      margin: 0 auto 3rem auto;
-      text-align: center;
-      font-size: 1.2rem;
-      line-height: 1.6;
-      color: #dfe6e9;
-    }
-
-    /* Fullscreen galerie */
-    .fullscreen {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      background: rgba(0,0,0,0.95);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 2000;
-    }
-
-    .fullscreen img {
-      max-width: 95%;
-      max-height: 95%;
-      border-radius: 10px;
-      box-shadow: 0 0 20px rgba(0,0,0,0.8);
-    }
-
-    .close-fullscreen {
-      position: fixed;
-      top: 20px;
-      right: 30px;
-      font-size: 2.5rem;
-      color: white;
-      cursor: pointer;
-    }
-
-    .nav-arrow {
-      position: fixed;
-      top: 50%;
-      transform: translateY(-50%);
-      font-size: 3rem;
-      color: white;
-      cursor: pointer;
-      padding: 0.5rem 1rem;
-      user-select: none;
-    }
-
-    .nav-left { left: 20px; }
-    .nav-right { right: 20px; }
-
-    @media (max-width: 768px) {
-      .hero {
-        padding-top: 8rem;
-      }
-      .hero h1 {
-        font-size: 2.5rem;
-      }
-      .hero-buttons {
-        flex-direction: column;
-      }
-    }
-  </style>
+/* ==== RESPONSIVE ==== */
+@media (max-width: 968px) {
+  .hero h1 { font-size: 2.8rem; }
+  .mountains-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 640px) {
+  .hero { padding-top: 8rem; }
+  .hero h1 { font-size: 2rem; }
+  .hero-buttons { flex-direction: column; gap: 1rem; }
+  .mountains-grid { grid-template-columns: 1fr; }
+  .modal-photos { grid-template-columns: 1fr; }
+}
+</style>
 </head>
+
 <body>
   <section class="hero">
     <h1>Vzít batoh na záda a jít...</h1>
@@ -170,100 +161,115 @@
     </div>
   </section>
 
-  <!-- Koruna Evropy -->
   <section class="mountains-section" id="koruna-evropy">
-    <h2 class="section-title">Koruna Evropy</h2>
-    <div class="mountains-grid" id="korunaGrid"></div>
+    <div class="mountains-grid" id="mountainsGrid"></div>
   </section>
 
-  <!-- Alpské čtyřtisícovky -->
-  <section class="mountains-section" id="alpske-ctyrtisicovky">
-    <h2 class="section-title">Alpské čtyřtisícovky</h2>
-    <div class="mountains-grid" id="alpsGrid"></div>
-  </section>
+  <!-- MODAL -->
+  <div class="modal" id="mountainModal">
+    <div class="modal-content">
+      <button class="close-modal" onclick="closeModal()">×</button>
+      <div class="modal-header-info">
+        <h2 id="modalMountainName">Název hory</h2>
+        <p id="modalDate">📅 12. srpna 2024</p>
+        <p id="modalTeam">👥 Team: Alena, Petr, Jirka, Jana</p>
+        <p id="modalDescription">Krátký popis výstupu...</p>
+      </div>
+      <div class="modal-photos" id="modalPhotos"></div>
+    </div>
+  </div>
 
-  <!-- Nepál -->
-  <section class="mountains-section" id="Nepal">
-    <h2 class="section-title">Nepál</h2>
-    <div id="nepalText">Zde bude text o výletu do Nepálu...</div>
-    <div class="mountains-grid" id="nepalGrid"></div>
-  </section>
+<script>
+/* ==== DATA ==== */
+const korunaEvropy = [
+  {id: 'mont-blanc', name: 'Mont Blanc 4.810 m', country: 'Francie/Itálie', date: '31.8.2007', image: 'https://raw.githubusercontent.com/suchanek76/website/main/images/Koruna/MontBlanc2x3.jpg'},
+  {id: 'dufourspitze', name: 'Dufourspitze 4.634 m', country: 'Švýcarsko', date: '', image: null},
+  {id: 'grossglockner', name: 'Grossglockner 3.798 m', country: 'Rakousko', date: '30.6.2025', image: 'https://raw.githubusercontent.com/suchanek76/website/main/images/Koruna/Grossglockner2x3.jpg'},
+];
 
-  <script>
-    /* === Data === */
-    const korunaEvropy = [
-      { name: "Mont Blanc 4 810 m", img: "https://raw.githubusercontent.com/suchanek76/website/main/images/Koruna/MontBlanc2x3.jpg" },
-      { name: "Grossglockner 3 798 m", img: "https://raw.githubusercontent.com/suchanek76/website/main/images/Koruna/Grossglockner2x3.jpg" },
-      { name: "Vatikánské zahrady 75 m", img: "https://raw.githubusercontent.com/suchanek76/website/main/images/Koruna/Vatikan2x3.jpg" }
-    ];
+const alpskeCtyrtisicovky = [
+  {id: 'alps-1', name: 'Mont Blanc / Monte Bianco', country: 'Francie/Itálie', image: 'https://raw.githubusercontent.com/suchanek76/website/main/images/4000/MontBlanc2x3.jpg'},
+  {id: 'alps-2', name: 'Mont Blanc di Courmayeur', country: 'Itálie', image: null},
+  {id: 'alps-3', name: 'Dufourspitze / Punta Dufour', country: 'Švýcarsko/Itálie', image: null}
+];
 
-    const alpskeCtyrtisicovky = [
-      { name: "Dufourspitze 4 634 m", img: "https://raw.githubusercontent.com/suchanek76/website/main/images/4000/Dufourspitze2x3.jpg" },
-      { name: "Weisshorn 4 506 m", img: "https://raw.githubusercontent.com/suchanek76/website/main/images/4000/Weisshorn2x3.jpg" },
-      { name: "Matterhorn 4 478 m", img: "https://raw.githubusercontent.com/suchanek76/website/main/images/4000/Matterhorn2x3.jpg" }
-    ];
+const Nepal = Array.from({length: 40}, (_, i) => {
+  const num = String(i + 1).padStart(2, '0');
+  return { id: `nepal-${num}`,
+           image: `https://raw.githubusercontent.com/suchanek76/website/main/images/Nepal/Nepal${num}.jpg` };
+});
 
-    const nepalPhotos = Array.from({ length: 40 }, (_, i) => 
-      `https://raw.githubusercontent.com/suchanek76/website/main/images/Nepal/Nepal${String(i+1).padStart(2,'0')}.jpg`
-    );
+/* ==== LOGIKA ==== */
+let currentCategory = 'koruna-evropy';
+let mountains = [];
 
-    /* === Generování === */
-    function createGrid(gridId, data, isNepal = false) {
-      const grid = document.getElementById(gridId);
-      grid.innerHTML = "";
-      data.forEach((item, index) => {
-        const div = document.createElement("div");
-        div.className = "mountain-card";
-        div.style.backgroundImage = `url(${isNepal ? item : item.img})`;
-        div.onclick = () => {
-          if (isNepal) openFullscreenGallery(index);
-        };
-        grid.appendChild(div);
-      });
+function openModal(mountain) {
+  const modal = document.getElementById("mountainModal");
+  modal.classList.add("active");
+  document.getElementById("modalMountainName").textContent = mountain.name;
+  document.getElementById("modalDate").textContent = "📅 12. srpna 2024";
+  document.getElementById("modalTeam").textContent = "👥 Team: Alena, Petr, Jirka, Jana";
+  document.getElementById("modalDescription").textContent = "Krásný výstup za ideálního počasí.";
+  const photos = document.getElementById("modalPhotos");
+  photos.innerHTML = "";
+  for (let i = 1; i <= 4; i++) {
+    const img = document.createElement("img");
+    img.src = `https://raw.githubusercontent.com/suchanek76/website/main/images/${mountain.id}/${mountain.id}${String(i).padStart(2,"0")}.jpg`;
+    photos.appendChild(img);
+  }
+}
+function closeModal() { document.getElementById("mountainModal").classList.remove("active"); }
+
+function openImageFullscreen(imgUrl) {
+  const overlay = document.createElement('div');
+  Object.assign(overlay.style, {
+    position:'fixed', inset:'0', background:'rgba(0,0,0,0.95)',
+    display:'flex', alignItems:'center', justifyContent:'center', zIndex:'2000', cursor:'zoom-out'
+  });
+  const img = document.createElement('img');
+  Object.assign(img.style, { maxWidth:'95%', maxHeight:'95%', borderRadius:'8px' });
+  img.src = imgUrl;
+  overlay.appendChild(img);
+  overlay.onclick = () => overlay.remove();
+  document.body.appendChild(overlay);
+}
+
+function renderMountains() {
+  const grid = document.getElementById('mountainsGrid');
+  grid.innerHTML = '';
+  grid.style.gridTemplateColumns = currentCategory === 'Nepal' ? 'repeat(4, 1fr)' : 'repeat(3, 1fr)';
+  mountains.forEach(m => {
+    const card = document.createElement('div');
+    card.className = 'mountain-card';
+    if (m.image) card.style.backgroundImage = `url(${m.image})`;
+    if (currentCategory === 'Nepal') {
+      card.onclick = () => openImageFullscreen(m.image);
+    } else {
+      card.style.position = 'relative';
+      card.innerHTML = `
+        <div class="mountain-overlay">
+          <div class="mountain-name">${m.name}</div>
+          <div class="mountain-details">${m.country || ''} ${m.date || ''}</div>
+        </div>`;
+      card.onclick = () => openModal(m);
     }
+    grid.appendChild(card);
+  });
+}
 
-    /* === Fullscreen galerie pro Nepál === */
-    let currentIndex = 0;
-    function openFullscreenGallery(index) {
-      currentIndex = index;
-      const fullscreen = document.createElement("div");
-      fullscreen.className = "fullscreen";
-      fullscreen.innerHTML = `
-        <span class="close-fullscreen" onclick="closeFullscreen()">×</span>
-        <span class="nav-arrow nav-left" onclick="changeImage(-1)">❮</span>
-        <img id="fullscreenImage" src="${nepalPhotos[index]}">
-        <span class="nav-arrow nav-right" onclick="changeImage(1)">❯</span>
-      `;
-      document.body.appendChild(fullscreen);
-    }
+function scrollToSection(sectionId) {
+  currentCategory = sectionId;
+  mountains = (sectionId === 'koruna-evropy') ? korunaEvropy :
+              (sectionId === 'alpske-ctyrtisicovky') ? alpskeCtyrtisicovky : Nepal;
+  renderMountains();
+  document.getElementById('koruna-evropy').scrollIntoView({ behavior: 'smooth' });
+}
 
-    function closeFullscreen() {
-      const fs = document.querySelector(".fullscreen");
-      if (fs) fs.remove();
-    }
-
-    function changeImage(direction) {
-      currentIndex = (currentIndex + direction + nepalPhotos.length) % nepalPhotos.length;
-      document.getElementById("fullscreenImage").src = nepalPhotos[currentIndex];
-    }
-
-    document.addEventListener("keydown", e => {
-      if (e.key === "Escape") closeFullscreen();
-      if (e.key === "ArrowRight") changeImage(1);
-      if (e.key === "ArrowLeft") changeImage(-1);
-    });
-
-    /* === Navigace === */
-    function scrollToSection(id) {
-      document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
-    }
-
-    /* === Načtení === */
-    window.addEventListener("DOMContentLoaded", () => {
-      createGrid("korunaGrid", korunaEvropy);
-      createGrid("alpsGrid", alpskeCtyrtisicovky);
-      createGrid("nepalGrid", nepalPhotos, true);
-    });
-  </script>
+/* ==== INIT ==== */
+window.addEventListener('DOMContentLoaded', () => {
+  mountains = korunaEvropy;
+  renderMountains();
+});
+</script>
 </body>
 </html>
