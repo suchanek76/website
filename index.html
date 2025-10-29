@@ -2,207 +2,120 @@
 <html lang="cs">
 <head>
 <meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>Suchánci na horách</title>
 <style>
-  /* RESET */
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  html,body { height: 100%; }
-  body {
+  /* reset */
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{
     font-family: "Montserrat", Tahoma, sans-serif;
-    background: #121826;
-    color: #fff;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
+    background:#0f1620;
+    color:#fff;
+    -webkit-font-smoothing:antialiased;
+    -moz-osx-font-smoothing:grayscale;
+    overflow-x:hidden;
   }
 
-  /* HERO: místo background-image používáme <img> aby top nebyl oříznut */
+  /* HERO: použijeme <img> a zajistíme že nebude oříznutá nahoře a vyplní šířku */
   .hero {
     position: relative;
-    width: 100%;
-    overflow: visible;
+    width:100%;
+    overflow:visible;
+    background: #0f1620;
   }
-
-  .hero img.hero-bg {
-    display: block;
-    width: 100%;        /* naplní šířku viewportu */
-    height: auto;       /* zachová poměr stran -> top nebude oříznut */
-    max-height: 68vh;   /* nastavit aby zabíral vhodnou část obrazovky; upravitelné */
-    object-fit: contain;/* redundantní u <img>, ale bezpečné */
-  }
-
-  /* overlay nad obrázkem pro text a tlačítka */
-  .hero-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    /* výška overlayu nastavena na výšku obrazku (přesná) pomocí JS při loadu */
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: flex-start;
-    pointer-events: none; /* aby klikání šlo do tlačítek které mají pointer-events:auto */
-  }
-
-  .hero-inner {
-    width: 100%;
-    max-width: 1200px;
-    padding: 3rem 1rem 2rem;
-    text-align: center;
-    pointer-events: auto; /* tlačítka aktivní */
-  }
-
-  .hero h1 {
-    font-size: 2.8rem;
-    margin-bottom: 1rem;
-    text-shadow: 0 6px 24px rgba(0,0,0,0.6);
-  }
-
-  .hero-buttons {
-    display:flex;
-    gap:1rem;
-    justify-content:center;
-    flex-wrap:wrap;
-  }
-  .hero-button {
-    background: #fff;
-    color:#1a2332;
-    border: none;
-    padding: 0.8rem 1.6rem;
-    border-radius: 8px;
-    font-weight:700;
-    cursor:pointer;
-    pointer-events: auto;
-  }
-  .hero-button:hover { transform: translateY(-2px); }
-
-  /* SECTIONS - galerie přes celý obsah (grid) */
-  .mountains-section {
-    position: relative;
-    z-index: 3;
-    /* necháme menší záporný margin, aby galerie začínala v ploše obrázku,
-       ale neruší horní okraj obrázku protože top není oříznutý (img řeší) */
-    margin-top: -6vh; /* jemně natáhne sekce do prostoru hero obrázku */
-    padding: 2rem 1rem 4rem;
-  }
-
-  .section-title { text-align:center; font-size:1.6rem; margin-bottom:0.6rem; }
-
-  /* prostor pro popis (Nepál) */
-  .section-description {
-    max-width: 1000px;
-    margin: 0 auto 1.5rem;
-    text-align: center;
-    color: #d7e0e8;
-    background: rgba(255,255,255,0.03);
-    padding: 0.9rem 1rem;
-    border-radius: 8px;
-    font-size: 1rem;
-  }
-
-  .mountains-grid {
-    max-width: 1400px;
-    margin: 0 auto;
-    display: grid;
-    gap: 1rem;
-  }
-
-  /* layout: 3 sloupce běžně; Nepál 4 sloupce (přepnuto JSem) */
-  .grid-3 { grid-template-columns: repeat(3, 1fr); }
-  .grid-4 { grid-template-columns: repeat(4, 1fr); }
-
-  .mountain-card {
-    position: relative;
-    width: 100%;
-    aspect-ratio: 3/2;
-    border-radius: 10px;
-    overflow: hidden;
-    background: #394d61 center/cover no-repeat;
-    cursor: pointer;
-    transition: transform .2s ease;
-  }
-  .mountain-card:hover { transform: translateY(-6px); box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
-
-  .mountain-overlay {
-    position: absolute;
-    left:0;right:0;bottom:0;padding:0.9rem;
-    background: linear-gradient(to top, rgba(0,0,0,0.85), rgba(0,0,0,0));
-  }
-  .mountain-name { font-weight:700; font-size:1.05rem; }
-  .mountain-details { font-size:0.9rem; color:#d0d8de; margin-top:0.25rem; }
-
-  /* GALLERY MODAL (Nepál) */
-  .gallery-modal {
-    display:none;
-    position:fixed;
-    inset:0;
-    background: rgba(0,0,0,0.95);
-    z-index:4000;
-    align-items:center;
-    justify-content:center;
-    touch-action: none;
-  }
-  .gallery-modal.active { display:flex; }
-  .gallery-inner { position:relative; width:100%; max-width:1100px; display:flex; align-items:center; justify-content:center; }
-  .gallery-img {
-    max-width:94%;
-    max-height:86vh;
-    border-radius:10px;
+  .hero .hero-bg {
+    display:block;
+    width:100vw;        /* vyplní šířku obrazovky přesně */
+    height:auto;        /* zachová poměr stran -> top nebude oříznut */
+    max-height:78vh;    /* zmenší příliš vysoké obrázky; upravitelné */
     object-fit:contain;
-    background:#111;
-    transition: opacity .22s ease;
-    user-select:none;
+    margin:0 auto;
   }
-  .gallery-close {
-    position:absolute; right:12px; top:12px; font-size:28px; color:#fff; border:none; background:rgba(255,255,255,0.06);
-    padding:6px 10px; border-radius:8px; cursor:pointer;
-  }
-  .gallery-arrow {
-    position:absolute; top:50%; transform:translateY(-50%); font-size:36px; color:#fff;
-    background:rgba(0,0,0,0.25); padding:8px 12px; border-radius:8px; cursor:pointer;
-    user-select:none;
-  }
-  .gallery-arrow.left { left:12px; }
-  .gallery-arrow.right { right:12px; }
 
-  /* small caption */
-  .gallery-caption { position:absolute; bottom:12px; left:0; right:0; text-align:center; color:#d7e0e8; font-size:14px; }
+  /* overlay se přizpůsobí skutečné výšce obrázku (nastavujeme v JS) */
+  .hero-overlay {
+    position:absolute;
+    top:0;
+    left:0;
+    width:100%;
+    pointer-events:none; /* umožní klikání pouze přes vnořené elementy s pointer-events:auto */
+    display:flex;
+    justify-content:center;
+  }
+  .hero-inner{
+    width:100%;
+    max-width:1200px;
+    padding:2.2rem 1rem;
+    text-align:center;
+    pointer-events:auto; /* tlačítka jsou interaktivní */
+  }
+  .hero h1{font-size:2.6rem;margin-bottom:.9rem;text-shadow:0 6px 20px rgba(0,0,0,0.6)}
+  .hero-buttons{display:flex;gap:0.9rem;justify-content:center;flex-wrap:wrap}
+  .hero-button{
+    background:#fff;color:#112033;border:none;padding:.65rem 1rem;border-radius:8px;font-weight:700;cursor:pointer;
+  }
+  .hero-button:hover{transform:translateY(-2px)}
 
-  /* responsivita */
-  @media (max-width:1100px) {
-    .grid-4 { grid-template-columns: repeat(3,1fr); }
+  /* SECTIONS - galerie blíž pod tlačítky, ale horní část obrázku zůstává vidět */
+  .mountains-section{
+    position:relative;
+    z-index:3;
+    padding:1.6rem 1rem 3rem 1rem;
+    margin-top: calc(-1 * (var(--hero-overlap, 0px))); /* JS nastaví --hero-overlap tak, aby gallery hladce navazovala */
   }
-  @media (max-width:760px) {
-    .hero h1 { font-size:20px; }
-    .mountains-section { margin-top:-3vh; padding-top:1.2rem; }
-    .grid-3 { grid-template-columns: repeat(2,1fr); }
-    .grid-4 { grid-template-columns: repeat(2,1fr); }
+  .section-title{text-align:center;font-size:1.5rem;margin:0.4rem 0 1rem}
+  .section-description{
+    max-width:1000px;margin:0 auto 1rem;padding:.8rem 1rem;border-radius:8px;background:rgba(255,255,255,0.02);color:#dbe9f2
   }
-  @media (max-width:420px) {
-    .hero-inner { padding: 1rem; }
-    .grid-3, .grid-4 { grid-template-columns: 1fr; }
-  }
+
+  /* gridy */
+  .mountains-grid{max-width:1400px;margin:0 auto;display:grid;gap:1rem}
+  .grid-3{grid-template-columns:repeat(3,1fr)}
+  .grid-4{grid-template-columns:repeat(4,1fr)}
+  @media (max-width:1100px){ .grid-4{grid-template-columns:repeat(3,1fr)} }
+  @media (max-width:760px){ .grid-3,.grid-4{grid-template-columns:repeat(2,1fr)} }
+  @media (max-width:420px){ .grid-3,.grid-4{grid-template-columns:1fr} }
+
+  .mountain-card{aspect-ratio:3/2;border-radius:10px;overflow:hidden;background:#344354 center/cover no-repeat;cursor:pointer;transition:transform .18s}
+  .mountain-card:hover{transform:translateY(-6px);box-shadow:0 12px 30px rgba(0,0,0,0.5)}
+
+  .mountain-overlay{position:absolute;left:0;right:0;bottom:0;padding:.8rem;background:linear-gradient(to top, rgba(0,0,0,.85), rgba(0,0,0,0))}
+  .mountain-name{font-weight:700}
+  .mountain-details{font-size:.9rem;color:#cdd9e0;margin-top:.25rem}
+
+  /* GALLERY MODAL */
+  .gallery-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.95);z-index:5000;align-items:center;justify-content:center;touch-action:none}
+  .gallery-modal.active{display:flex}
+  .gallery-inner{position:relative;width:100%;max-width:1200px;display:flex;align-items:center;justify-content:center}
+  .gallery-img{max-width:94%;max-height:86vh;border-radius:8px;object-fit:contain;transition:opacity .18s}
+  .gallery-close{position:absolute;top:12px;right:12px;background:rgba(255,255,255,0.06);border:none;color:#fff;padding:6px 10px;border-radius:8px;cursor:pointer}
+  .gallery-arrow{position:absolute;top:50%;transform:translateY(-50%);font-size:34px;color:#fff;background:rgba(0,0,0,0.25);padding:8px 12px;border-radius:8px;cursor:pointer;user-select:none}
+  .gallery-arrow.left{left:12px}.gallery-arrow.right{right:12px}
+  .gallery-caption{position:absolute;bottom:12px;left:0;right:0;text-align:center;color:#d7e0e8;font-size:14px}
+
+  /* drobné */
+  .visually-hidden{position:absolute;left:-9999px}
 </style>
 </head>
 <body>
 
-  <!-- HERO: jako obrázek + overlay s titulkem a tlačítky -->
+  <!-- HERO: skutečný <img> aby top nebyl oříznut -->
   <header class="hero" id="hero">
-    <img class="hero-bg" id="heroBg" src="https://raw.githubusercontent.com/suchanek76/website/main/images/background.jpg" alt="Suchánci na horách - hory">
-    <div class="hero-overlay" id="heroOverlay">
+    <img id="heroBg" class="hero-bg" src="https://raw.githubusercontent.com/suchanek76/website/main/images/background.jpg" alt="Suchánci na horách">
+    <div id="heroOverlay" class="hero-overlay" aria-hidden="false">
       <div class="hero-inner">
         <h1>Vzít batoh na záda a jít...</h1>
         <div class="hero-buttons" role="navigation" aria-label="Sekce">
-          <button class="hero-button" onclick="goToSection('koruna-evropy')">Koruna Evropy 14/42</button>
-          <button class="hero-button" onclick="goToSection('alpske-ctyrtisicovky')">Alpské čtyřtisícovky 5/82</button>
-          <button class="hero-button" onclick="goToSection('Nepal')">Nepál</button>
+          <button class="hero-button" onclick="gotoSection('koruna-evropy')">Koruna Evropy 14/42</button>
+          <button class="hero-button" onclick="gotoSection('alpske-ctyrtisicovky')">Alpské čtyřtisícovky 5/82</button>
+          <button class="hero-button" onclick="gotoSection('Nepal')">Nepál</button>
         </div>
       </div>
     </div>
   </header>
 
-  <!-- KORUNA EVROPY -->
+  <!-- KORUNA -->
   <section id="koruna-evropy" class="mountains-section">
     <h2 class="section-title">Koruna Evropy</h2>
     <div id="korunaGrid" class="mountains-grid grid-3" aria-live="polite"></div>
@@ -211,22 +124,20 @@
   <!-- ALPS -->
   <section id="alpske-ctyrtisicovky" class="mountains-section">
     <h2 class="section-title">Alpské čtyřtisícovky</h2>
-    <div id="alpsGrid" class="mountains-grid grid-3"></div>
+    <div id="alpsGrid" class="mountains-grid grid-3" aria-live="polite"></div>
   </section>
 
   <!-- NEPAL -->
   <section id="Nepal" class="mountains-section">
     <h2 class="section-title">Nepál</h2>
-    <div id="nepalText" class="section-description">
-      Zde napiš krátký popis výletu do Nepálu – trasa, datum, dojmy.
-    </div>
+    <div id="nepalText" class="section-description">Zde napiš krátký popis výletu do Nepálu — trasa, datum, dojmy.</div>
     <div id="nepalGrid" class="mountains-grid grid-4" aria-live="polite"></div>
   </section>
 
   <!-- GALLERY MODAL -->
   <div id="galleryModal" class="gallery-modal" role="dialog" aria-hidden="true">
-    <div class="gallery-inner" id="galleryInner">
-      <img id="galleryImage" class="gallery-img" src="" alt="Fotka z Nepálu">
+    <div class="gallery-inner">
+      <img id="galleryImage" class="gallery-img" src="" alt="Fotografie">
       <button class="gallery-close" onclick="closeGallery()" aria-label="Zavřít">✕</button>
       <div class="gallery-arrow left" onclick="prevImage()" aria-label="Předchozí">❮</div>
       <div class="gallery-arrow right" onclick="nextImage()" aria-label="Další">❯</div>
@@ -237,194 +148,163 @@
 <script>
 /* -------- DATA -------- */
 const koruna = [
-  { id:'mont-blanc', name:'Mont Blanc 4.810 m', image:'https://raw.githubusercontent.com/suchanek76/website/main/images/Koruna/MontBlanc2x3.jpg' },
-  { id:'grossglockner', name:'Grossglockner 3.798 m', image:'https://raw.githubusercontent.com/suchanek76/website/main/images/Koruna/Grossglockner2x3.jpg' },
-  { id:'vatikan', name:'Vatikánské zahrady 75 m', image:'https://raw.githubusercontent.com/suchanek76/website/main/images/Koruna/Vatikan2x3.jpg' }
+  { id:'mont-blanc', name:'Mont Blanc 4 810 m', image:'https://raw.githubusercontent.com/suchanek76/website/main/images/Koruna/MontBlanc2x3.jpg' },
+  { id:'grossglockner', name:'Grossglockner 3 798 m', image:'https://raw.githubusercontent.com/suchanek76/website/main/images/Koruna/Grossglockner2x3.jpg' }
 ];
-
 const alps = [
   { id:'alps-1', name:'Mont Blanc / Monte Bianco', image:'https://raw.githubusercontent.com/suchanek76/website/main/images/4000/MontBlanc2x3.jpg' },
-  { id:'alps-2', name:'Mont Blanc di Courmayeur', image:'' },
-  { id:'alps-3', name:'Dufourspitze / Punta Dufour', image:'' }
+  { id:'alps-2', name:'Dufourspitze', image:'' }
 ];
-
-/* Nepál - 40 fotek generovaných (raw GitHub) */
-const nepalPhotos = Array.from({length:40}, (_, i) => 
-  `https://raw.githubusercontent.com/suchanek76/website/main/images/Nepal/Nepal${String(i+1).padStart(2,'0')}.jpg`
-);
+const nepalPhotos = Array.from({length:40}, (_,i)=>`https://raw.githubusercontent.com/suchanek76/website/main/images/Nepal/Nepal${String(i+1).padStart(2,'0')}.jpg`);
 
 /* -------- STATE -------- */
-let currentCategory = 'koruna';
-let currentList = koruna;
 let currentIndex = 0;
+let galleryArray = nepalPhotos; // default when opening nepál gallery
 
-/* -------- HELPERS: render gridy -------- */
-function makeCard(imageUrl, title) {
+/* -------- RENDERERS -------- */
+function makeCard(src, title){
   const d = document.createElement('div');
   d.className = 'mountain-card';
-  if (imageUrl) d.style.backgroundImage = `url(${imageUrl})`;
-  if (title) d.setAttribute('title', title);
+  if(src) d.style.backgroundImage = `url(${src})`;
+  if(title) d.setAttribute('title', title);
   return d;
 }
-
-function renderKoruna() {
-  const g = document.getElementById('korunaGrid');
-  g.innerHTML = '';
-  koruna.forEach(item => {
-    const card = makeCard(item.image, item.name);
-    card.onclick = () => openSmallModalForMountain(item);
-    g.appendChild(card);
+function renderKoruna(){
+  const g = document.getElementById('korunaGrid'); g.innerHTML='';
+  koruna.forEach(item=>{
+    const c = makeCard(item.image, item.name);
+    c.onclick = ()=> openSmallMountainGallery(item); // small 4-photo modal
+    g.appendChild(c);
+  });
+}
+function renderAlps(){
+  const g = document.getElementById('alpsGrid'); g.innerHTML='';
+  alps.forEach(item=>{
+    const c = makeCard(item.image, item.name);
+    c.onclick = ()=> openSmallMountainGallery(item);
+    g.appendChild(c);
+  });
+}
+function renderNepal(){
+  const g = document.getElementById('nepalGrid'); g.innerHTML='';
+  nepalPhotos.forEach((url,idx)=>{
+    const c = makeCard(url, `Nepál ${idx+1}`);
+    c.onclick = ()=> openNepalGallery(idx);
+    g.appendChild(c);
   });
 }
 
-function renderAlps() {
-  const g = document.getElementById('alpsGrid');
-  g.innerHTML = '';
-  alps.forEach(item => {
-    const card = makeCard(item.image, item.name);
-    card.onclick = () => openSmallModalForMountain(item);
-    g.appendChild(card);
-  });
+/* -------- GALLERY FUNCTIONS -------- */
+function openNepalGallery(index){
+  galleryArray = nepalPhotos;
+  currentIndex = index;
+  showGallery();
 }
-
-function renderNepal() {
-  const g = document.getElementById('nepalGrid');
-  g.innerHTML = '';
-  nepalPhotos.forEach((url, idx) => {
-    const card = makeCard(url, `Nepál ${idx+1}`);
-    card.onclick = () => openGallery(idx);
-    g.appendChild(card);
-  });
-}
-
-/* -------- Open small modal for Koruna/Alps (4 photos + info) -------- */
-function openSmallModalForMountain(mountain){
-  // If you prefer separate implementation for Koruna items, we can fetch or construct 4 images.
-  // For now show small gallery of up to 4 images from images/{id}/{id}01..04.jpg (fallback to main image)
-  const imgs = [];
-  for (let i=1;i<=4;i++){
+function openSmallMountainGallery(mountain){
+  // try to construct 4-photo array; fallback to main image if missing
+  const arr = [];
+  for(let i=1;i<=4;i++){
     const num = String(i).padStart(2,'0');
-    imgs.push(`https://raw.githubusercontent.com/suchanek76/website/main/images/${mountain.id}/${mountain.id}${num}.jpg`);
+    arr.push(`https://raw.githubusercontent.com/suchanek76/website/main/images/${mountain.id}/${mountain.id}${num}.jpg`);
   }
-  // fallback: if not available, will still try to load; browser shows broken if not existing.
-  // Show first image and let arrows cycle through these imgs
-  window._tempGallery = imgs;
+  // fallback: if arr elements broken, browser will show broken thumbnails — acceptable or we could check via fetch
+  galleryArray = arr;
   currentIndex = 0;
-  showGalleryImage(window._tempGallery[currentIndex], `${mountain.name} — ${currentIndex+1}/${window._tempGallery.length}`);
-  openGalleryModal();
+  showGallery();
 }
 
-/* -------- Gallery modal (Nepal) functions -------- */
-function openGallery(idx){
-  currentIndex = idx;
-  showGalleryImage(nepalPhotos[currentIndex], `${currentIndex+1} / ${nepalPhotos.length}`);
-  openGalleryModal();
-}
-
-function openGalleryModal(){
+function showGallery(){
   const modal = document.getElementById('galleryModal');
+  const img = document.getElementById('galleryImage');
+  const caption = document.getElementById('galleryCaption');
+  img.style.opacity = 0;
+  // small fade when swapping
+  setTimeout(()=>{ img.src = galleryArray[currentIndex]; img.style.opacity = 1 }, 80);
+  caption.textContent = `${currentIndex+1} / ${galleryArray.length}`;
   modal.classList.add('active');
   modal.setAttribute('aria-hidden','false');
-  document.body.style.overflow = 'hidden';
+  document.body.style.overflow='hidden';
 }
-
 function closeGallery(){
   const modal = document.getElementById('galleryModal');
   modal.classList.remove('active');
   modal.setAttribute('aria-hidden','true');
-  document.body.style.overflow = '';
-  // cleanup temp
-  if(window._tempGallery){ window._tempGallery = null; }
-}
-
-function showGalleryImage(src, caption){
-  const img = document.getElementById('galleryImage');
-  const cap = document.getElementById('galleryCaption');
-  img.style.opacity = 0;
-  // small timeout for fade effect
-  setTimeout(()=>{ img.src = src; img.style.opacity = 1; }, 120);
-  cap.textContent = caption || '';
+  document.body.style.overflow='';
 }
 
 function nextImage(){
-  // if tempGallery present (Koruna small modal), use it; otherwise Nepál array
-  const arr = window._tempGallery || nepalPhotos;
-  currentIndex = (currentIndex + 1) % arr.length;
-  showGalleryImage(arr[currentIndex], (window._tempGallery ? `${currentIndex+1}/${arr.length}` : `${currentIndex+1} / ${arr.length}`));
+  currentIndex = (currentIndex+1) % galleryArray.length;
+  showGallery();
 }
 function prevImage(){
-  const arr = window._tempGallery || nepalPhotos;
-  currentIndex = (currentIndex - 1 + arr.length) % arr.length;
-  showGalleryImage(arr[currentIndex], (window._tempGallery ? `${currentIndex+1}/${arr.length}` : `${currentIndex+1} / ${arr.length}`));
+  currentIndex = (currentIndex-1 + galleryArray.length) % galleryArray.length;
+  showGallery();
 }
 
-/* close when clicking outside the image */
-document.getElementById('galleryModal').addEventListener('click', (e)=>{
+/* click outside image closes */
+document.getElementById('galleryModal').addEventListener('click',(e)=>{
   if(e.target.id === 'galleryModal') closeGallery();
 });
 
-/* keyboard navigation */
-document.addEventListener('keydown', (e)=>{
+/* keyboard nav */
+document.addEventListener('keydown',(e)=>{
   const modal = document.getElementById('galleryModal');
-  if (!modal.classList.contains('active')) return;
-  if (e.key === 'Escape') closeGallery();
-  if (e.key === 'ArrowRight') nextImage();
-  if (e.key === 'ArrowLeft') prevImage();
+  if(!modal.classList.contains('active')) return;
+  if(e.key === 'Escape') closeGallery();
+  if(e.key === 'ArrowRight') nextImage();
+  if(e.key === 'ArrowLeft') prevImage();
 });
 
 /* swipe support */
-(function addTouch(){
+(function(){
   const modal = document.getElementById('galleryModal');
   let startX = 0;
-  modal.addEventListener('touchstart', (e)=> startX = e.changedTouches[0].clientX );
+  modal.addEventListener('touchstart', (e)=> startX = e.changedTouches[0].clientX);
   modal.addEventListener('touchend', (e)=>{
     const endX = e.changedTouches[0].clientX;
-    if (endX < startX - 40) nextImage();
-    if (endX > startX + 40) prevImage();
+    if(endX < startX - 40) nextImage();
+    if(endX > startX + 40) prevImage();
   });
 })();
 
-/* -------- navigation between sections (keeps hero visible) -------- */
-function goToSection(id){
-  // set currentCategory so render can adapt if needed
-  currentCategory = id;
-  // render appropriate grid if necessary
-  if(id === 'koruna-evropy') {
-    renderKoruna(); renderAlps(); renderNepal();
-  } else if (id === 'alpske-ctyrtisicovky') {
-    renderKoruna(); renderAlps(); renderNepal();
-  } else {
-    renderKoruna(); renderAlps(); renderNepal();
-  }
-  // scroll so that the top of the grid area is just under the hero buttons
-  const heroOverlay = document.getElementById('heroOverlay');
-  const heroRect = document.getElementById('heroBg').getBoundingClientRect();
-  // scroll to approx. position: top of viewport + hero image visible height - small offset
-  // We'll scroll to the koruna section for consistent anchor
-  const target = document.getElementById('koruna-evropy');
-  target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-
-  // small adjustment: scroll a bit down so gallery starts within hero area
-  setTimeout(()=> window.scrollBy(0, -Math.round(window.innerHeight * 0.12)), 450);
-}
-
-/* -------- INIT on load -------- */
-window.addEventListener('DOMContentLoaded', ()=>{
-  // render all grids
-  renderKoruna();
-  renderAlps();
-  renderNepal();
-
-  // ensure overlay height matches image height so overlayed buttons sit correctly
+/* -------- overlay sizing & smooth section start -------- */
+function syncHeroOverlayAndOverlap(){
   const heroBg = document.getElementById('heroBg');
   const heroOverlay = document.getElementById('heroOverlay');
-  function syncOverlay(){
-    const h = heroBg.clientHeight;
-    heroOverlay.style.height = h + 'px';
-  }
-  // sync after image loads and on resize
-  if (heroBg.complete) syncOverlay(); else heroBg.onload = syncOverlay;
-  window.addEventListener('resize', syncOverlay);
+  if(!heroBg || !heroOverlay) return;
+  // set overlay height to image height so buttons are inside hero area
+  heroOverlay.style.height = heroBg.clientHeight + 'px';
+  // compute desired overlap (how much of gallery should visually enter image area)
+  // keep it modest: 6% of viewport height or 40px min
+  const overlap = Math.max(40, Math.round(window.innerHeight * 0.06));
+  // set CSS var used in margins
+  document.documentElement.style.setProperty('--hero-overlap', overlap + 'px');
+}
+window.addEventListener('resize', syncHeroOverlayAndOverlap);
+window.addEventListener('load', syncHeroOverlayAndOverlap);
+
+/* -------- smooth scroll to put gallery nicely under buttons -------- */
+function gotoSection(id){
+  // render grids to ensure correct layout (safe)
+  renderKoruna(); renderAlps(); renderNepal();
+
+  const target = document.getElementById(id);
+  // scroll to top of the section
+  target.scrollIntoView({behavior:'smooth', block:'start'});
+  // adjust slightly so gallery begins a little higher (so it sits in hero area)
+  setTimeout(()=> {
+    // read computed overlap
+    const overlap = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--hero-overlap')) || 0;
+    window.scrollBy({ top: -Math.round(overlap * 0.6), left:0, behavior:'smooth' });
+  }, 450);
+}
+
+/* -------- init -------- */
+window.addEventListener('DOMContentLoaded', ()=>{
+  renderKoruna(); renderAlps(); renderNepal();
+  // ensure overlay synced after image loaded
+  const heroBg = document.getElementById('heroBg');
+  if(heroBg.complete) syncHeroOverlayAndOverlap(); else heroBg.onload = syncHeroOverlayAndOverlap;
 });
 </script>
 </body>
