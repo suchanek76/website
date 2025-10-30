@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="cs">
-<head>
+>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>Vzít batoh na záda a jít ...</title>
@@ -42,10 +42,10 @@ html,body{
   height:100%;
   display:flex;
   flex-direction:column;
-  justify-content:flex-start;     /* posunout obsah nahoru */
+  justify-content:flex-start;
   align-items:center;
   text-align:center;
-  padding-top:100px;              /* pozice textu a tlačítek výš */
+  padding-top:100px;
 }
 .hero h1{
   font-size:clamp(30px,6vw,56px);
@@ -75,7 +75,7 @@ html,body{
 /* Galerie překrývá spodní část panoramatu */
 main{
   position:relative;
-  margin-top:-420px;   /* galerie výš */
+  margin-top:-420px;
   z-index:3;
   background:none;
   padding-top:100px;
@@ -205,69 +205,111 @@ footer{text-align:center;color:rgba(255,255,255,0.6);padding:30px 0;}
 <script>
 const RAW="https://raw.githubusercontent.com/suchanek76/website/main/images";
 function pad(n){return String(n).padStart(2,"0");}
-function range(path,prefix,count){
-  return Array.from({length:count},(_,i)=>({
-    id:`${prefix}-${i+1}`,
-    img:`${path}/${prefix}${pad(i+1)}.jpg`,
-    title:`${prefix} ${i+1}`,
-    country:"Evropa",
-    height:`${1500+Math.floor(Math.random()*3000)} m`,
-    date:`${2020+Math.floor(Math.random()*5)}`
-  }));
-}
-const koruna=range(`${RAW}/Koruna`,"Koruna",43);
-const alpy=range(`${RAW}/4000`,"ctyrtisicovka",82);
-const nepal=range(`${RAW}/Nepal`,"Nepal",40);
 
-/* Render galleries */
-function createCard(it,onClick){
-  const d=document.createElement("div");
-  d.className="photo-card";
-  d.innerHTML=`
-    <img class="photo" src="${it.img}" alt="${it.title}">
+/* --- Data z tvé tabulky --- */
+const korunaData=[
+{p:1,hora:"Mont Blanc",v:4809,z:"Francie / Itálie",d:"31. 8. 2007"},
+{p:2,hora:"Dufourspitze",v:4634,z:"Švýcarsko",d:""},
+{p:3,hora:"Grossglockner",v:3798,z:"Rakousko",d:"30. 6. 2025"},
+{p:4,hora:"Mulhacén",v:3479,z:"Španělsko",d:"10. 9. 2022"},
+{p:5,hora:"Zugspitze",v:2962,z:"Německo",d:"21. 6. 2025"},
+{p:6,hora:"Coma Pedrosa",v:2942,z:"Andorra",d:""},
+{p:7,hora:"Musala",v:2925,z:"Bulharsko",d:""},
+{p:8,hora:"Mytikas",v:2917,z:"Řecko",d:""},
+{p:9,hora:"Triglav",v:2864,z:"Slovinsko",d:"25. 7. 2022"},
+{p:10,hora:"Velký Korab",v:2764,z:"Albánie / Makedonie",d:""},
+{p:11,hora:"Gerlachovský štít",v:2655,z:"Slovensko",d:"24. 7. 2021"},
+{p:12,hora:"Vorder Grauspitz",v:2599,z:"Lichtenštejnsko",d:"6. 9. 2025"},
+{p:13,hora:"Moldoveanu",v:2544,z:"Rumunsko",d:""},
+{p:14,hora:"Zla Kolata",v:2534,z:"Černá Hora",d:""},
+{p:15,hora:"Rysy",v:2499,z:"Polsko",d:"21. 9. 2024"},
+{p:16,hora:"Galdhøpiggen",v:2469,z:"Norsko",d:"7. 7. 2022"},
+{p:17,hora:"Bosanski Maglić",v:2386,z:"Bosna a Hercegovina",d:""},
+{p:18,hora:"Midžur",v:2169,z:"Srbsko",d:""},
+{p:19,hora:"Hvannadalshnjúkur",v:2110,z:"Island",d:""},
+{p:20,hora:"Kebnekaise",v:2103,z:"Švédsko",d:""},
+{p:21,hora:"Hoverla",v:2061,z:"Ukrajina",d:""},
+{p:22,hora:"Torre",v:1993,z:"Portugalsko",d:"28. 3. 2025"},
+{p:23,hora:"Narodnaja",v:1895,z:"Rusko",d:""},
+{p:24,hora:"Sinjal",v:1831,z:"Chorvatsko",d:""},
+{p:25,hora:"Sněžka",v:1603,z:"Česko",d:""},
+{p:26,hora:"Ben Nevis",v:1344,z:"Spojené království",d:""},
+{p:27,hora:"Halti",v:1324,z:"Finsko",d:""},
+{p:28,hora:"Carrauntoohil",v:1041,z:"Irsko",d:""},
+{p:29,hora:"Mahya Dağı",v:1031,z:"Turecko",d:""},
+{p:30,hora:"Kékes",v:1014,z:"Maďarsko",d:"17. 8. 2023"},
+{p:31,hora:"Monte Titano",v:756,z:"San Marino",d:""},
+{p:32,hora:"Signal de Botrange",v:694,z:"Belgie",d:"6. 10. 2024"},
+{p:33,hora:"Kneiff",v:560,z:"Lucembursko",d:"6. 10. 2024"},
+{p:34,hora:"Dealul Bălănești",v:430,z:"Moldavsko",d:""},
+{p:35,hora:"Dzjaržynskaja hara",v:345,z:"Bělorusko",d:""},
+{p:36,hora:"Vaalserberg",v:322,z:"Nizozemsko",d:"6. 10. 2024"},
+{p:37,hora:"Suur Munamägi",v:318,z:"Estonsko",d:""},
+{p:38,hora:"Gaiziņkalns",v:312,z:"Lotyšsko",d:""},
+{p:39,hora:"Aukštojas",v:294,z:"Litva",d:""},
+{p:40,hora:"Ta' Dmejrek",v:253,z:"Malta",d:""},
+{p:41,hora:"Møllehøj",v:171,z:"Dánsko",d:""},
+{p:42,hora:"Chemin des Révoires",v:161,z:"Monako",d:""},
+{p:43,hora:"Vatikánské zahrady",v:75,z:"Vatikán",d:""}
+];
+
+/* --- Ostatní galerie --- */
+function pad2(n){return String(n).padStart(2,"0");}
+const alpy=[...Array(82)].map((_,i)=>({img:`${RAW}/4000/ctyrtisicovka${pad2(i+1)}.jpg`,title:`Alpy ${i+1}`}));
+const nepal=[...Array(40)].map((_,i)=>({img:`${RAW}/Nepal/Nepal${pad2(i+1)}.jpg`,title:`Nepál ${i+1}`}));
+
+/* --- Render --- */
+function createCardKoruna(it,onClick){
+  const div=document.createElement("div");
+  div.className="photo-card";
+  const line1=`${it.p}. ${it.hora}${it.v?`, ${it.v} m`:``}`;
+  const line2=[it.z,it.d].filter(Boolean).join(" · ");
+  div.innerHTML=`
+    <img class="photo" src="${RAW}/Koruna/Koruna${pad2(it.p)}.jpg" alt="${it.hora}">
     <div class="photo-overlay">
-      <div class="photo-title">${it.title}</div>
-      <div class="photo-sub">${it.height} · ${it.country} · ${it.date}</div>
+      <div class="photo-title">${line1}</div>
+      <div class="photo-sub">${line2}</div>
     </div>`;
-  d.addEventListener("click",()=>onClick(it));
-  return d;
+  div.addEventListener("click",()=>onClick(it));
+  return div;
 }
-function renderGallery(el,arr,onClick){
-  el.innerHTML="";arr.forEach(it=>el.appendChild(createCard(it,onClick)));
-}
-const korEl=document.getElementById("koruna-gallery");
-const alpEl=document.getElementById("alpy-gallery");
-const nepEl=document.getElementById("nepal-gallery");
 
-/* Modal logic */
+function createCardSimple(it,onClick){
+  const div=document.createElement("div");
+  div.className="photo-card";
+  div.innerHTML=`<img class="photo" src="${it.img}" alt="${it.title}">
+  <div class="photo-overlay"><div class="photo-title">${it.title}</div></div>`;
+  div.addEventListener("click",()=>onClick(it));
+  return div;
+}
+
+function renderGallery(el,arr,onClick,koruna=false){
+  el.innerHTML="";
+  arr.forEach(it=>el.appendChild(koruna?createCardKoruna(it,onClick):createCardSimple(it,onClick)));
+}
+
+/* --- Modal --- */
 const modal=document.getElementById("modal-backdrop");
 const content=document.getElementById("modal-content");
-const closeBtn=document.getElementById("modal-close");
-closeBtn.onclick=()=>{modal.classList.remove("show");setTimeout(()=>modal.hidden=true,150);};
+document.getElementById("modal-close").onclick=()=>{modal.classList.remove("show");setTimeout(()=>modal.hidden=true,150);};
 function openModal(html){
   content.innerHTML=html;
   modal.hidden=false;setTimeout(()=>modal.classList.add("show"),10);
 }
 
-/* Koruna detail */
+/* --- Detail Koruna --- */
 function showKoruna(it){
-  openModal(`<h3>${it.title}</h3>
-    <div>${it.height} · ${it.country} · ${it.date}</div>
-    <img class="main" src="${it.img}">
-    <div class="thumb-row">
-      <img src="${it.img}" class="selected">
-      <img src="${it.img}">
-      <img src="${it.img}">
-      <img src="${it.img}">
-    </div>`);
+  openModal(`<h3>${it.hora} (${it.v} m)</h3>
+    <div>${[it.z,it.d].filter(Boolean).join(" · ")}</div>
+    <img class="main" src="${RAW}/Koruna/Koruna${pad2(it.p)}.jpg">`);
 }
 
-/* Alpy detail */
+/* --- Detail Alpy --- */
 function showAlpy(it){
   openModal(`<h3>${it.title}</h3><img class="main" src="${it.img}">`);
 }
 
-/* Nepál slideshow */
+/* --- Nepál slideshow --- */
 let nepIndex=0;
 function showNepalAt(i){
   nepIndex=(i+nepal.length)%nepal.length;
@@ -280,28 +322,14 @@ function showNepalAt(i){
   </div>`);
   document.getElementById("left").onclick=e=>{e.stopPropagation();showNepalAt(nepIndex-1);}
   document.getElementById("right").onclick=e=>{e.stopPropagation();showNepalAt(nepIndex+1);}
-  document.addEventListener("keydown",function k(e){
-    if(e.key==="ArrowLeft"){showNepalAt(nepIndex-1);}
-    if(e.key==="ArrowRight"){showNepalAt(nepIndex+1);}
-    document.removeEventListener("keydown",k);
-  });
-  const img=document.getElementById("mainNep");
-  let startX=null;
-  img.addEventListener("touchstart",e=>startX=e.touches[0].clientX,{passive:true});
-  img.addEventListener("touchend",e=>{
-    if(startX==null)return;
-    const dx=e.changedTouches[0].clientX-startX;
-    if(Math.abs(dx)>40){dx>0?showNepalAt(nepIndex-1):showNepalAt(nepIndex+1);}
-    startX=null;
-  },{passive:true});
 }
 
-/* Render all galleries */
-renderGallery(korEl,koruna,showKoruna);
-renderGallery(alpEl,alpy,showAlpy);
-renderGallery(nepEl,nepal,(it)=>showNepalAt(nepal.findIndex(x=>x.id===it.id)));
+/* --- Render all --- */
+renderGallery(document.getElementById("koruna-gallery"),korunaData,showKoruna,true);
+renderGallery(document.getElementById("alpy-gallery"),alpy,showAlpy);
+renderGallery(document.getElementById("nepal-gallery"),nepal,(it)=>showNepalAt(nepal.indexOf(it)));
 
-/* Routing */
+/* --- Routing --- */
 const btns=document.querySelectorAll(".btn");
 const secs=document.querySelectorAll("[data-route-content]");
 function show(r){
