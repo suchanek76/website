@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Vzít batoh a jít</title>
+<title>Vzít batoh na záda a jít ...</title>
 <style>
 :root{
   --dark-blue:#041633;
@@ -30,35 +30,30 @@ html,body{
 .hero-bg{
   position:absolute;
   inset:0;
-  background:url("https://raw.githubusercontent.com/suchanek76/website/main/images/background.jpg") 
+  background:url("https://raw.githubusercontent.com/suchanek76/website/main/images/background.jpg")
              no-repeat center top;
   background-size:cover;
   z-index:0;
 }
-.hero::after{
-  content:"";
-  position:absolute;
-  inset:0;
-  background:linear-gradient(to bottom,rgba(0,0,0,0.2) 0%,rgba(4,22,51,0.9) 95%);
-  z-index:1;
-}
+/* žádný přechod */
 .hero-overlay{
   position:relative;
   z-index:2;
   height:100%;
   display:flex;
   flex-direction:column;
-  justify-content:center;
+  justify-content:flex-start;     /* posunout obsah nahoru */
   align-items:center;
   text-align:center;
+  padding-top:100px;              /* pozice textu a tlačítek výš */
 }
 .hero h1{
   font-size:clamp(30px,6vw,56px);
   margin:0;
-  text-shadow:0 4px 12px rgba(0,0,0,0.7);
+  text-shadow:0 3px 10px rgba(0,0,0,0.5);
 }
 .nav{
-  margin-top:20px;
+  margin-top:18px;
   display:flex;
   gap:12px;
   flex-wrap:wrap;
@@ -77,10 +72,10 @@ html,body{
 .btn:hover{background:rgba(255,255,255,0.25);}
 .btn.active{background:#fff;color:var(--dark-blue);}
 
-/* Galerie výš – překrývá víc panoramatu */
+/* Galerie překrývá spodní část panoramatu */
 main{
   position:relative;
-  margin-top:-420px;   /* posunuto výš */
+  margin-top:-420px;   /* galerie výš */
   z-index:3;
   background:none;
   padding-top:100px;
@@ -175,7 +170,7 @@ footer{text-align:center;color:rgba(255,255,255,0.6);padding:30px 0;}
 <header class="hero">
   <div class="hero-bg"></div>
   <div class="hero-overlay">
-    <h1>Vzít batoh a jít</h1>
+    <h1>Vzít batoh na záda a jít ...</h1>
     <div class="nav">
       <button class="btn active" data-route="koruna">Koruna Evropy</button>
       <button class="btn" data-route="alpy">Alpské čtyřtisícovky</button>
@@ -205,7 +200,7 @@ footer{text-align:center;color:rgba(255,255,255,0.6);padding:30px 0;}
   </div>
 </div>
 
-<footer>© Vzít batoh a jít</footer>
+<footer>© Vzít batoh na záda a jít ...</footer>
 
 <script>
 const RAW="https://raw.githubusercontent.com/suchanek76/website/main/images";
@@ -215,7 +210,8 @@ function range(path,prefix,count){
     id:`${prefix}-${i+1}`,
     img:`${path}/${prefix}${pad(i+1)}.jpg`,
     title:`${prefix} ${i+1}`,
-    country:"Evropa",height:`${1500+Math.floor(Math.random()*3000)} m`,
+    country:"Evropa",
+    height:`${1500+Math.floor(Math.random()*3000)} m`,
     date:`${2020+Math.floor(Math.random()*5)}`
   }));
 }
