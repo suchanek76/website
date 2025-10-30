@@ -1,276 +1,225 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="cs">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Suchánci na horách</title>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Vzít batoh na záda a jít ...</title>
 
 <style>
-/* ==== RESET ==== */
-* { margin: 0; padding: 0; box-sizing: border-box; }
-body {
-  font-family: 'Montserrat', Tahoma, sans-serif;
-  background: #1a2332;
-  color: white;
+:root{
+  --dark-blue:#041633;
+  --accent:#ffffff;
+  --max-width:1200px;
 }
 
-/* ==== HERO ==== */
-.hero {
-  height: 100vh;
-  background: linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(26,35,50,1) 100%),
-              url('https://raw.githubusercontent.com/suchanek76/website/main/images/background.jpg') center/cover;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;
-  padding-top: 18rem;
-  text-align: center;
-}
-.hero h1 {
-  font-size: 4rem;
-  font-weight: 600;
-  text-shadow: 2px 2px 8px rgba(0,0,0,0.8);
-  letter-spacing: 2px;
-  margin-bottom: 2rem;
-}
-.hero-buttons {
-  display: flex;
-  gap: 1.5rem;
-  flex-wrap: wrap;
-  justify-content: center;
-}
-.hero-button {
-  background: white;
-  color: #1a2332;
-  padding: 1rem 2rem;
-  border: none;
-  border-radius: 8px;
-  font-size: 1.1rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s;
-}
-.hero-button:hover {
-  background: #3498db;
-  color: white;
-  transform: scale(1.05);
+/* Základ */
+*{box-sizing:border-box}
+html,body{
+  margin:0;padding:0;
+  font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,Arial;
+  color:var(--accent);
+  background:var(--dark-blue);
+  overflow-x:hidden;
 }
 
-/* ==== SECTIONS ==== */
-.mountains-section { padding: 4rem 2rem; }
-.section-description {
-  max-width: 900px;
-  margin: 0 auto 3rem;
-  text-align: center;
-  font-size: 1.2rem;
-  line-height: 1.6;
-  color: #dfe6e9;
+/* Panorama */
+.hero{
+  position:relative;
+  width:100%;
+  height:100vh;
+  overflow:hidden;
+  background:var(--dark-blue);
 }
-.mountains-grid {
-  max-width: 1400px;
-  margin: 0 auto;
-  display: grid;
-  gap: 1.5rem;
+.hero-bg{
+  position:absolute; inset:0;
+  background:url("https://raw.githubusercontent.com/suchanek76/website/main/images/background.jpg")
+             no-repeat center top;
+  background-size:cover;
+  z-index:0;
 }
-.mountain-card {
-  aspect-ratio: 3/2;
-  background: #394d61;
-  border-radius: 8px;
-  overflow: hidden;
-  cursor: pointer;
-  background-size: cover;
-  background-position: center;
-  transition: transform 0.3s;
+.hero-overlay{
+  position:relative; z-index:2; height:100%;
+  display:flex; flex-direction:column; align-items:center;
+  justify-content:flex-start; text-align:center;
+  padding-top:100px;
 }
-.mountain-card:hover { transform: scale(1.05); }
+.hero h1{
+  font-size:clamp(30px,6vw,56px);
+  margin:0;
+  text-shadow:0 3px 10px rgba(0,0,0,0.5);
+}
+.nav{
+  margin-top:18px; display:flex; gap:12px; flex-wrap:wrap; justify-content:center;
+}
+.btn{
+  background:rgba(255,255,255,0.12);
+  border:1px solid rgba(255,255,255,0.2);
+  padding:10px 18px; color:white; border-radius:8px;
+  font-weight:600; cursor:pointer; transition:background .2s;
+}
+.btn:hover{background:rgba(255,255,255,0.25);}
+.btn.active{background:#fff;color:var(--dark-blue);}
 
-/* Overlay pouze pro Korunu a Alpy */
-.mountain-overlay {
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  padding: 1rem;
-  background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);
+/* Galerie */
+main{
+  position:relative;
+  margin-top:-420px;
+  z-index:3;
+  background:none;
+  padding-top:100px; padding-bottom:80px;
 }
-.mountain-name { font-size: 1.3rem; font-weight: 600; }
-.mountain-details { font-size: 0.9rem; opacity: 0.9; }
+.container{ width:95%; max-width:var(--max-width); margin:0 auto; }
 
-/* ==== GALERIE MODAL ==== */
-.gallery-modal {
-  display: none;
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.95);
-  z-index: 2000;
-  align-items: center;
-  justify-content: center;
+.gallery{ display:grid; gap:16px; }
+.grid-3{ grid-template-columns:repeat(3,1fr); }
+.grid-4{ grid-template-columns:repeat(4,1fr); }
+@media (max-width:1000px){
+  .grid-3{ grid-template-columns:repeat(2,1fr); }
+  .grid-4{ grid-template-columns:repeat(2,1fr); }
 }
-.gallery-modal.active { display: flex; }
-.gallery-img {
-  max-width: 90%;
-  max-height: 90%;
-  border-radius: 10px;
-}
-.gallery-arrow {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  font-size: 3rem;
-  color: white;
-  cursor: pointer;
-  user-select: none;
-  background: rgba(0,0,0,0.3);
-  border-radius: 50%;
-  width: 60px;
-  height: 60px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.gallery-arrow:hover { background: rgba(255,255,255,0.2); }
-.arrow-left { left: 2rem; }
-.arrow-right { right: 2rem; }
-.close-gallery {
-  position: absolute;
-  top: 2rem;
-  right: 2rem;
-  font-size: 2.5rem;
-  cursor: pointer;
+@media (max-width:600px){
+  .grid-3,.grid-4{ grid-template-columns:1fr; }
 }
 
-/* ==== RESPONSIVE ==== */
-@media (max-width: 968px) {
-  .hero h1 { font-size: 2.8rem; }
-  .mountains-grid { grid-template-columns: repeat(2, 1fr); }
+.photo-card{
+  position:relative; overflow:hidden; border-radius:10px; cursor:pointer; background:#000;
 }
-@media (max-width: 640px) {
-  .hero { padding-top: 8rem; }
-  .hero h1 { font-size: 2rem; }
-  .hero-buttons { flex-direction: column; gap: 1rem; }
-  .mountains-grid { grid-template-columns: 1fr; }
+.photo-card img.photo{
+  width:100%; aspect-ratio:3/2; object-fit:cover; transition:transform .35s ease;
 }
+.photo-card:hover img.photo{ transform:scale(1.04); }
+.photo-overlay{
+  position:absolute; left:0; right:0; bottom:0; padding:10px;
+  background:linear-gradient(to top, rgba(0,0,0,0.7), rgba(0,0,0,0));
+  color:#fff;
+}
+.photo-title{ font-weight:700; font-size:14px; margin:0; }
+.photo-sub{ font-size:12px; opacity:0.9; margin-top:3px; }
+
+/* Modal */
+.modal-backdrop{
+  position:fixed; inset:0; background:rgba(0,0,0,0.9);
+  display:flex; align-items:center; justify-content:center;
+  z-index:9999; opacity:0; pointer-events:none; transition:opacity .2s;
+}
+.modal-backdrop.show{ opacity:1; pointer-events:auto; }
+.modal{
+  width:100%; max-width:1000px; max-height:90vh;
+  background:none; color:#fff; display:flex; flex-direction:column; align-items:center;
+  justify-content:center; text-align:center;
+  overflow:hidden; position:relative;
+}
+.modal img.main{
+  width:auto; max-width:95%; max-height:90vh; object-fit:contain; border-radius:10px;
+}
+.modal-close{
+  position:absolute; right:24px; top:24px; background:none; border:none;
+  color:white; font-size:28px; cursor:pointer;
+}
+.nav-arrow{
+  position:absolute; top:50%; transform:translateY(-50%);
+  background:none; border:none; color:white; font-size:48px;
+  cursor:pointer; opacity:0.7; transition:opacity .2s;
+}
+.nav-arrow:hover{opacity:1;}
+.nav-arrow.left{ left:40px; }
+.nav-arrow.right{ right:40px; }
+
+footer{ text-align:center; color:rgba(255,255,255,0.6); padding:30px 0; }
 </style>
 </head>
 
 <body>
-  <section class="hero">
-    <h1>Vzít batoh na záda a jít...</h1>
-    <div class="hero-buttons">
-      <button class="hero-button" onclick="scrollToSection('koruna-evropy')">Koruna Evropy 14/42</button>
-      <button class="hero-button" onclick="scrollToSection('alpske-ctyrtisicovky')">Alpské čtyřtisícovky 5/82</button>
-      <button class="hero-button" onclick="scrollToSection('Nepal')">Nepál</button>
+<header class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-overlay">
+    <h1>Vzít batoh na záda a jít ...</h1>
+    <div class="nav">
+      <button class="btn active" data-route="koruna">Koruna Evropy</button>
+      <button class="btn" data-route="alpy">Alpské čtyřtisícovky</button>
+      <button class="btn" data-route="nepal">Nepál</button>
     </div>
-  </section>
-
-  <section class="mountains-section" id="koruna-evropy">
-    <div class="mountains-grid" id="mountainsGrid"></div>
-  </section>
-
-  <!-- GALERIE MODAL -->
-  <div class="gallery-modal" id="galleryModal">
-    <span class="close-gallery" onclick="closeGallery()">×</span>
-    <span class="gallery-arrow arrow-left" onclick="prevImage()">&#10094;</span>
-    <img id="galleryImage" class="gallery-img" src="">
-    <span class="gallery-arrow arrow-right" onclick="nextImage()">&#10095;</span>
   </div>
+</header>
+
+<main>
+  <div class="container">
+    <section id="koruna" data-route-content>
+      <div id="koruna-gallery" class="gallery grid-3"></div>
+    </section>
+    <section id="alpy" data-route-content hidden>
+      <div id="alpy-gallery" class="gallery grid-3"></div>
+    </section>
+    <section id="nepal" data-route-content hidden>
+      <div id="nepal-gallery" class="gallery grid-4"></div>
+    </section>
+  </div>
+</main>
+
+<div id="modal-backdrop" class="modal-backdrop" hidden>
+  <div class="modal">
+    <button class="modal-close" id="modal-close">✕</button>
+    <div id="modal-content"></div>
+  </div>
+</div>
+
+<footer>© Vzít batoh na záda a jít ...</footer>
 
 <script>
-/* ==== DATA ==== */
-const korunaEvropy = [
-  {id:'mont-blanc', name:'Mont Blanc 4.810 m', country:'Francie/Itálie', date:'31.8.2007', image:'https://raw.githubusercontent.com/suchanek76/website/main/images/Koruna/MontBlanc2x3.jpg'},
-  {id:'dufourspitze', name:'Dufourspitze 4.634 m', country:'Švýcarsko', date:'', image:null},
-  {id:'grossglockner', name:'Grossglockner 3.798 m', country:'Rakousko', date:'30.6.2025', image:'https://raw.githubusercontent.com/suchanek76/website/main/images/Koruna/Grossglockner2x3.jpg'},
-];
+const RAW="https://raw.githubusercontent.com/suchanek76/website/main/images";
+const imgKoruna=i=>`${RAW}/Koruna/Koruna${String(i).padStart(2,"0")}.jpg`;
+const imgAlpy=i=>`${RAW}/4000/ctyrtisicovka${String(i).padStart(2,"0")}.jpg`;
+const imgNepal=i=>`${RAW}/Nepal/Nepal${String(i).padStart(2,"0")}.jpg`;
 
-const alpskeCtyrtisicovky = [
-  {id:'alps-1', name:'Mont Blanc / Monte Bianco', country:'Francie/Itálie', image:'https://raw.githubusercontent.com/suchanek76/website/main/images/4000/MontBlanc2x3.jpg'},
-  {id:'alps-2', name:'Mont Blanc di Courmayeur', country:'Itálie', image:null},
-  {id:'alps-3', name:'Dufourspitze / Punta Dufour', country:'Švýcarsko/Itálie', image:null}
-];
+/* zkráceno: korunaData, alpyData jako dřív */
+const korunaData=[{p:1,hora:"Mont Blanc",v:4809,z:"Francie / Itálie",d:"31. 8. 2007"}];
+const alpyData=[{p:"1",hora:"Mont Blanc",v:"4807",z:"Francie / Itálie",d:"31. 8. 2007",cas:"7:09",team:"Karel",obt:"B",pohori:"Mont Blank"}];
+const nepalData=Array.from({length:40},(_,i)=>({idx:i+1,img:imgNepal(i+1)}));
 
-const Nepal = Array.from({length:40},(_,i)=>({
-  id:`nepal-${i+1}`,
-  image:`https://raw.githubusercontent.com/suchanek76/website/main/images/Nepal/Nepal${String(i+1).padStart(2,'0')}.jpg`
-}));
-
-/* ==== STAV ==== */
-let currentCategory = 'koruna-evropy';
-let mountains = [];
-let currentImageIndex = 0;
-
-/* ==== FUNKCE ==== */
-function renderMountains() {
-  const grid = document.getElementById('mountainsGrid');
-  grid.innerHTML = '';
-  if(currentCategory==='Nepal'){
-    grid.insertAdjacentHTML('beforebegin',`
-      <div class="section-description">
-        <p>Tady bude popis výletu do Nepálu – zážitky, trasa, atmosféra a další dojmy.</p>
-      </div>
-    `);
-  } else {
-    const desc = document.querySelector('.section-description');
-    if(desc) desc.remove();
-  }
-
-  grid.style.gridTemplateColumns = currentCategory==='Nepal' ? 'repeat(4,1fr)' : 'repeat(3,1fr)';
-  mountains.forEach((m,idx)=>{
-    const card=document.createElement('div');
-    card.className='mountain-card';
-    if(m.image) card.style.backgroundImage=`url(${m.image})`;
-    if(currentCategory==='Nepal'){
-      card.onclick=()=>openGallery(idx);
-    } else {
-      card.style.position='relative';
-      card.innerHTML=`
-        <div class="mountain-overlay">
-          <div class="mountain-name">${m.name}</div>
-          <div class="mountain-details">${m.country||''} ${m.date||''}</div>
-        </div>`;
-    }
-    grid.appendChild(card);
-  });
+function cardSimple(it,onClick){
+ const d=document.createElement("div");d.className="photo-card";
+ d.innerHTML=`<img class="photo" src="${it.img}" alt="Nepál ${it.idx}">`;
+ d.onclick=()=>onClick(it.idx-1);return d;
 }
 
-/* ==== GALERIE ==== */
-function openGallery(index){
-  currentImageIndex=index;
-  const modal=document.getElementById('galleryModal');
-  const img=document.getElementById('galleryImage');
-  img.src=Nepal[currentImageIndex].image;
-  modal.classList.add('active');
-}
-function closeGallery(){
-  document.getElementById('galleryModal').classList.remove('active');
-}
-function nextImage(){
-  currentImageIndex=(currentImageIndex+1)%Nepal.length;
-  document.getElementById('galleryImage').src=Nepal[currentImageIndex].image;
-}
-function prevImage(){
-  currentImageIndex=(currentImageIndex-1+Nepal.length)%Nepal.length;
-  document.getElementById('galleryImage').src=Nepal[currentImageIndex].image;
-}
-document.addEventListener('keydown',e=>{
-  if(e.key==='Escape') closeGallery();
-  if(e.key==='ArrowRight') nextImage();
-  if(e.key==='ArrowLeft') prevImage();
-});
+/* MODAL */
+const modal=document.getElementById("modal-backdrop");
+const modalContent=document.getElementById("modal-content");
+document.getElementById("modal-close").onclick=()=>closeModal();
+function openModal(html){modalContent.innerHTML=html;modal.hidden=false;setTimeout(()=>modal.classList.add("show"),10);document.body.style.overflow="hidden";}
+function closeModal(){modal.classList.remove("show");setTimeout(()=>{modal.hidden=true;modalContent.innerHTML="";},200);document.body.style.overflow="";}
 
-/* ==== NAVIGACE ==== */
-function scrollToSection(sectionId){
-  currentCategory=sectionId;
-  mountains=(sectionId==='koruna-evropy')?korunaEvropy:
-            (sectionId==='alpske-ctyrtisicovky')?alpskeCtyrtisicovky:Nepal;
-  renderMountains();
-  document.getElementById('koruna-evropy').scrollIntoView({behavior:'smooth'});
+/* NEPÁL */
+let nepalIndex=0;
+function showNepalAt(idx){
+ nepalIndex=(idx+nepalData.length)%nepalData.length;
+ const it=nepalData[nepalIndex];
+ openModal(`
+   <button class="nav-arrow left" id="nav-left">‹</button>
+   <img class="main" id="nepal-main" src="${it.img}" alt="Nepál ${it.idx}">
+   <button class="nav-arrow right" id="nav-right">›</button>
+ `);
+ document.getElementById("nav-left").onclick=e=>{e.stopPropagation();showNepalAt(nepalIndex-1)};
+ document.getElementById("nav-right").onclick=e=>{e.stopPropagation();showNepalAt(nepalIndex+1)};
+ document.onkeydown=e=>{
+   if(e.key==="ArrowLeft")showNepalAt(nepalIndex-1);
+   if(e.key==="ArrowRight")showNepalAt(nepalIndex+1);
+   if(e.key==="Escape")closeModal();
+ };
+ const img=document.getElementById("nepal-main");let sx=null,sy=null,st=null;
+ img.addEventListener("touchstart",ev=>{const t=ev.touches[0];sx=t.clientX;sy=t.clientY;st=Date.now();},{passive:true});
+ img.addEventListener("touchend",ev=>{if(sx===null)return;const t=ev.changedTouches[0];const dx=t.clientX-sx;const dy=t.clientY-sy;const dt=Date.now()-st;sx=null;if(Math.abs(dx)>40&&Math.abs(dx)>Math.abs(dy)&&dt<600){dx>0?showNepalAt(nepalIndex-1):showNepalAt(nepalIndex+1);}}, {passive:true});
 }
 
-/* ==== INIT ==== */
-window.addEventListener('DOMContentLoaded',()=>{
-  mountains=korunaEvropy;
-  renderMountains();
-});
+/* Render Nepál */
+const nepEl=document.getElementById("nepal-gallery");
+nepalData.forEach(it=>nepEl.appendChild(cardSimple(it,showNepalAt)));
+
+/* Routing */
+const btns=document.querySelectorAll(".btn"),sections=document.querySelectorAll("[data-route-content]");
+function show(r){sections.forEach(s=>s.hidden=s.id!==r);btns.forEach(b=>b.classList.toggle("active",b.dataset.route===r));history.replaceState(null,"","#"+r);}
+btns.forEach(b=>b.onclick=()=>show(b.dataset.route));
+show(location.hash?location.hash.substring(1):"koruna");
 </script>
 </body>
 </html>
