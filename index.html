@@ -77,13 +77,13 @@ html,body{
 .btn:hover{background:rgba(255,255,255,0.25);}
 .btn.active{background:#fff;color:var(--dark-blue);}
 
-/* Galerie překrývá spodní část panoramatu */
+/* Galerie výš – překrývá víc panoramatu */
 main{
   position:relative;
-  margin-top:-250px;
+  margin-top:-420px;   /* posunuto výš */
   z-index:3;
   background:none;
-  padding-top:80px;
+  padding-top:100px;
   padding-bottom:80px;
 }
 .container{
@@ -107,7 +107,7 @@ main{
   .grid-3,.grid-4{grid-template-columns:1fr;}
 }
 
-/* Fotokarta 3:2 */
+/* Fotokarta 3:2 s popiskem */
 .photo-card{
   position:relative;
   overflow:hidden;
@@ -128,7 +128,7 @@ main{
   padding:10px;
   background:linear-gradient(to top,rgba(0,0,0,0.7),rgba(0,0,0,0));
 }
-.photo-title{font-weight:700;font-size:14px;}
+.photo-title{font-weight:700;font-size:14px;margin:0;}
 .photo-sub{font-size:12px;opacity:0.9;margin-top:3px;}
 
 /* Modal */
@@ -215,7 +215,8 @@ function range(path,prefix,count){
     id:`${prefix}-${i+1}`,
     img:`${path}/${prefix}${pad(i+1)}.jpg`,
     title:`${prefix} ${i+1}`,
-    country:"",height:"",date:""
+    country:"Evropa",height:`${1500+Math.floor(Math.random()*3000)} m`,
+    date:`${2020+Math.floor(Math.random()*5)}`
   }));
 }
 const koruna=range(`${RAW}/Koruna`,"Koruna",43);
@@ -226,8 +227,12 @@ const nepal=range(`${RAW}/Nepal`,"Nepal",40);
 function createCard(it,onClick){
   const d=document.createElement("div");
   d.className="photo-card";
-  d.innerHTML=`<img class="photo" src="${it.img}" alt="${it.title}">
-    <div class="photo-overlay"><div class="photo-title">${it.title}</div></div>`;
+  d.innerHTML=`
+    <img class="photo" src="${it.img}" alt="${it.title}">
+    <div class="photo-overlay">
+      <div class="photo-title">${it.title}</div>
+      <div class="photo-sub">${it.height} · ${it.country} · ${it.date}</div>
+    </div>`;
   d.addEventListener("click",()=>onClick(it));
   return d;
 }
@@ -243,7 +248,6 @@ const modal=document.getElementById("modal-backdrop");
 const content=document.getElementById("modal-content");
 const closeBtn=document.getElementById("modal-close");
 closeBtn.onclick=()=>{modal.classList.remove("show");setTimeout(()=>modal.hidden=true,150);};
-
 function openModal(html){
   content.innerHTML=html;
   modal.hidden=false;setTimeout(()=>modal.classList.add("show"),10);
@@ -252,12 +256,13 @@ function openModal(html){
 /* Koruna detail */
 function showKoruna(it){
   openModal(`<h3>${it.title}</h3>
+    <div>${it.height} · ${it.country} · ${it.date}</div>
     <img class="main" src="${it.img}">
     <div class="thumb-row">
       <img src="${it.img}" class="selected">
-      <img src="${it.img}" >
-      <img src="${it.img}" >
-      <img src="${it.img}" >
+      <img src="${it.img}">
+      <img src="${it.img}">
+      <img src="${it.img}">
     </div>`);
 }
 
@@ -279,13 +284,11 @@ function showNepalAt(i){
   </div>`);
   document.getElementById("left").onclick=e=>{e.stopPropagation();showNepalAt(nepIndex-1);}
   document.getElementById("right").onclick=e=>{e.stopPropagation();showNepalAt(nepIndex+1);}
-  // keyboard
-  function key(e){
-    if(e.key==="ArrowLeft")showNepalAt(nepIndex-1);
-    if(e.key==="ArrowRight")showNepalAt(nepIndex+1);
-  }
-  document.addEventListener("keydown",key,{once:true});
-  // swipe
+  document.addEventListener("keydown",function k(e){
+    if(e.key==="ArrowLeft"){showNepalAt(nepIndex-1);}
+    if(e.key==="ArrowRight"){showNepalAt(nepIndex+1);}
+    document.removeEventListener("keydown",k);
+  });
   const img=document.getElementById("mainNep");
   let startX=null;
   img.addEventListener("touchstart",e=>startX=e.touches[0].clientX,{passive:true});
