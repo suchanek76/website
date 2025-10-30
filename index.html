@@ -1,305 +1,522 @@
 <!doctype html>
 <html lang="cs">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Vzít batoh a jít</title>
-  <style>
-    :root{
-      --deep-navy:#04112b;
-      --accent:#fff;
-      --card-radius:12px;
-      --max-width:1200px;
-    }
-    *{box-sizing:border-box}
-    body{margin:0;font-family:Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;color:#fff;background:var(--deep-navy)}
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Vzít batoh a jít</title>
+<style>
+  :root{
+    --dark-blue:#041633;
+    --accent:#ffffff;
+    --overlay-gradient: linear-gradient(to top, rgba(0,0,0,0.6), rgba(0,0,0,0.15));
+    --max-width:1200px;
+  }
+  html,body{height:100%;margin:0;font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;}
+  body{
+    background: var(--dark-blue) no-repeat top/cover;
+    color:var(--accent);
+    display:flex;
+    flex-direction:column;
+    min-height:100vh;
+  }
 
-    /* HERO */
-    .hero{
-      position:relative;
-      min-height:48vh;
-      display:flex;
-      align-items:flex-start;
-      justify-content:center;
-      padding:48px 24px 80px;
-      background-image:linear-gradient(to bottom, rgba(4,17,43,0.25) 0%, rgba(4,17,43,0.7) 70%), url('https://raw.githubusercontent.com/suchanek76/website/main/images/background.jpg');
-      background-size:cover;background-position:center top;
-    }
-    .container{width:100%;max-width:var(--max-width);margin:0 auto}
-    .title{font-size:clamp(28px,6vw,52px);font-weight:700;text-align:center;color:#fff;margin:4px 0}
-    .subtitle{opacity:0.9;text-align:center;margin-bottom:18px}
+  /* Top hero with panorama */
+  .hero{
+    background-image: url('https://picsum.photos/1600/400?blur=1&random=101');
+    background-size:cover;
+    background-position:center;
+    min-height:240px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    position:relative;
+  }
+  .hero::after{
+    content:'';
+    position:absolute;left:0;right:0;bottom:0;height:50%;
+    background: linear-gradient(to bottom, rgba(0,0,0,0), rgba(4,22,51,0.85));
+  }
+  .container{
+    width:95%;
+    max-width:var(--max-width);
+    margin:0 auto;
+    padding:32px 0 60px 0;
+  }
 
-    .tabs{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
-    .tab{background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.06);padding:10px 18px;border-radius:999px;color:#fff;cursor:pointer;font-weight:600}
-    .tab.active{background:#fff;color:var(--deep-navy);box-shadow:0 6px 18px rgba(2,6,23,0.6)}
+  .title{
+    position:relative;
+    text-align:center;
+    z-index:2;
+  }
+  .title h1{
+    font-size:clamp(28px,5vw,48px);
+    margin:0;
+    color:#fff;
+    text-shadow:0 2px 10px rgba(0,0,0,0.6);
+  }
 
-    /* Gallery wrapper overlaps hero bottom */
-    .gallery-wrap{position:relative;top:-80px;padding:32px 24px 80px}
-    .card{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));padding:20px;border-radius:16px;box-shadow:0 8px 30px rgba(2,6,23,0.6)}
+  /* Nav buttons */
+  .nav{
+    margin-top:18px;
+    display:flex;
+    gap:12px;
+    justify-content:center;
+  }
+  .btn{
+    background:rgba(255,255,255,0.12);
+    border:1px solid rgba(255,255,255,0.12);
+    padding:10px 16px;
+    color:white;
+    border-radius:8px;
+    cursor:pointer;
+    font-weight:600;
+    backdrop-filter: blur(4px);
+  }
+  .btn.active{
+    background:#fff;color:var(--dark-blue);
+    border-color:rgba(0,0,0,0.08);
+  }
 
-    .grid{display:grid;gap:14px}
-    /* Koruna & 4000: 3 per row on desktop */
-    .grid.three{grid-template-columns:repeat(3,1fr)}
-    /* Nepal: 4 per row on desktop */
-    .grid.four{grid-template-columns:repeat(4,1fr)}
+  main{
+    background: linear-gradient(to bottom, rgba(4,22,51,0.0), var(--dark-blue));
+    flex:1 0 auto;
+    padding-bottom:60px;
+  }
 
-    .photo{
-      position:relative;overflow:hidden;border-radius:10px;aspect-ratio:3/2;background:#000;display:block;cursor:pointer
-    }
-    .photo img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .6s cubic-bezier(.2,.9,.2,1)}
-    .photo:focus img, .photo:hover img{transform:scale(1.03)}
+  /* Galleries */
+  .gallery{
+    margin-top:30px;
+    display:grid;
+    gap:16px;
+  }
 
-    .photo .meta{
-      position:absolute;left:12px;bottom:12px;right:12px;padding:10px;border-radius:6px;background:linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.55) 60%);backdrop-filter: blur(2px);
-    }
-    .meta h4{margin:0;font-size:15px;font-weight:700}
-    .meta p{margin:3px 0 0;font-size:13px;opacity:0.9}
+  /* 3-per-row grid */
+  .grid-3{
+    grid-template-columns: repeat(3, 1fr);
+  }
+  .grid-4{
+    grid-template-columns: repeat(4, 1fr);
+  }
 
-    /* Modal */
-    .modal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;padding:24px;z-index:1200}
-    .modal.open{display:flex}
-    .modal-backdrop{position:absolute;inset:0;background:rgba(2,6,23,0.6);backdrop-filter:blur(4px)}
-    .modal-card{position:relative;z-index:2;background:linear-gradient(180deg,#04112b,#06213a);max-width:920px;width:100%;border-radius:12px;padding:18px;box-shadow:0 20px 50px rgba(2,6,23,0.7);color:#fff}
-    .modal-header{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
-    .modal-title{font-size:20px;margin:0}
-    .modal-meta{font-size:14px;opacity:0.95}
-    .modal-body{margin-top:12px;display:grid;grid-template-columns:1fr 320px;gap:16px}
-    .modal-left img{width:100%;height:420px;object-fit:cover;border-radius:8px}
-    .modal-right{display:flex;flex-direction:column;gap:10px}
-    .thumbs{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+  /* For responsive */
+  @media (max-width: 1000px){
+    .grid-3{grid-template-columns: repeat(2,1fr);}
+    .grid-4{grid-template-columns: repeat(2,1fr);}
+  }
+  @media (max-width: 560px){
+    .grid-3,.grid-4{grid-template-columns: 1fr;}
+    .nav{flex-wrap:wrap}
+  }
 
-    .close-btn{background:transparent;border:0;color:#fff;font-size:20px;cursor:pointer}
+  .photo-card{
+    position:relative;
+    overflow:hidden;
+    border-radius:8px;
+    cursor:pointer;
+    background:#111;
+  }
+  /* maintain 2:3 ratio */
+  .photo-card .photo{
+    aspect-ratio: 2 / 3;
+    width:100%;
+    object-fit:cover;
+    display:block;
+    transition:transform .35s ease;
+  }
+  .photo-card:hover .photo{ transform: scale(1.03); }
 
-    /* Nepal lightbox style */
-    .lightbox-image{max-width:100%;height:auto;display:block;margin:0 auto}
-    .lightbox-controls{display:flex;justify-content:space-between;align-items:center;margin-top:8px}
-    .arrow-btn{background:rgba(255,255,255,0.06);border:0;padding:10px 14px;border-radius:8px;color:#fff;cursor:pointer}
+  .photo-overlay{
+    position:absolute;
+    left:0;right:0;bottom:0;padding:12px;
+    background: linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.2) 30%, rgba(0,0,0,0.6) 100%);
+    color:white;
+    display:flex;
+    flex-direction:column;
+    align-items:flex-start;
+  }
+  .photo-title{ font-weight:700; font-size:14px; margin:0; }
+  .photo-sub{ font-size:12px; opacity:0.9; margin-top:4px; }
 
-    /* Responsive */
-    @media (max-width:1000px){.grid.three{grid-template-columns:repeat(2,1fr)}.modal-body{grid-template-columns:1fr 300px}.modal-left img{height:320px}}
-    @media (max-width:640px){.hero{padding:28px 20px 60px}.grid.three{grid-template-columns:1fr}.grid.four{grid-template-columns:repeat(2,1fr)}.modal-body{grid-template-columns:1fr}.modal-left img{height:220px}}
+  /* Modal / Lightbox */
+  .modal-backdrop{
+    position:fixed;inset:0;background:rgba(0,0,0,0.7);display:flex;align-items:center;justify-content:center;
+    z-index:9999;padding:24px;opacity:0;pointer-events:none;transition:opacity .15s ease;
+  }
+  .modal-backdrop.show{opacity:1;pointer-events:auto;}
+  .modal{
+    width:100%;max-width:960px;background:#071431;border-radius:10px;color:#fff;padding:18px;box-shadow:0 10px 40px rgba(0,0,0,0.6);overflow:auto;
+    max-height:90vh;
+  }
+  .modal-close{ position:absolute; right:18px; top:18px; background:none;border:none;color:white;font-size:20px; cursor:pointer; }
+  .modal-header{ display:flex; gap:12px; align-items:center; justify-content:space-between; margin-bottom:8px; }
+  .modal-title{ font-size:20px; font-weight:700; margin:0; }
+  .modal-meta{ font-size:14px; opacity:0.95; margin-top:6px; }
 
-    /* small helper */
-    .sr-only{position:absolute;left:-10000px;width:1px;height:1px;top:auto;overflow:hidden}
-  </style>
+  .modal-main-image{
+    width:100%;
+    max-height:420px;
+    object-fit:cover;
+    border-radius:6px;
+    display:block;
+    margin:12px 0;
+  }
+
+  .modal-description{ margin-top:8px; line-height:1.5; color:#e6eefc; }
+
+  .thumb-row{ display:flex; gap:10px; margin-top:12px; flex-wrap:wrap; }
+  .thumb-row img{ width:calc((100% - 30px)/4); height:80px; object-fit:cover; border-radius:6px; cursor:pointer; border:2px solid transparent; }
+  .thumb-row img.selected{ border-color:#fff; }
+
+  /* Nepal lightbox navigation */
+  .nav-arrow{
+    position:absolute;top:50%;transform:translateY(-50%);font-size:28px;background:rgba(0,0,0,0.4);border:none;color:white;padding:10px;border-radius:50%;cursor:pointer;
+  }
+  .nav-arrow.left{ left:8px; }
+  .nav-arrow.right{ right:8px; }
+
+  footer{ text-align:center;color:rgba(255,255,255,0.6); padding:22px 0 60px 0; }
+</style>
 </head>
 <body>
   <header class="hero">
-    <div class="container">
-      <h1 class="title">Vzít batoh a jít</h1>
-      <p class="subtitle">Foto-alba z výšlapů — vyber sekci</p>
-      <div class="tabs" role="tablist" aria-label="Galerie">
-        <button class="tab active" data-target="koruna" role="tab" aria-selected="true">Koruna Evropy</button>
-        <button class="tab" data-target="alpy" role="tab">Alpské čtyřtisícovky</button>
-        <button class="tab" data-target="nepal" role="tab">Nepál</button>
+    <div class="container title">
+      <h1>Vzít batoh a jít</h1>
+      <div class="nav" role="tablist" aria-label="Sekce">
+        <button class="btn active" data-route="koruna">Koruna Evropy</button>
+        <button class="btn" data-route="alpy">Alpské čtyřtisícovky</button>
+        <button class="btn" data-route="nepal">Nepál</button>
       </div>
     </div>
   </header>
 
-  <main class="gallery-wrap container">
-    <!-- Koruna -->
-    <section id="koruna" class="card gallery" aria-label="Koruna Evropy galerie">
-      <h2 class="sr-only">Koruna Evropy</h2>
-      <div class="grid three" id="koruna-grid"></div>
-    </section>
+  <main>
+    <div class="container" id="app">
+      <!-- galleries render sem -->
+      <section id="koruna" class="gallery-section" data-route-content>
+        <h2>Koruna Evropy</h2>
+        <div id="koruna-gallery" class="gallery grid-3" aria-live="polite"></div>
+      </section>
 
-    <!-- Alps -->
-    <section id="alpy" class="card gallery" style="display:none" aria-label="Alpské čtyřtisícovky galerie">
-      <h2 class="sr-only">Alpské čtyřtisícovky</h2>
-      <div class="grid three" id="alpy-grid"></div>
-    </section>
+      <section id="alpy" class="gallery-section" data-route-content hidden>
+        <h2>Alpské čtyřtisícovky</h2>
+        <div id="alpy-gallery" class="gallery grid-3" aria-live="polite"></div>
+      </section>
 
-    <!-- Nepal -->
-    <section id="nepal" class="card gallery" style="display:none" aria-label="Nepál galerie">
-      <h2 class="sr-only">Nepál</h2>
-      <div class="grid four" id="nepal-grid"></div>
-    </section>
+      <section id="nepal" class="gallery-section" data-route-content hidden>
+        <h2>Nepál</h2>
+        <div id="nepal-gallery" class="gallery grid-4" aria-live="polite"></div>
+      </section>
+    </div>
   </main>
 
-  <!-- Modal (shared for Koruna + Alps) -->
-  <div id="modal" class="modal" aria-hidden="true">
-    <div class="modal-backdrop" data-close></div>
-    <div class="modal-card" role="dialog" aria-modal="true" aria-label="Detaily fotografie">
-      <div class="modal-header">
-        <div>
-          <h3 class="modal-title" id="modal-title">Název hory — výška</h3>
-          <div class="modal-meta" id="modal-sub">Stát • Datum zdolání</div>
-        </div>
-        <button class="close-btn" aria-label="Zavřít" data-close>&times;</button>
-      </div>
-      <div class="modal-body">
-        <div class="modal-left">
-          <img id="modal-main-img" src="" alt="Hlavní fotografie" />
-        </div>
-        <aside class="modal-right">
-          <div><strong>Výstupový tým:</strong><div id="modal-team">—</div></div>
-          <div><strong>Krátký popis:</strong><div id="modal-desc">—</div></div>
-          <div><strong>Další fotky:</strong></div>
-          <div class="thumbs" id="modal-thumbs"></div>
-        </aside>
-      </div>
+  <!-- Modal common -->
+  <div id="modal-backdrop" class="modal-backdrop" role="dialog" aria-modal="true" hidden>
+    <div class="modal" id="modal">
+      <button class="modal-close" id="modal-close" aria-label="Zavřít">✕</button>
+      <div id="modal-content"></div>
     </div>
   </div>
 
-  <!-- Nepal Lightbox modal -->
-  <div id="nb-lightbox" class="modal" aria-hidden="true">
-    <div class="modal-backdrop" data-close></div>
-    <div class="modal-card" role="dialog" aria-modal="true" style="max-width:1100px;">
-      <div style="display:flex;justify-content:space-between;align-items:center">
-        <button class="arrow-btn" id="nb-prev" aria-label="Předchozí">◀</button>
-        <button class="close-btn" aria-label="Zavřít" data-close>&times;</button>
-        <button class="arrow-btn" id="nb-next" aria-label="Další">▶</button>
-      </div>
-      <div style="padding-top:12px;text-align:center">
-        <img id="nb-img" class="lightbox-image" src="" alt="Nepál fotografie" />
-        <div class="lightbox-controls">
-          <div id="nb-caption">&nbsp;</div>
-          <div id="nb-index">0 / 0</div>
-        </div>
-      </div>
-    </div>
-  </div>
+  <footer>
+    © Vzít batoh a jít — galerie
+  </footer>
 
-  <script>
-    // --- configuration: available image ranges and base URLs ---
-    const cfg = {
-      koruna: {count: 40, base: 'https://raw.githubusercontent.com/suchanek76/website/main/images/Koruna/Koruna', pad: 2},
-      alpy:   {count: 40, base: 'https://raw.githubusercontent.com/suchanek76/website/main/images/4000/ctyrtisicovka', pad: 2},
-      nepal:  {count: 40, base: 'https://raw.githubusercontent.com/suchanek76/website/main/images/Nepal/Nepal', pad: 2}
-    };
+<script>
+/*
+  Data generation for galleries.
+  - Each item: id, img (2:3), title, height, country, date, team, description, extraPhotos[]
+  - Koruna: 45 items, Alpy:82, Nepál:40
+  Replace picsum.photos URLs with your real images as needed.
+*/
 
-    // Utility to build filename with leading zeros
-    function pad(n, width){return String(n).padStart(width,'0')}
+function randInt(min,max){ return Math.floor(Math.random()*(max-min+1))+min; }
+function makeDate(i){
+  // deterministic pseudo-dates for display (e.g. 2018-05-12)
+  const year = 2005 + (i % 20);
+  const month = ((i*7) % 12) + 1;
+  const day = ((i*5) % 28) + 1;
+  return `${year}-${String(month).padStart(2,'0')}-${String(day).padStart(2,'0')}`;
+}
 
-    // Mock meta generator (user can replace with real data later)
-    function metaFor(section, idx){
-      // creates placeholder names, heights and dates
-      const num = idx;
-      const name = (section==='koruna'? 'Hora Koruna ':'Hora Alpy ')+(num);
-      const height = (2500 + (num*10)) + ' m';
-      const country = (section==='nepal'? 'Nepál' : (section==='koruna' ? 'Slovensko' : 'Švýcarsko'));
-      const date = new Date(2018 + (num % 6), (num % 12), ((num*3)%27)+1).toLocaleDateString('cs-CZ');
-      const team = `Team A, Team B`;
-      const desc = `Krátký popis výstupu číslo ${num}. Náročnost, počasí a zážitky.`;
-      return {name, height, country, date, team, desc};
+function makeTitle(kind, i){
+  // simple names; feel free to replace with real mountain names
+  return `${kind} Hora ${i+1}`;
+}
+
+function makeHeight(i, base){
+  return `${base + (i % 120)} m`;
+}
+
+// build arrays
+const koruna = Array.from({length:45}, (_,i) => ({
+  id: `kor-${i+1}`,
+  img: `https://picsum.photos/600/900?random=${1010+i}`, // 2:3
+  title: makeTitle('Koruna', i),
+  height: makeHeight(i,2300),
+  country: ['Česko','Slovensko','Polsko','Rakousko','Itálie','Švýcarsko'][i%6],
+  date: makeDate(i),
+  team: `Team ${ (i%6)+1 }`,
+  description: `Krátký popis výstupu na ${makeTitle('Koruna',i)}. Trasa začala brzy ráno, počasí bylo proměnlivé, technické úseky zvládnuty s jistotou.`,
+  extras: [
+    `https://picsum.photos/600/900?random=${2010+i*4+0}`,
+    `https://picsum.photos/600/900?random=${2010+i*4+1}`,
+    `https://picsum.photos/600/900?random=${2010+i*4+2}`,
+    `https://picsum.photos/600/900?random=${2010+i*4+3}`,
+  ]
+}));
+
+const alpy = Array.from({length:82}, (_,i) => ({
+  id: `alp-${i+1}`,
+  img: `https://picsum.photos/600/900?random=${3000+i}`,
+  title: makeTitle('Alpy', i),
+  height: makeHeight(i,3600),
+  country: ['Francie','Itálie','Švýcarsko','Rakousko'][i%4],
+  date: makeDate(i+2),
+  team: `Alpine Team ${ (i%8)+1 }`,
+}));
+
+const nepal = Array.from({length:40}, (_,i) => ({
+  id: `nep-${i+1}`,
+  img: `https://picsum.photos/600/900?random=${5000+i}`,
+  title: makeTitle('Nepál', i),
+  height: makeHeight(i,4800),
+  country: 'Nepál',
+  date: makeDate(i+5),
+}));
+
+/* Render functions */
+function createPhotoCard(item, options = {}){
+  const card = document.createElement('div');
+  card.className = 'photo-card';
+  card.setAttribute('tabindex','0');
+  card.dataset.id = item.id;
+
+  const img = document.createElement('img');
+  img.className = 'photo';
+  img.src = item.img;
+  img.alt = `${item.title} — ${item.height}`;
+  card.appendChild(img);
+
+  const overlay = document.createElement('div');
+  overlay.className = 'photo-overlay';
+  const title = document.createElement('div');
+  title.className = 'photo-title';
+  title.textContent = item.title;
+  const sub = document.createElement('div');
+  sub.className = 'photo-sub';
+  sub.textContent = `${item.height} · ${item.country} · ${item.date}`;
+  overlay.appendChild(title);
+  overlay.appendChild(sub);
+  card.appendChild(overlay);
+
+  // click handler
+  card.addEventListener('click', () => {
+    if(options.onClick) options.onClick(item);
+  });
+  card.addEventListener('keydown', (e) => {
+    if(e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      card.click();
     }
+  });
 
-    // Build gallery grids
-    function buildGallery(sectionId, gridEl, layout){
-      const conf = cfg[sectionId];
-      for(let i=1;i<=conf.count;i++){
-        const el = document.createElement('a');
-        el.href='#'; el.className='photo'; el.setAttribute('data-section',sectionId); el.setAttribute('data-index',i);
-        el.setAttribute('role','button');
-        const img = document.createElement('img');
-        img.loading='lazy';
-        img.alt = `${sectionId} ${i}`;
-        const filename = `${conf.base}${pad(i,conf.pad)}.jpg`;
-        img.src = filename;
-        el.appendChild(img);
+  return card;
+}
 
-        const m = metaFor(sectionId,i);
-        const meta = document.createElement('div'); meta.className='meta';
-        const h4 = document.createElement('h4'); h4.textContent = `${m.name} — ${m.height}`;
-        const p = document.createElement('p'); p.textContent = `${m.country} • ${m.date}`;
-        meta.appendChild(h4); meta.appendChild(p);
-        el.appendChild(meta);
+function renderGallery(targetEl, items, opts = {}){
+  targetEl.innerHTML = '';
+  items.forEach(item => {
+    const card = createPhotoCard(item, { onClick: opts.onClick });
+    targetEl.appendChild(card);
+  });
+}
 
-        gridEl.appendChild(el);
-      }
-    }
+/* Modal helpers */
+const modalBackdrop = document.getElementById('modal-backdrop');
+const modalContent = document.getElementById('modal-content');
+const modalCloseBtn = document.getElementById('modal-close');
 
-    // Initialize galleries
-    document.addEventListener('DOMContentLoaded',()=>{
-      buildGallery('koruna',document.getElementById('koruna-grid'));
-      buildGallery('alpy',document.getElementById('alpy-grid'));
-      buildGallery('nepal',document.getElementById('nepal-grid'));
+function openModal(renderFn){
+  modalBackdrop.hidden = false;
+  setTimeout(()=> modalBackdrop.classList.add('show'), 10);
+  modalContent.innerHTML = '';
+  renderFn(modalContent);
+  document.body.style.overflow = 'hidden';
+}
 
-      // tabs behavior
-      document.querySelectorAll('.tab').forEach(btn=>{
-        btn.addEventListener('click',()=>{
-          document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
-          btn.classList.add('active');
-          const target = btn.dataset.target;
-          document.querySelectorAll('.gallery').forEach(g=>g.style.display='none');
-          document.getElementById(target).style.display='block';
-        });
+function closeModal(){
+  modalBackdrop.classList.remove('show');
+  setTimeout(()=> { modalBackdrop.hidden = true; modalContent.innerHTML = ''; }, 180);
+  document.body.style.overflow = '';
+}
+modalCloseBtn.addEventListener('click', closeModal);
+modalBackdrop.addEventListener('click', (e)=> {
+  if(e.target === modalBackdrop) closeModal();
+});
+document.addEventListener('keydown', (e)=> {
+  if(e.key === 'Escape') closeModal();
+});
+
+/* Koruna: detail modal with metadata and 4 extra photos with "možnost zvláštní" 
+   I'll interpret "s možností zvláštní" jako: ty 4 fotky lze otevřít samostatně (klik -> změní hlavní fotku). */
+function showKorunaDetail(item){
+  openModal(container => {
+    const header = document.createElement('div');
+    header.className = 'modal-header';
+    const left = document.createElement('div');
+    left.innerHTML = `<h3 class="modal-title">${item.title} — ${item.height}</h3>
+                      <div class="modal-meta">${item.country} · ${item.date}</div>`;
+    const right = document.createElement('div');
+    right.innerHTML = `<div style="text-align:right;font-size:13px;color:#cfe0ff">Výstupový team<br><strong>${item.team}</strong></div>`;
+    header.appendChild(left);
+    header.appendChild(right);
+    container.appendChild(header);
+
+    const mainImg = document.createElement('img');
+    mainImg.className = 'modal-main-image';
+    mainImg.src = item.img;
+    mainImg.alt = item.title;
+    container.appendChild(mainImg);
+
+    const desc = document.createElement('div');
+    desc.className = 'modal-description';
+    desc.textContent = item.description;
+    container.appendChild(desc);
+
+    const thumbLabel = document.createElement('div');
+    thumbLabel.style.marginTop = '12px';
+    thumbLabel.style.fontSize = '13px';
+    thumbLabel.style.opacity = '0.9';
+    thumbLabel.textContent = 'Další fotografie:';
+    container.appendChild(thumbLabel);
+
+    const thumbRow = document.createElement('div');
+    thumbRow.className = 'thumb-row';
+    item.extras.forEach((u, idx) => {
+      const t = document.createElement('img');
+      t.src = u;
+      t.alt = `Další foto ${idx+1}`;
+      if(idx===0) t.classList.add('selected');
+      t.addEventListener('click', () => {
+        mainImg.src = u;
+        thumbRow.querySelectorAll('img').forEach(im=>im.classList.remove('selected'));
+        t.classList.add('selected');
       });
-
-      // photo click handlers (delegation)
-      document.body.addEventListener('click', (ev)=>{
-        const a = ev.target.closest('.photo');
-        if(!a) return;
-        ev.preventDefault();
-        const section = a.dataset.section;
-        const index = parseInt(a.dataset.index,10);
-        if(section==='nepal') { openNepalLightbox(index); }
-        else { openModal(section,index); }
-      });
-
-      // modal close
-      document.querySelectorAll('[data-close]').forEach(el=>el.addEventListener('click',closeModals));
-      document.addEventListener('keydown', (e)=>{
-        if(e.key==='Escape') closeModals();
-        if(document.getElementById('nb-lightbox').classList.contains('open')){
-          if(e.key==='ArrowLeft') nbPrev();
-          if(e.key==='ArrowRight') nbNext();
-        }
-      });
-
-      // Nepal lightbox arrows
-      document.getElementById('nb-prev').addEventListener('click',nbPrev);
-      document.getElementById('nb-next').addEventListener('click',nbNext);
-
-      // touch swipe for Nepal
-      addNepalSwipe();
+      thumbRow.appendChild(t);
     });
+    container.appendChild(thumbRow);
+  });
+}
 
-    // --- Shared modal for Koruna & Alps ---
-    function openModal(section, index){
-      const m = metaFor(section,index);
-      document.getElementById('modal-title').textContent = `${m.name} — ${m.height}`;
-      document.getElementById('modal-sub').textContent = `${m.country} • ${m.date}`;
-      document.getElementById('modal-team').textContent = m.team;
-      document.getElementById('modal-desc').textContent = m.desc;
-      const conf = cfg[section];
-      const main = document.getElementById('modal-main-img');
-      main.src = `${conf.base}${pad(index,conf.pad)}.jpg`;
-      main.alt = `${m.name}`;
-      // additional thumbs (up to 4 nearby images)
-      const thumbs = document.getElementById('modal-thumbs'); thumbs.innerHTML='';
-      for(let j=Math.max(1,index-2); j<=Math.min(conf.count,index+2); j++){
-        if(j===index) continue;
-        const t = document.createElement('img'); t.src = `${conf.base}${pad(j,conf.pad)}.jpg`; t.loading='lazy'; t.style.width='100%'; t.style.height='120px'; t.style.objectFit='cover'; t.style.borderRadius='6px'; t.style.cursor='pointer';
-        t.addEventListener('click',()=>{ main.src = t.src; });
-        thumbs.appendChild(t);
-      }
-      // open
-      const modal = document.getElementById('modal'); modal.classList.add('open'); modal.setAttribute('aria-hidden','false');
-    }
-    function closeModals(){
-      document.querySelectorAll('.modal').forEach(m=>{m.classList.remove('open');m.setAttribute('aria-hidden','true')});
-    }
+/* Nepál: modal with navigation arrows between gallery images */
+let nepalIndex = 0;
+function showNepalAt(index){
+  nepalIndex = index;
+  const item = nepal[nepalIndex];
+  openModal(container => {
+    container.innerHTML = '';
+    const header = document.createElement('div');
+    header.className = 'modal-header';
+    header.innerHTML = `<h3 class="modal-title">${item.title} — ${item.height}</h3>
+                        <div style="font-size:13px;opacity:0.95">${item.country} · ${item.date}</div>`;
+    container.appendChild(header);
 
-    // --- Nepal lightbox ---
-    let nbIndex = 1;
-    function openNepalLightbox(index){ nbIndex = index; renderNepal(); document.getElementById('nb-lightbox').classList.add('open'); document.getElementById('nb-lightbox').setAttribute('aria-hidden','false'); }
-    function renderNepal(){ const conf = cfg.nepal; const img = document.getElementById('nb-img'); img.src = `${conf.base}${pad(nbIndex,conf.pad)}.jpg`; document.getElementById('nb-caption').textContent = `Nepál — foto ${nbIndex}`; document.getElementById('nb-index').textContent = `${nbIndex} / ${conf.count}`; }
-    function nbPrev(){ const conf=cfg.nepal; nbIndex = nbIndex<=1?conf.count:nbIndex-1; renderNepal(); }
-    function nbNext(){ const conf=cfg.nepal; nbIndex = nbIndex>=conf.count?1:nbIndex+1; renderNepal(); }
+    const wrapper = document.createElement('div');
+    wrapper.style.position = 'relative';
 
-    function addNepalSwipe(){
-      const box = document.getElementById('nb-lightbox'); let startX=0, endX=0;
-      box.addEventListener('touchstart', e=>{ startX = e.changedTouches[0].screenX; });
-      box.addEventListener('touchend', e=>{ endX = e.changedTouches[0].screenX; const diff = endX - startX; if(Math.abs(diff)>50){ if(diff>0) nbPrev(); else nbNext(); } });
-    }
+    const leftArrow = document.createElement('button');
+    leftArrow.className = 'nav-arrow left';
+    leftArrow.innerHTML = '◀';
+    leftArrow.addEventListener('click', (e) => { e.stopPropagation(); showNepalAt((nepalIndex-1+nepal.length)%nepal.length); });
 
-    // Accessibility: focus trap basic (keep simple)
-    document.addEventListener('focusin', (e)=>{
-      const modalOpen = document.querySelector('.modal.open');
-      if(modalOpen){ if(!modalOpen.contains(e.target)) { e.stopPropagation(); modalOpen.focus(); } }
-    });
+    const rightArrow = document.createElement('button');
+    rightArrow.className = 'nav-arrow right';
+    rightArrow.innerHTML = '▶';
+    rightArrow.addEventListener('click', (e) => { e.stopPropagation(); showNepalAt((nepalIndex+1)%nepal.length); });
 
-  </script>
+    const img = document.createElement('img');
+    img.className = 'modal-main-image';
+    img.src = item.img;
+    img.alt = item.title;
+    wrapper.appendChild(img);
+    wrapper.appendChild(leftArrow);
+    wrapper.appendChild(rightArrow);
+    container.appendChild(wrapper);
+  });
+}
+
+/* Alpské čtyřtisícovky: simpler modal (title, meta, image) */
+function showAlpyDetail(item){
+  openModal(container => {
+    container.innerHTML = `<div class="modal-header">
+      <div>
+        <h3 class="modal-title">${item.title} — ${item.height}</h3>
+        <div class="modal-meta">${item.country} · ${item.date}</div>
+      </div>
+    </div>`;
+    const img = document.createElement('img');
+    img.className = 'modal-main-image';
+    img.src = item.img;
+    img.alt = item.title;
+    container.appendChild(img);
+  });
+}
+
+/* Initialize render */
+const korEl = document.getElementById('koruna-gallery');
+const alpEl = document.getElementById('alpy-gallery');
+const nepEl = document.getElementById('nepal-gallery');
+
+renderGallery(korEl, koruna, { onClick: showKorunaDetail });
+renderGallery(alpEl, alpy, { onClick: showAlpyDetail });
+renderGallery(nepEl, nepal, { onClick: (it) => showNepalAt(nepal.findIndex(x=>x.id===it.id)) });
+
+/* Routing (hash-based) + nav buttons */
+const sections = document.querySelectorAll('[data-route-content]');
+const navButtons = document.querySelectorAll('.btn');
+
+function showRoute(route){
+  sections.forEach(s=>{
+    if(s.id === route) s.hidden = false;
+    else s.hidden = true;
+  });
+  navButtons.forEach(b=>{
+    if(b.dataset.route === route) b.classList.add('active'); else b.classList.remove('active');
+  });
+  // focus top of section for accessibility
+  const sec = document.getElementById(route);
+  if(sec) sec.scrollIntoView({behavior:'smooth', block:'start'});
+}
+
+navButtons.forEach(btn => {
+  btn.addEventListener('click', () => {
+    const r = btn.dataset.route;
+    location.hash = r;
+    // showRoute(r); // will be handled by onhashchange
+  });
+});
+
+window.addEventListener('hashchange', () => {
+  const route = (location.hash.replace('#','') || 'koruna');
+  showRoute(route);
+});
+
+// initial
+if(location.hash){
+  showRoute(location.hash.replace('#',''));
+} else {
+  location.hash = 'koruna';
+  showRoute('koruna');
+}
+
+/* Accessibility: trap focus in modal (simple) */
+document.addEventListener('focus', function(e){
+  if(!modalBackdrop.hidden && !modalBackdrop.contains(e.target)){
+    e.stopPropagation();
+    modalBackdrop.focus();
+  }
+}, true);
+
+</script>
 </body>
 </html>
