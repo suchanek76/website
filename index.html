@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="cs">
-<head>
+>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>Vzít batoh na záda a jít ...</title>
@@ -11,8 +11,6 @@
   --max-width:1200px;
 }
 
-/* Base */
-*{box-sizing:border-box}
 html,body{
   margin:0;padding:0;
   font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,Arial;
@@ -21,7 +19,7 @@ html,body{
   overflow-x:hidden;
 }
 
-/* Panorama */
+/* Panorama sekce */
 .hero{
   position:relative;
   width:100%;
@@ -30,18 +28,24 @@ html,body{
   background:var(--dark-blue);
 }
 .hero-bg{
-  position:absolute; inset:0;
+  position:absolute;
+  inset:0;
   background:url("https://raw.githubusercontent.com/suchanek76/website/main/images/background.jpg")
              no-repeat center top;
   background-size:cover;
   z-index:0;
 }
-/* žádný ztmavující přechod – čisté panorama */
+/* žádný přechod */
 .hero-overlay{
-  position:relative; z-index:2; height:100%;
-  display:flex; flex-direction:column; align-items:center;
-  justify-content:flex-start; text-align:center;
-  padding-top:100px; /* nadpis + tlačítka výš */
+  position:relative;
+  z-index:2;
+  height:100%;
+  display:flex;
+  flex-direction:column;
+  justify-content:flex-start;
+  align-items:center;
+  text-align:center;
+  padding-top:100px;
 }
 .hero h1{
   font-size:clamp(30px,6vw,56px);
@@ -49,85 +53,116 @@ html,body{
   text-shadow:0 3px 10px rgba(0,0,0,0.5);
 }
 .nav{
-  margin-top:18px; display:flex; gap:12px; flex-wrap:wrap; justify-content:center;
+  margin-top:18px;
+  display:flex;
+  gap:12px;
+  flex-wrap:wrap;
+  justify-content:center;
 }
 .btn{
   background:rgba(255,255,255,0.12);
   border:1px solid rgba(255,255,255,0.2);
-  padding:10px 18px; color:white; border-radius:8px;
-  font-weight:600; cursor:pointer; transition:background .2s;
+  padding:10px 18px;
+  color:white;
+  border-radius:8px;
+  font-weight:600;
+  cursor:pointer;
+  transition:background .2s;
 }
 .btn:hover{background:rgba(255,255,255,0.25);}
 .btn.active{background:#fff;color:var(--dark-blue);}
 
-/* Galerie – výš přes panoráma */
+/* Galerie překrývá spodní část panoramatu */
 main{
   position:relative;
-  margin-top:-420px;  /* galerii zvedneme přes spodní část panoramatu */
+  margin-top:-420px;
   z-index:3;
   background:none;
-  padding-top:100px; padding-bottom:80px;
+  padding-top:100px;
+  padding-bottom:80px;
 }
-.container{ width:95%; max-width:var(--max-width); margin:0 auto; }
-
-/* Mřížky */
-.gallery{ display:grid; gap:16px; }
-.grid-3{ grid-template-columns:repeat(3,1fr); }
-.grid-4{ grid-template-columns:repeat(4,1fr); }
-@media (max-width:1000px){
-  .grid-3{ grid-template-columns:repeat(2,1fr); }
-  .grid-4{ grid-template-columns:repeat(2,1fr); }
-}
-@media (max-width:600px){
-  .grid-3,.grid-4{ grid-template-columns:1fr; }
+.container{
+  width:95%;
+  max-width:var(--max-width);
+  margin:0 auto;
 }
 
-/* Karty 3:2 s popisky */
+/* Galerie mřížka */
+.gallery{
+  display:grid;
+  gap:16px;
+}
+.grid-3{grid-template-columns:repeat(3,1fr);}
+.grid-4{grid-template-columns:repeat(4,1fr);}
+@media(max-width:1000px){
+  .grid-3{grid-template-columns:repeat(2,1fr);}
+  .grid-4{grid-template-columns:repeat(2,1fr);}
+}
+@media(max-width:600px){
+  .grid-3,.grid-4{grid-template-columns:1fr;}
+}
+
+/* Fotokarta 3:2 s popiskem */
 .photo-card{
-  position:relative; overflow:hidden; border-radius:10px; cursor:pointer; background:#000;
+  position:relative;
+  overflow:hidden;
+  border-radius:10px;
+  cursor:pointer;
+  background:#000;
 }
 .photo-card img.photo{
-  width:100%; aspect-ratio:3/2; object-fit:cover; transition:transform .35s ease;
+  width:100%;
+  aspect-ratio:3/2;
+  object-fit:cover;
+  transition:transform .35s ease;
 }
-.photo-card:hover img.photo{ transform:scale(1.04); }
+.photo-card:hover img.photo{transform:scale(1.04);}
 .photo-overlay{
-  position:absolute; left:0; right:0; bottom:0; padding:10px;
-  background:linear-gradient(to top, rgba(0,0,0,0.7), rgba(0,0,0,0));
-  color:#fff;
+  position:absolute;
+  left:0;right:0;bottom:0;
+  padding:10px;
+  background:linear-gradient(to top,rgba(0,0,0,0.7),rgba(0,0,0,0));
 }
-.photo-title{ font-weight:700; font-size:14px; margin:0; }
-.photo-sub{ font-size:12px; opacity:0.9; margin-top:3px; }
+.photo-title{font-weight:700;font-size:14px;margin:0;}
+.photo-sub{font-size:12px;opacity:0.9;margin-top:3px;}
 
 /* Modal */
 .modal-backdrop{
-  position:fixed; inset:0; background:rgba(0,0,0,0.7);
-  display:flex; align-items:center; justify-content:center;
-  z-index:9999; padding:24px; opacity:0; pointer-events:none; transition:opacity .18s;
+  position:fixed;inset:0;background:rgba(0,0,0,0.7);
+  display:flex;align-items:center;justify-content:center;
+  z-index:9999;padding:24px;opacity:0;pointer-events:none;
+  transition:opacity .18s;
 }
-.modal-backdrop.show{ opacity:1; pointer-events:auto; }
+.modal-backdrop.show{opacity:1;pointer-events:auto;}
 .modal{
-  width:100%; max-width:980px; max-height:92vh;
-  background:#071431; border-radius:10px; padding:18px; color:#fff;
-  overflow:auto; position:relative;
+  width:100%;max-width:940px;max-height:92vh;
+  background:#071431;border-radius:10px;padding:18px;color:#fff;
+  overflow:auto;position:relative;
 }
 .modal-close{
-  position:absolute; right:16px; top:16px; background:none; border:none; color:white; font-size:22px; cursor:pointer;
+  position:absolute;right:16px;top:16px;
+  background:none;border:none;color:white;font-size:22px;cursor:pointer;
 }
-.modal h3{ margin:0 0 6px 0; }
-.modal .meta{ font-size:14px; opacity:0.95; margin-bottom:10px; }
-.modal .grid{
-  display:grid; gap:10px; grid-template-columns:1fr 1fr;
+.modal img.main{
+  width:100%;border-radius:8px;object-fit:cover;
+  margin:12px 0;max-height:480px;
 }
-@media (max-width:700px){ .modal .grid{ grid-template-columns:1fr; } }
-.modal img.main{ width:100%; border-radius:8px; object-fit:cover; margin:12px 0; max-height:480px; }
-
+.thumb-row{
+  display:flex;gap:8px;flex-wrap:wrap;margin-top:8px;
+}
+.thumb-row img{
+  width:calc((100% - 24px)/4);height:80px;
+  object-fit:cover;border-radius:6px;cursor:pointer;
+  border:2px solid transparent;
+}
+.thumb-row img.selected{border-color:white;}
 .nav-arrow{
-  position:absolute; top:50%; transform:translateY(-50%);
-  background:rgba(0,0,0,0.4); border:none; color:white; font-size:22px; padding:8px 10px; border-radius:50%; cursor:pointer;
+  position:absolute;top:50%;transform:translateY(-50%);
+  background:rgba(0,0,0,0.4);border:none;color:white;
+  font-size:22px;padding:8px 10px;border-radius:50%;cursor:pointer;
 }
-.nav-arrow.left{ left:8px; } .nav-arrow.right{ right:8px; }
-
-footer{ text-align:center; color:rgba(255,255,255,0.6); padding:30px 0; }
+.nav-arrow.left{left:8px;} .nav-arrow.right{right:8px;}
+footer{text-align:center;color:rgba(255,255,255,0.6);padding:30px 0;}
 </style>
 </head>
 <body>
@@ -146,27 +181,21 @@ footer{ text-align:center; color:rgba(255,255,255,0.6); padding:30px 0; }
 
 <main>
   <div class="container">
-    <!-- Koruna Evropy -->
     <section id="koruna" data-route-content>
-      <div id="koruna-gallery" class="gallery grid-3" aria-live="polite"></div>
+      <div id="koruna-gallery" class="gallery grid-3"></div>
     </section>
-
-    <!-- Alpské čtyřtisícovky -->
     <section id="alpy" data-route-content hidden>
-      <div id="alpy-gallery" class="gallery grid-3" aria-live="polite"></div>
+      <div id="alpy-gallery" class="gallery grid-3"></div>
     </section>
-
-    <!-- Nepál -->
     <section id="nepal" data-route-content hidden>
-      <div id="nepal-gallery" class="gallery grid-4" aria-live="polite"></div>
+      <div id="nepal-gallery" class="gallery grid-4"></div>
     </section>
   </div>
 </main>
 
-<!-- Modal -->
 <div id="modal-backdrop" class="modal-backdrop" hidden>
   <div class="modal">
-    <button class="modal-close" id="modal-close" aria-label="Zavřít">✕</button>
+    <button class="modal-close" id="modal-close">✕</button>
     <div id="modal-content"></div>
   </div>
 </div>
@@ -174,14 +203,11 @@ footer{ text-align:center; color:rgba(255,255,255,0.6); padding:30px 0; }
 <footer>© Vzít batoh na záda a jít ...</footer>
 
 <script>
-/* ---------- Konfigurace zdrojů ---------- */
-const RAW = "https://raw.githubusercontent.com/suchanek76/website/main/images";
-const imgKoruna = i => `${RAW}/Koruna/Koruna${String(i).padStart(2,'0')}.jpg`;
-const imgAlpy = i => `${RAW}/4000/ctyrtisicovka${String(i).padStart(2,'0')}.jpg`;
-const imgNepal = i => `${RAW}/Nepal/Nepal${String(i).padStart(2,'0')}.jpg`;
+const RAW="https://raw.githubusercontent.com/suchanek76/website/main/images";
+function pad(n){return String(n).padStart(2,"0");}
 
-/* ---------- Data: Koruna (z tvé tabulky) ---------- */
-const korunaData = [
+/* --- Data z tvé tabulky --- */
+const korunaData=[
 {p:1,hora:"Mont Blanc",v:4809,z:"Francie / Itálie",d:"31. 8. 2007"},
 {p:2,hora:"Dufourspitze",v:4634,z:"Švýcarsko",d:""},
 {p:3,hora:"Grossglockner",v:3798,z:"Rakousko",d:"30. 6. 2025"},
@@ -227,261 +253,91 @@ const korunaData = [
 {p:43,hora:"Vatikánské zahrady",v:75,z:"Vatikán",d:""}
 ];
 
-/* ---------- Data: Alpy 4000 (z tvé tabulky) ---------- */
-/* prázdné hodnoty zůstávají prázdné */
-const alpyData = [
-{p:"1",hora:"Mont Blanc",v:"4 807",z:"Francie / Itálie",d:"31. 8. 2007",cas:"7:09",team:"1. Karel, Duštič,    2. Mrňous, Radka, Petr Moravec",obt:"B",pohori:"Mont Blank",povidani:""},
-{p:"2",hora:"Mont Blanc di Courmayeur",v:"4 765",z:"",d:"",cas:"",team:"",obt:"B+",pohori:"Mont Blank",povidani:""},
-{p:"3",hora:"Dufourspitze",v:"4 634",z:"",d:"",cas:"",team:"",obt:"B+",pohori:"Monte Rosa",povidani:""},
-{p:"4",hora:"Nordend",v:"4 609",z:"",d:"",cas:"",team:"",obt:"B+",pohori:"Monte Rosa",povidani:""},
-{p:"5",hora:"Zumsteinspitze",v:"4 563",z:"Itálie / Švýcarsko",d:"",cas:"",team:"Karel, Luky",obt:"B-",pohori:"Monte Rosa",povidani:""},
-{p:"6",hora:"Punta Gnifetti",v:"4 554",z:"Itálie / Švýcarsko",d:"",cas:"",team:"Karel, Luky",obt:"B-",pohori:"Monte Rosa",povidani:""},
-{p:"7",hora:"Dom",v:"4 545",z:"",d:"",cas:"",team:"",obt:"B",pohori:"Mischabel",povidani:""},
-{p:"8",hora:"Lyskamm orientale",v:"4 527",z:"",d:"",cas:"",team:"",obt:"C-",pohori:"Liskamm",povidani:""},
-{p:"9",hora:"Weisshorn",v:"4 506",z:"",d:"",cas:"",team:"",obt:"C",pohori:"Weisshorn",povidani:""},
-{p:"10",hora:"Täschhorn",v:"4 491",z:"",d:"",cas:"",team:"",obt:"B+",pohori:"Mischabel",povidani:""},
-{p:"11",hora:"Lyskamm occidentale",v:"4 479",z:"",d:"",cas:"",team:"",obt:"B",pohori:"Liskamm",povidani:""},
-{p:"12",hora:"Matterhorn",v:"4 478",z:"",d:"",cas:"",team:"",obt:"C",pohori:"Matterhorn",povidani:""},
-{p:"13",hora:"Pic Luigi Amedeo",v:"4 470",z:"",d:"",cas:"",team:"",obt:"C",pohori:"Mont Blank",povidani:""},
-{p:"14",hora:"Mont Maudit",v:"4 468",z:"",d:"",cas:"",team:"",obt:"B+",pohori:"Mont Blank",povidani:""},
-{p:"15",hora:"Parrotspitze",v:"4 432",z:"",d:"",cas:"",team:"",obt:"B-",pohori:"Monte Rosa",povidani:""},
-{p:"16",hora:"Dent Blanche",v:"4 357",z:"",d:"",cas:"",team:"",obt:"B",pohori:"Matterhorn",povidani:""},
-{p:"17",hora:"Ludwigshöhe",v:"4 341",z:"Itálie / Švýcarsko",d:"",cas:"",team:"Karel, Luky",obt:"B-",pohori:"Monte Rosa",povidani:""},
-{p:"18",hora:"Nadelhorn",v:"4 327",z:"",d:"",cas:"",team:"",obt:"B+",pohori:"Mischabel",povidani:""},
-{p:"19",hora:"Corno Nero",v:"4 322",z:"",d:"",cas:"",team:"",obt:"B+",pohori:"Monte Rosa",povidani:""},
-{p:"20",hora:"Combin de Grafeneire",v:"4 314",z:"",d:"",cas:"",team:"",obt:"C-",pohori:"Grand Combin",povidani:""},
-{p:"21",hora:"Dôme du Goûter",v:"4 306",z:"",d:"",cas:"",team:"",obt:"B",pohori:"Mont Blank",povidani:""},
-{p:"22",hora:"Lenzspitze",v:"4 294",z:"",d:"",cas:"",team:"",obt:"C",pohori:"Mischabel",povidani:""},
-{p:"23",hora:"Finsteraarhorn",v:"4 274",z:"",d:"",cas:"",team:"",obt:"B+",pohori:"Jungfrau",povidani:""},
-{p:"24",hora:"Mont Blanc du Tacul",v:"4 248",z:"",d:"",cas:"",team:"",obt:"B-",pohori:"Mont Blank",povidani:""},
-{p:"25",hora:"Grande Pilier d'Angle",v:"4 243",z:"",d:"",cas:"",team:"",obt:"D",pohori:"Mont Blank",povidani:""},
-{p:"26",hora:"Stecknadelhorn",v:"4 241",z:"",d:"",cas:"",team:"",obt:"B+",pohori:"Mischabel",povidani:""},
-{p:"27",hora:"Castor",v:"4 228",z:"",d:"",cas:"",team:"",obt:"B-",pohori:"Liskamm",povidani:""},
-{p:"28",hora:"Zinalrothorn",v:"4 221",z:"",d:"",cas:"",team:"",obt:"C-",pohori:"Weisshorn",povidani:""},
-{p:"29",hora:"Hohbärghorn",v:"4 019",z:"",d:"",cas:"",team:"",obt:"B+",pohori:"Mischabel",povidani:""},
-{p:"30",hora:"Piramide Vincent",v:"4 215",z:"Itálie / Švýcarsko",d:"",cas:"",team:"Karel, Luky",obt:"B-",pohori:"Monte Rosa",povidani:""},
-{p:"31",hora:"Punta Walker",v:"4 206",z:"",d:"",cas:"",team:"",obt:"C-",pohori:"Grandes Jorasses",povidani:""},
-{p:"32",hora:"Alphubel",v:"4 206",z:"",d:"",cas:"",team:"",obt:"B",pohori:"Allalinhorn",povidani:""},
-{p:"33",hora:"Rimpfischhorn",v:"4 199",z:"",d:"",cas:"",team:"",obt:"B+",pohori:"Allalinhorn",povidani:""},
-{p:"34",hora:"Aletschhorn",v:"4 195",z:"",d:"",cas:"",team:"",obt:"B+",pohori:"Jungfrau",povidani:""},
-{p:"35",hora:"Strahlhorn",v:"4 190",z:"",d:"",cas:"",team:"",obt:"B-",pohori:"Allalinhorn",povidani:""},
-{p:"36",hora:"Combin de Valsorey",v:"4 184",z:"",d:"",cas:"",team:"",obt:"C-",pohori:"Grand Combin",povidani:""},
-{p:"37",hora:"Pointe Whymper",v:"4 180",z:"",d:"",cas:"",team:"",obt:"C",pohori:"Grandes Jorasses",povidani:""},
-{p:"38",hora:"Dent d'Hérens",v:"4 171",z:"",d:"",cas:"",team:"",obt:"B+",pohori:"Matterhorn",povidani:""},
-{p:"39",hora:"Breithorn West",v:"4 164",z:"",d:"",cas:"",team:"",obt:"A",pohori:"Liskamm",povidani:""},
-{p:"40",hora:"Breithorn central",v:"4 159",z:"",d:"",cas:"",team:"",obt:"A",pohori:"Liskamm",povidani:""},
-{p:"41",hora:"Jungfrau",v:"4 158",z:"",d:"",cas:"",team:"",obt:"B",pohori:"Jungfrau",povidani:""},
-{p:"42",hora:"Bishorn",v:"4 153",z:"",d:"",cas:"",team:"",obt:"B-",pohori:"Weisshorn",povidani:""},
-{p:"43",hora:"Combin de la Tsessette",v:"4 141",z:"",d:"",cas:"",team:"",obt:"C-",pohori:"Grand Combin",povidani:""},
-{p:"44",hora:"Breithorn Est",v:"4 139",z:"",d:"",cas:"",team:"",obt:"B-",pohori:"Liskamm",povidani:""},
-{p:"45",hora:"Aiguille Verte",v:"4 122",z:"",d:"",cas:"",team:"",obt:"C+",pohori:"Aiguille Verte",povidani:""},
-{p:"46",hora:"L'Isolée",v:"4 114",z:"",d:"",cas:"",team:"",obt:"D+",pohori:"Mont Blank",povidani:""},
-{p:"47",hora:"Aiguille Blanche de Peuterey",v:"4 114",z:"",d:"",cas:"",team:"",obt:"C+",pohori:"Mont Blank",povidani:""},
-{p:"48",hora:"Punta Carmen",v:"4 109",z:"",d:"",cas:"",team:"",obt:"D+",pohori:"Mont Blank",povidani:""},
-{p:"49",hora:"Punta Croz",v:"4 108",z:"",d:"",cas:"",team:"",obt:"C",pohori:"Grandes Jorasses",povidani:""},
-{p:"50",hora:"Breithornzwillinge",v:"4 106",z:"",d:"",cas:"",team:"",obt:"B+",pohori:"Liskamm",povidani:""},
-{p:"51",hora:"Grande Rocheuse",v:"4 102",z:"",d:"",cas:"",team:"",obt:"C",pohori:"Aiguille Verte",povidani:""},
-{p:"52",hora:"Barre des Ecrins",v:"4 101",z:"",d:"",cas:"",team:"",obt:"B+",pohori:"Barre des Ecrins",povidani:""},
-{p:"53",hora:"Mönch",v:"4 099",z:"",d:"",cas:"",team:"",obt:"B",pohori:"Jungfrau",povidani:""},
-{p:"54",hora:"Pointe Médiane",v:"4 097",z:"",d:"",cas:"",team:"",obt:"D+",pohori:"Mont Blank",povidani:""},
-{p:"55",hora:"Pollux / Polucce",v:"4 092",z:"",d:"",cas:"",team:"",obt:"B",pohori:"Liskamm",povidani:""},
-{p:"56",hora:"Schreckhorn",v:"4 078",z:"",d:"",cas:"",team:"",obt:"C+",pohori:"Schreckhorn",povidani:""},
-{p:"57",hora:"Roccia Nera",v:"4 075",z:"",d:"",cas:"",team:"",obt:"B-",pohori:"Liskamm",povidani:""},
-{p:"58",hora:"Pointe Chaubert",v:"4 074",z:"",d:"",cas:"",team:"",obt:"D+",pohori:"Mont Blank",povidani:""},
-{p:"59",hora:"Mont Brouillard",v:"4 068",z:"",d:"",cas:"",team:"",obt:"C",pohori:"Mont Blank",povidani:""},
-{p:"60",hora:"Punta Margherita",v:"4 065",z:"",d:"",cas:"",team:"",obt:"C",pohori:"Grandes Jorasses",povidani:""},
-{p:"61",hora:"Corne du Diable",v:"4 064",z:"",d:"",cas:"",team:"",obt:"C",pohori:"Mont Blank",povidani:""},
-{p:"62",hora:"Ober Gabelhorn",v:"4 063",z:"",d:"",cas:"",team:"",obt:"C-",pohori:"Weisshorn",povidani:""},
-{p:"63",hora:"Gran Paradiso",v:"4 061",z:"",d:"",cas:"",team:"",obt:"B-",pohori:"Gran Paradiso",povidani:""},
-{p:"64",hora:"Aiguille de Bionnassay",v:"4 052",z:"",d:"",cas:"",team:"",obt:"B+",pohori:"Mont Blank",povidani:""},
-{p:"65",hora:"Piz Bernina",v:"4 049",z:"",d:"",cas:"",team:"",obt:"B",pohori:"Piz Bernina",povidani:""},
-{p:"66",hora:"Gross Fiescherhorn",v:"4 049",z:"",d:"",cas:"",team:"",obt:"B",pohori:"Jungfrau",povidani:""},
-{p:"67",hora:"Punta Giordani",v:"4 046",z:"",d:"",cas:"",team:"",obt:"A",pohori:"Monte Rosa",povidani:""},
-{p:"68",hora:"Gross Grünhorn",v:"4 044",z:"",d:"",cas:"",team:"",obt:"B+",pohori:"Jungfrau",povidani:""},
-{p:"69",hora:"Punta Elena",v:"4 042",z:"",d:"",cas:"",team:"",obt:"C",pohori:"Grandes Jorasses",povidani:""},
-{p:"70",hora:"Lauteraarhorn",v:"4 042",z:"",d:"",cas:"",team:"",obt:"C-",pohori:"Schreckhorn",povidani:""},
-{p:"71",hora:"Aiguille du Jardin",v:"4 035",z:"",d:"",cas:"",team:"",obt:"C",pohori:"Aiguille Verte",povidani:""},
-{p:"72",hora:"Dirruhorn",v:"4 035",z:"",d:"",cas:"",team:"",obt:"B+",pohori:"Mischabel",povidani:""},
-{p:"73",hora:"Allalinhorn",v:"4 027",z:"",d:"",cas:"",team:"",obt:"B-",pohori:"Allalinhorn",povidani:""},
-{p:"74",hora:"Hinter Fiescherhorn",v:"4 025",z:"",d:"",cas:"",team:"",obt:"B",pohori:"Jungfrau",povidani:""},
-{p:"75",hora:"Weissmies",v:"4 023",z:"",d:"",cas:"",team:"",obt:"B",pohori:"Weissmies",povidani:""},
-{p:"76",hora:"Dôme de Rochefort",v:"4 015",z:"",d:"",cas:"",team:"",obt:"C",pohori:"Grandes Jorasses",povidani:""},
-{p:"77",hora:"Dôme de Neige des Ecrins",v:"4 015",z:"",d:"",cas:"",team:"",obt:"A",pohori:"Barre des Ecrins",povidani:""},
-{p:"78",hora:"Dente del Gigante",v:"4 014",z:"",d:"",cas:"",team:"",obt:"C",pohori:"Grandes Jorasses",povidani:""},
-{p:"79",hora:"Lagginhorn",v:"4 010",z:"",d:"",cas:"",team:"",obt:"B",pohori:"Weissmies",povidani:""},
-{p:"80",hora:"Punta Baretti",v:"4 006",z:"",d:"",cas:"",team:"",obt:"C",pohori:"Mont Blank",povidani:""},
-{p:"81",hora:"Aiguille de Rochefort",v:"4 001",z:"",d:"",cas:"",team:"",obt:"C",pohori:"Mont Blank",povidani:""},
-{p:"82",hora:"Les Droites",v:"4 000",z:"",d:"",cas:"",team:"",obt:"C",pohori:"Aiguille Verte",povidani:""}
-];
+/* --- Ostatní galerie --- */
+function pad2(n){return String(n).padStart(2,"0");}
+const alpy=[...Array(82)].map((_,i)=>({img:`${RAW}/4000/ctyrtisicovka${pad2(i+1)}.jpg`,title:`Alpy ${i+1}`}));
+const nepal=[...Array(40)].map((_,i)=>({img:`${RAW}/Nepal/Nepal${pad2(i+1)}.jpg`,title:`Nepál ${i+1}`}));
 
-/* ---------- Data: Nepál (jen obrázky) ---------- */
-const nepalData = Array.from({length:40},(_,i)=>({ idx:i+1, title:`Nepál ${i+1}`, img: imgNepal(i+1) }));
-
-/* ---------- Render karty ---------- */
-function cardKoruna(it, onClick){
-  const div=document.createElement('div');
-  div.className='photo-card';
-  const first = [ `${it.p}. ${it.hora}`, it.v ? `${it.v} m` : '' ].filter(Boolean).join(', ');
-  const second = [ it.z||'', it.d||'' ].filter(Boolean).join(' · ');
-  div.innerHTML = `
-    <img class="photo" src="${imgKoruna(it.p)}" alt="${it.hora}">
+/* --- Render --- */
+function createCardKoruna(it,onClick){
+  const div=document.createElement("div");
+  div.className="photo-card";
+  const line1=`${it.p}. ${it.hora}${it.v?`, ${it.v} m`:``}`;
+  const line2=[it.z,it.d].filter(Boolean).join(" · ");
+  div.innerHTML=`
+    <img class="photo" src="${RAW}/Koruna/Koruna${pad2(it.p)}.jpg" alt="${it.hora}">
     <div class="photo-overlay">
-      <div class="photo-title">${first}</div>
-      <div class="photo-sub">${second}</div>
+      <div class="photo-title">${line1}</div>
+      <div class="photo-sub">${line2}</div>
     </div>`;
-  div.addEventListener('click', ()=> onClick(it));
+  div.addEventListener("click",()=>onClick(it));
   return div;
 }
 
-function cardAlpy(it, onClick){
-  const div=document.createElement('div');
-  div.className='photo-card';
-  const orderNum = parseInt(String(it.p).replace('.', '').trim(), 10);
-  const first = [ `${it.p}. ${it.hora}`, it.v ? `${it.v} m` : '' ].filter(Boolean).join(', ');
-  const second = [ it.z||'', it.d||'' ].filter(Boolean).join(' · ');
-  div.innerHTML = `
-    <img class="photo" src="${imgAlpy(orderNum)}" alt="${it.hora}">
-    <div class="photo-overlay">
-      <div class="photo-title">${first}</div>
-      <div class="photo-sub">${second}</div>
-    </div>`;
-  div.addEventListener('click', ()=> onClick(it, orderNum));
+function createCardSimple(it,onClick){
+  const div=document.createElement("div");
+  div.className="photo-card";
+  div.innerHTML=`<img class="photo" src="${it.img}" alt="${it.title}">
+  <div class="photo-overlay"><div class="photo-title">${it.title}</div></div>`;
+  div.addEventListener("click",()=>onClick(it));
   return div;
 }
 
-function cardSimple(it, onClick){
-  const div=document.createElement('div');
-  div.className='photo-card';
-  div.innerHTML = `
-    <img class="photo" src="${it.img}" alt="${it.title}">
-    <div class="photo-overlay">
-      <div class="photo-title">${it.title}</div>
-    </div>`;
-  div.addEventListener('click', ()=> onClick(it));
-  return div;
+function renderGallery(el,arr,onClick,koruna=false){
+  el.innerHTML="";
+  arr.forEach(it=>el.appendChild(koruna?createCardKoruna(it,onClick):createCardSimple(it,onClick)));
 }
 
-function renderGallery(el, items, builder){
-  el.innerHTML = '';
-  items.forEach(it => el.appendChild(builder(it)));
-}
-
-/* ---------- Modal ---------- */
-const modal = document.getElementById('modal-backdrop');
-const modalContent = document.getElementById('modal-content');
-document.getElementById('modal-close').addEventListener('click', closeModal);
-modal.addEventListener('click', e => { if(e.target === modal) closeModal(); });
-
+/* --- Modal --- */
+const modal=document.getElementById("modal-backdrop");
+const content=document.getElementById("modal-content");
+document.getElementById("modal-close").onclick=()=>{modal.classList.remove("show");setTimeout(()=>modal.hidden=true,150);};
 function openModal(html){
-  modalContent.innerHTML = html;
-  modal.hidden = false;
-  setTimeout(()=> modal.classList.add('show'), 10);
-  document.body.style.overflow='hidden';
-}
-function closeModal(){
-  modal.classList.remove('show');
-  setTimeout(()=> { modal.hidden = true; modalContent.innerHTML=''; }, 150);
-  document.body.style.overflow='';
+  content.innerHTML=html;
+  modal.hidden=false;setTimeout(()=>modal.classList.add("show"),10);
 }
 
-/* ---------- Detaily / modály ---------- */
-// Koruna – jednoduchý detail (základní info)
-function showKorunaDetail(it){
-  openModal(`
-    <h3>${it.hora}${it.v?` (${it.v} m)`:''}</h3>
-    <div class="meta">${[it.z||'', it.d||''].filter(Boolean).join(' · ')}</div>
-    <img class="main" src="${imgKoruna(it.p)}" alt="${it.hora}">
-  `);
+/* --- Detail Koruna --- */
+function showKoruna(it){
+  openModal(`<h3>${it.hora} (${it.v} m)</h3>
+    <div>${[it.z,it.d].filter(Boolean).join(" · ")}</div>
+    <img class="main" src="${RAW}/Koruna/Koruna${pad2(it.p)}.jpg">`);
 }
 
-// Alpy – detail se všemi poli
-function showAlpyDetail(it, orderNum){
-  const linesTop = [
-    `<strong>${it.p}. ${it.hora}${it.v?`, ${it.v} m`:''}</strong>`,
-    it.z || ''
-  ].filter(Boolean).join('<br>');
-
-  const linesMeta = [
-    [it.d, it.cas].filter(Boolean).join(' · '),
-    it.team || '',
-    it.obt ? `Obtížnost: ${it.obt}` : '',
-    it.pohori ? `Pohoří: ${it.pohori}` : ''
-  ].filter(Boolean);
-
-  const pov = it.povidani ? `<p>${it.povidani}</p>` : `<p class="meta">Krátké povídání o výstupu bude doplněno.</p>`;
-
-  openModal(`
-    <h3>${it.hora}${it.v?` (${it.v} m)`:''}</h3>
-    <div class="meta">${linesTop}</div>
-    <img class="main" src="${imgAlpy(orderNum)}" alt="${it.hora}">
-    <div class="grid">
-      <div>
-        ${linesMeta.map(s=>`<div class="meta">${s}</div>`).join('')}
-      </div>
-      <div>${pov}</div>
-    </div>
-  `);
+/* --- Detail Alpy --- */
+function showAlpy(it){
+  openModal(`<h3>${it.title}</h3><img class="main" src="${it.img}">`);
 }
 
-// Nepál – slideshow (šipky, klávesy, swipe)
-let nepalIndex = 0;
-function showNepalAt(idx){
-  nepalIndex = (idx + nepalData.length) % nepalData.length;
-  const it = nepalData[nepalIndex];
-  openModal(`
-    <div style="position:relative">
-      <h3>${it.title}</h3>
-      <button class="nav-arrow left" id="nav-left">◀</button>
-      <img class="main" id="nepal-main" src="${it.img}" alt="${it.title}">
-      <button class="nav-arrow right" id="nav-right">▶</button>
-    </div>
-  `);
-  document.getElementById('nav-left').onclick = e => { e.stopPropagation(); showNepalAt(nepalIndex-1); };
-  document.getElementById('nav-right').onclick = e => { e.stopPropagation(); showNepalAt(nepalIndex+1); };
-
-  // klávesy
-  function keyHandler(e){
-    if(e.key==='ArrowLeft') showNepalAt(nepalIndex-1);
-    if(e.key==='ArrowRight') showNepalAt(nepalIndex+1);
-    if(e.key==='Escape') closeModal();
-  }
-  document.addEventListener('keydown', keyHandler, { once:true });
-
-  // swipe
-  const img = document.getElementById('nepal-main');
-  let sx=null, sy=null, st=null;
-  img.addEventListener('touchstart', ev=>{
-    const t = ev.touches[0]; sx=t.clientX; sy=t.clientY; st=Date.now();
-  }, {passive:true});
-  img.addEventListener('touchend', ev=>{
-    if(sx===null) return;
-    const t = ev.changedTouches[0]; const dx=t.clientX-sx; const dy=t.clientY-sy; const dt=Date.now()-st;
-    sx=null; if(Math.abs(dx)>40 && Math.abs(dx)>Math.abs(dy) && dt<600){ dx>0?showNepalAt(nepalIndex-1):showNepalAt(nepalIndex+1); }
-  }, {passive:true});
+/* --- Nepál slideshow --- */
+let nepIndex=0;
+function showNepalAt(i){
+  nepIndex=(i+nepal.length)%nepal.length;
+  const it=nepal[nepIndex];
+  openModal(`<div style="position:relative">
+    <h3>${it.title}</h3>
+    <button class="nav-arrow left" id="left">◀</button>
+    <img class="main" id="mainNep" src="${it.img}">
+    <button class="nav-arrow right" id="right">▶</button>
+  </div>`);
+  document.getElementById("left").onclick=e=>{e.stopPropagation();showNepalAt(nepIndex-1);}
+  document.getElementById("right").onclick=e=>{e.stopPropagation();showNepalAt(nepIndex+1);}
 }
 
-/* ---------- Render všech galerií ---------- */
-const korEl = document.getElementById('koruna-gallery');
-const alpEl = document.getElementById('alpy-gallery');
-const nepEl = document.getElementById('nepal-gallery');
+/* --- Render all --- */
+renderGallery(document.getElementById("koruna-gallery"),korunaData,showKoruna,true);
+renderGallery(document.getElementById("alpy-gallery"),alpy,showAlpy);
+renderGallery(document.getElementById("nepal-gallery"),nepal,(it)=>showNepalAt(nepal.indexOf(it)));
 
-renderGallery(korEl, korunaData, it => cardKoruna(it, showKorunaDetail));
-renderGallery(alpEl, alpyData, it => cardAlpy(it, showAlpyDetail));
-renderGallery(nepEl, nepalData, it => cardSimple(it, () => showNepalAt(it.idx-1)));
-
-/* ---------- Routing ---------- */
-const btns = document.querySelectorAll('.btn');
-const sections = document.querySelectorAll('[data-route-content]');
-function show(route){
-  sections.forEach(s => s.hidden = (s.id !== route));
-  btns.forEach(b => b.classList.toggle('active', b.dataset.route === route));
-  history.replaceState(null,'','#'+route);
+/* --- Routing --- */
+const btns=document.querySelectorAll(".btn");
+const secs=document.querySelectorAll("[data-route-content]");
+function show(r){
+  secs.forEach(s=>s.hidden=s.id!==r);
+  btns.forEach(b=>b.classList.toggle("active",b.dataset.route===r));
 }
-btns.forEach(b => b.addEventListener('click', () => show(b.dataset.route)));
-show(location.hash ? location.hash.substring(1) : 'koruna');
-
-/* ---------- Escape v modalu ---------- */
-document.addEventListener('keydown', e => { if(e.key==='Escape') closeModal(); });
+btns.forEach(b=>b.onclick=()=>show(b.dataset.route));
+show("koruna");
 </script>
 </body>
 </html>
