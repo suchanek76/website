@@ -119,12 +119,6 @@ main{
 @media (max-width:700px){ .modal .grid{ grid-template-columns:1fr; } }
 .modal img.main{ width:100%; border-radius:8px; object-fit:cover; margin:12px 0; max-height:480px; }
 
-.nav-arrow{
-  position:absolute; top:50%; transform:translateY(-50%);
-  background:rgba(0,0,0,0.4); border:none; color:white; font-size:22px; padding:8px 10px; border-radius:50%; cursor:pointer;
-}
-.nav-arrow.left{ left:8px; } .nav-arrow.right{ right:8px; }
-
 footer{ text-align:center; color:rgba(255,255,255,0.6); padding:30px 0; }
 
 /* --- Fullscreen slideshow styl pro Nepál --- */
@@ -364,13 +358,13 @@ const alpyData = [
 /* ---------- Data: Nepál (jen obrázky) ---------- */
 const nepalData = Array.from({length:40},(_,i)=>({ idx:i+1, title:`Nepál ${i+1}`, img: imgNepal(i+1) }));
 
-/* Generování karet */
+/* --- KARTY --- */
 function cardKoruna(it,onClick){const d=document.createElement('div');d.className='photo-card';const t=[`${it.p}. ${it.hora}`,it.v?`${it.v} m`:``].filter(Boolean).join(', ');const s=[it.z||'',it.d||''].filter(Boolean).join(' · ');d.innerHTML=`<img class="photo" src="${imgKoruna(it.p)}" alt="${it.hora}"><div class="photo-overlay"><div class="photo-title">${t}</div><div class="photo-sub">${s}</div></div>`;d.onclick=()=>onClick(it);return d;}
 function cardAlpy(it,onClick){const d=document.createElement('div');d.className='photo-card';const n=parseInt(String(it.p).replace('.','').trim(),10);const t=[`${it.p}. ${it.hora}`,it.v?`${it.v} m`:``].filter(Boolean).join(', ');const s=[it.z||'',it.d||''].filter(Boolean).join(' · ');d.innerHTML=`<img class="photo" src="${imgAlpy(n)}" alt="${it.hora}"><div class="photo-overlay"><div class="photo-title">${t}</div><div class="photo-sub">${s}</div></div>`;d.onclick=()=>onClick(it,n);return d;}
 function cardSimple(it,onClick){const d=document.createElement('div');d.className='photo-card';d.innerHTML=`<img class="photo" src="${it.img}" alt="${it.title}"><div class="photo-overlay"><div class="photo-title">${it.title}</div></div>`;d.onclick=()=>onClick(it);return d;}
 function renderGallery(el,items,builder){el.innerHTML='';items.forEach(it=>el.appendChild(builder(it)));}
 
-/* Modal */
+/* --- MODAL --- */
 const modal=document.getElementById('modal-backdrop');
 const modalContent=document.getElementById('modal-content');
 document.getElementById('modal-close').onclick=closeModal;
@@ -378,15 +372,15 @@ modal.onclick=e=>{if(e.target===modal)closeModal();};
 function openModal(html){modalContent.innerHTML=html;modal.hidden=false;setTimeout(()=>modal.classList.add('show'),10);document.body.style.overflow='hidden';}
 function closeModal(){const box=modal.querySelector('.modal');box.classList.remove('fullscreen');modal.classList.remove('show');setTimeout(()=>{modal.hidden=true;modalContent.innerHTML='';},150);document.body.style.overflow='';}
 
-/* Detaily */
+/* --- DETAILY --- */
 function showKorunaDetail(it){openModal(`<h3>${it.hora}${it.v?` (${it.v} m)`:''}</h3><div class="meta">${[it.z||'',it.d||''].filter(Boolean).join(' · ')}</div><img class="main" src="${imgKoruna(it.p)}" alt="${it.hora}">`);}
-// Alpy – detail s vertikálním uspořádáním informací + čárka mezi datem a časem
+
+// 🏔 Alpy – přehledný vertikální detail s čárkou a "hod"
 function showAlpyDetail(it, orderNum) {
   const hora = `${it.p}. ${it.hora || ''}`;
   const vyska = it.v ? `${it.v} m` : '';
   const zeme = it.z || '';
 
-  // datum + čas ve formátu "31. 8. 2007, 7:09 hod"
   let datumCas = '';
   if (it.d && it.cas) datumCas = `${it.d}, ${it.cas} hod`;
   else if (it.d) datumCas = it.d;
@@ -413,7 +407,7 @@ function showAlpyDetail(it, orderNum) {
   `);
 }
 
-/* Nepál – fullscreen slideshow */
+/* --- NEPÁL --- */
 let nepalIndex=0;
 function showNepalAt(idx){
   nepalIndex=(idx+nepalData.length)%nepalData.length;
@@ -450,12 +444,12 @@ function showNepalAt(idx){
   },{passive:true});
 }
 
-/* Render galerií */
+/* --- RENDER --- */
 renderGallery(document.getElementById('koruna-gallery'), korunaData, it=>cardKoruna(it,showKorunaDetail));
 renderGallery(document.getElementById('alpy-gallery'), alpyData, it=>cardAlpy(it,showAlpyDetail));
 renderGallery(document.getElementById('nepal-gallery'), nepalData, it=>cardSimple(it,()=>showNepalAt(it.idx-1)));
 
-/* Routing */
+/* --- ROUTING --- */
 const btns=document.querySelectorAll('.btn');
 const sections=document.querySelectorAll('[data-route-content]');
 function show(route){sections.forEach(s=>s.hidden=(s.id!==route));btns.forEach(b=>b.classList.toggle('active',b.dataset.route===route));history.replaceState(null,'','#'+route);}
