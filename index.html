@@ -19,6 +19,7 @@ html,body{
   color:var(--accent);
   background:var(--dark-blue);
   overflow-x:hidden;
+  scroll-behavior:auto !important;
 }
 
 /* Panorama */
@@ -62,10 +63,10 @@ html,body{
 /* Galerie */
 main{
   position:relative;
+  margin-top:-420px; /* zachováme překrytí hero sekcí */
   z-index:3;
   background:none;
-  padding-top:60px;
-  padding-bottom:80px;
+  padding-top:100px; padding-bottom:80px;
 }
 .container{ width:95%; max-width:var(--max-width); margin:0 auto; }
 
@@ -427,13 +428,19 @@ renderGallery(document.getElementById('koruna-gallery'),korunaData,it=>cardKorun
 renderGallery(document.getElementById('alpy-gallery'),alpyData,it=>cardAlpy(it,showAlpyDetail));
 renderGallery(document.getElementById('nepal-gallery'),nepalData,it=>cardSimple(it,()=>showNepalAt(it.idx-1)));
 
-/* Routing */
+/* Routing – zakáže jakýkoliv scroll */
 const btns=document.querySelectorAll('.btn');
 const sections=document.querySelectorAll('[data-route-content]');
-function show(route){sections.forEach(s=>s.hidden=(s.id!==route));btns.forEach(b=>b.classList.toggle('active',b.dataset.route===route));history.replaceState(null,'','#'+route);}
+function show(route){
+  sections.forEach(s=>s.hidden=(s.id!==route));
+  btns.forEach(b=>b.classList.toggle('active',b.dataset.route===route));
+  history.replaceState(null,'','#'+route);
+  window.scrollTo({top:0,left:0,behavior:'instant'});
+}
 btns.forEach(b=>b.addEventListener('click',()=>show(b.dataset.route)));
-show(location.hash?location.hash.substring(1):'koruna');
 window.addEventListener('popstate',()=>show(location.hash.substring(1)||'koruna'));
+show(location.hash?location.hash.substring(1):'koruna');
+window.scrollTo(0,0);
 </script>
 </body>
 </html>
