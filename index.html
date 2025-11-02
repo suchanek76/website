@@ -422,10 +422,10 @@ const nepalData = Array.from({length:40},(_,i)=>({ idx:i+1, title:`Nepál ${i+1}
 function cardKoruna(it,onClick){
   const d=document.createElement('div');
   d.className='photo-card';
-  const num=parseInt(it.p.replace(/\D/g,''),10)||0;
-  const t=[`${it.p}. ${it.hora}`,it.v?`${it.v} m`:``].filter(Boolean).join(', ');
+  const num=parseInt(it.p?.replace(/\D/g,'')||'0',10);
+  const t=[`${it.p||''}. ${it.hora||''}`,it.v?`${it.v} m`:``].filter(Boolean).join(', ');
   const s=[it.z||'',it.d||''].filter(Boolean).join(' · ');
-  d.innerHTML=`<img class="photo" src="${imgKoruna(num)}" alt="${it.hora}">
+  d.innerHTML=`<img class="photo" src="${imgKoruna(num)}" alt="${it.hora||''}">
   <div class="photo-overlay"><div class="photo-title">${t}</div><div class="photo-sub">${s}</div></div>`;
   d.onclick=()=>onClick(it);
   return d;
@@ -433,10 +433,10 @@ function cardKoruna(it,onClick){
 function cardAlpy(it,onClick){
   const d=document.createElement('div');
   d.className='photo-card';
-  const n=parseInt(String(it.p).replace('.','').trim(),10);
-  const t=[`${it.p}. ${it.hora}`,it.v?`${it.v} m`:``].filter(Boolean).join(', ');
+  const n=parseInt(String(it.p||'').replace('.','').trim(),10);
+  const t=[`${it.p||''}. ${it.hora||''}`,it.v?`${it.v} m`:``].filter(Boolean).join(', ');
   const s=[it.z||'',it.d||''].filter(Boolean).join(' · ');
-  d.innerHTML=`<img class="photo" src="${imgAlpy(n)}" alt="${it.hora}">
+  d.innerHTML=`<img class="photo" src="${imgAlpy(n)}" alt="${it.hora||''}">
   <div class="photo-overlay"><div class="photo-title">${t}</div><div class="photo-sub">${s}</div></div>`;
   d.onclick=()=>onClick(it,n);
   return d;
@@ -474,13 +474,13 @@ function closeModal(){
 }
 
 function showKorunaDetail(it){
-  const num=parseInt(String(it.p).replace(/\D/g,''),10)||0;
+  const num=parseInt(String(it.p||'').replace(/\D/g,''),10)||0;
   showDetail(it,imgKoruna(num));
 }
 function showAlpyDetail(it,n){showDetail(it,imgAlpy(n));}
 
 function showDetail(it,imgSrc){
-  const hora=`${it.p}. ${it.hora||''}`;
+  const hora=`${it.p||''}. ${it.hora||''}`;
   const vyska=it.v?`${it.v} m`:'';const zeme=it.z||'';
   let datumCas='';if(it.d&&it.cas)datumCas=`${it.d}, ${it.cas} hod`;else if(it.d)datumCas=it.d;else if(it.cas)datumCas=`${it.cas} hod`;
   const pohori=it.pohori||'';const team=it.team||'';const obt=it.obt||'';
@@ -494,21 +494,22 @@ function showDetail(it,imgSrc){
     <div class="meta">${pohori?'Pohoří: '+pohori:''}</div>
     <div class="meta">${team?'Team: '+team:''}</div>
     <div class="meta">${obt?'Obtížnost: '+obt:''}</div>
-    <img class="main" src="${imgSrc}" alt="${it.hora}">
+    <img class="main" src="${imgSrc}" alt="${it.hora||''}">
     ${pov}
   </div>`);
 }
 
+/* Nepál slideshow (opravena) */
 let nepalIndex=0;
-function showNepalAt(idx){
-  nepalIndex=(idx+nepalData.length)%nepalData.length;
-  const it=nepalData[nepalIndex];
+
+function openNepalModal(startIndex){
+  nepalIndex=startIndex;
   modalContent.innerHTML=`
     <button class="nav-arrow left" id="nav-left">❮</button>
     <button class="nav-arrow right" id="nav-right">❯</button>
-    <h3>${it.title}</h3>
+    <h3 id="nepal-title"></h3>
     <button class="modal-close" id="modal-close">✕</button>
-    <img class="main" id="nepal-main" src="${it.img}" alt="${it.title}">
+    <img class="main" id="nepal-main" src="" alt="">
   `;
   const box=modal.querySelector('.modal');
   box.classList.add('fullscreen');
@@ -518,18 +519,32 @@ function showNepalAt(idx){
     document.getElementById('modal-close').onclick=closeModal;
   },10);
   document.body.style.overflow='hidden';
-  document.getElementById('nav-left').onclick=e=>{e.stopPropagation();showNepalAt(nepalIndex-1);};
-  document.getElementById('nav-right').onclick=e=>{e.stopPropagation();showNepalAt(nepalIndex+1);};
+  document.getElementById('nav-left').onclick=e=>{e.stopPropagation();changeNepal(-1);};
+  document.getElementById('nav-right').onclick=e=>{e.stopPropagation();changeNepal(1);};
   document.addEventListener('keydown',e=>{
-    if(e.key==='ArrowLeft')showNepalAt(nepalIndex-1);
-    if(e.key==='ArrowRight')showNepalAt(nepalIndex+1);
+    if(e.key==='ArrowLeft')changeNepal(-1);
+    if(e.key==='ArrowRight')changeNepal(1);
     if(e.key==='Escape')closeModal();
-  },{once:true});
+  });
+  updateNepalModal();
+}
+
+function changeNepal(dir){
+  nepalIndex=(nepalIndex+dir+nepalData.length)%nepalData.length;
+  updateNepalModal();
+}
+function updateNepalModal(){
+  const it=nepalData[nepalIndex];
+  const img=document.getElementById('nepal-main');
+  const title=document.getElementById('nepal-title');
+  img.src=it.img;
+  img.alt=it.title;
+  title.textContent=`${it.title} (${nepalIndex+1}/${nepalData.length})`;
 }
 
 renderGallery(document.getElementById('koruna-gallery'),korunaData,it=>cardKoruna(it,showKorunaDetail));
 renderGallery(document.getElementById('alpy-gallery'),alpyData,it=>cardAlpy(it,showAlpyDetail));
-renderGallery(document.getElementById('nepal-gallery'),nepalData,it=>cardSimple(it,()=>showNepalAt(it.idx-1)));
+renderGallery(document.getElementById('nepal-gallery'),nepalData,it=>cardSimple(it,()=>openNepalModal(it.idx-1)));
 
 const btns=document.querySelectorAll('.btn');
 const sections=document.querySelectorAll('[data-route-content]');
