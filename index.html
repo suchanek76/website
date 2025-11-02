@@ -336,27 +336,19 @@ const nepalData = Array.from({length:40},(_,i)=>({idx:i,title:`Nepál ${i+1}`,im
 /* ---------- MODAL ---------- */
 const modal=document.getElementById('modal-backdrop');
 const modalContent=document.getElementById('modal-content');
-
 function closeModal(){
   modal.classList.remove('show');
   modal.querySelector('.modal').classList.remove('fullscreen');
-  setTimeout(()=>{
-    modal.hidden=true;
-    modalContent.innerHTML='';
-    document.body.style.overflow='';
-  },180);
+  setTimeout(()=>{modal.hidden=true;modalContent.innerHTML='';document.body.style.overflow='';},180);
 }
 function openModal(html,isFullscreen=false){
   const box=modal.querySelector('.modal');
   box.classList.toggle('fullscreen',isFullscreen);
   modalContent.innerHTML=html;
   modal.hidden=false;
-  requestAnimationFrame(()=>{
-    modal.classList.add('show');
-    document.body.style.overflow='hidden';
-  });
+  requestAnimationFrame(()=>{modal.classList.add('show');document.body.style.overflow='hidden';});
 }
-modal.addEventListener('click', e=>{ if(e.target===modal) closeModal(); });
+modal.addEventListener('click',e=>{if(e.target===modal)closeModal();});
 
 /* ---------- DETAIL: KORUNA / ALPY ---------- */
 function showDetail(data,i,imgFn){
@@ -371,7 +363,6 @@ function showDetail(data,i,imgFn){
     ${it.team?`<div class="meta"><strong>Tým:</strong> ${it.team}</div>`:""}
     ${it.obt?`<div class="meta"><strong>Obtížnost:</strong> ${it.obt}</div>`:""}
     <img class="main" src="${imgFn(i+1)}">
-    ${it.povidani?`<p class="meta">${it.povidani}</p>`:""}
   `);
 }
 
@@ -444,7 +435,8 @@ function updateNepalModal(){
   document.getElementById('nepal-main').src=it.img;
   document.getElementById('nepal-title').textContent=`${it.title} (${nepalIndex+1}/${nepalData.length})`;
 }
-/* Gesta */
+
+/* Gesta + klávesnice */
 let touchStartX=0,touchEndX=0,touchStartY=0,touchEndY=0;
 document.addEventListener("touchstart",e=>{
   touchStartX=e.changedTouches[0].screenX;
@@ -465,6 +457,15 @@ function handleGesture(){
     if(Math.abs(dy)>60){closeModal();}
   }
 }
+document.addEventListener('keydown',e=>{
+  const box=modal.querySelector('.modal');
+  if(!modal.classList.contains('show'))return;
+  if(box.classList.contains('fullscreen')){
+    if(e.key==='ArrowLeft')changeNepal(-1);
+    else if(e.key==='ArrowRight')changeNepal(1);
+    else if(e.key==='Escape')closeModal();
+  }
+});
 </script>
 </body>
 </html>
