@@ -30,14 +30,14 @@ html,body{
   overflow:hidden;
   background:var(--dark-blue);
 }
-.hero-bg{
-  position:absolute;
-  inset:0;
-  background:url("https://raw.githubusercontent.com/suchanek76/website/main/images/background.jpg")
-             no-repeat center center;
-  background-size: 100% auto;     /* ✅ roztáhne přes celou šířku, zachová výšku bez ořezu */
-  background-color:#041633;       /* ✅ tmavé pozadí pro případ volného místa nahoře/dole */
-  z-index:0;
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  background: url("https://raw.githubusercontent.com/suchanek76/website/main/images/background.jpg")
+             no-repeat top center;
+  background-size: cover;       /* 🟢 Vyplní šířku i výšku, zachová poměr stran */
+  background-color: #041633;    /* 🔵 Vyplní případné mezery na extrémních obrazovkách */
+  z-index: 0;
 }
 .hero-overlay{
   position:relative; z-index:2; height:100%;
