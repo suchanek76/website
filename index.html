@@ -362,21 +362,23 @@ function showDetail(data, i, imgFn) {
     ? it.povidani 
     : "Popis výstupu bude ještě doplněn";
 
-  openModal(`
-    <button class="modal-close" onclick="closeModal()">✕</button>
-    <h3>${it.p}/${data.length} – ${it.hora} ${it.v ? `${it.v} m` : ""}</h3>
-
+  const info = `
     ${it.z ? `<div class="meta"><strong>Země:</strong> ${it.z}</div>` : ""}
     ${it.d ? `<div class="meta"><strong>Datum výstupu:</strong> ${it.d}</div>` : ""}
     ${it.cas ? `<div class="meta"><strong>Čas výstupu:</strong> ${it.cas}</div>` : ""}
     ${it.team ? `<div class="meta"><strong>Tým:</strong> ${it.team}</div>` : ""}
     ${it.obt ? `<div class="meta"><strong>Obtížnost:</strong> ${it.obt}</div>` : ""}
     ${it.pohori ? `<div class="meta"><strong>Pohoří:</strong> ${it.pohori}</div>` : ""}
+  `;
 
-    <img class="main" src="${imgFn(i + 1)}">
-
-    <div class="meta" style="margin-top:10px;">
-      <strong>Popis:</strong> ${povidaniText}
+  openModal(`
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <h3>${it.p}/${data.length} – ${it.hora} ${it.v ? `${it.v} m` : ""}</h3>
+    <hr>
+    ${info}
+    <img class="main" src="${imgFn(i + 1)}" alt="${it.hora}">
+    <div class="meta" style="margin-top:12px;text-align:justify;">
+      ${povidaniText}
     </div>
   `);
 }
