@@ -63,7 +63,7 @@ html,body{
 /* Galerie */
 main{
   position:relative;
-  margin-top:-420px; /* zachováme překrytí hero sekcí */
+  margin-top:-420px;
   z-index:3;
   background:none;
   padding-top:100px; padding-bottom:80px;
@@ -203,7 +203,6 @@ footer{ text-align:center; color:rgba(255,255,255,0.6); padding:30px 0; }
 
 <div id="modal-backdrop" class="modal-backdrop" hidden>
   <div class="modal">
-    <button class="modal-close" id="modal-close">✕</button>
     <div id="modal-content"></div>
   </div>
 </div>
@@ -354,12 +353,39 @@ const alpyData = [
 const nepalData = Array.from({length:40},(_,i)=>({ idx:i+1, title:`Nepál ${i+1}`, img: imgNepal(i+1) }));
 
 /* --- KARTY --- */
-function cardKoruna(it,onClick){const d=document.createElement('div');d.className='photo-card';const t=[`${it.p}. ${it.hora}`,it.v?`${it.v} m`:``].filter(Boolean).join(', ');const s=[it.z||'',it.d||''].filter(Boolean).join(' · ');d.innerHTML=`<img class="photo" src="${imgKoruna(it.p)}" alt="${it.hora}"><div class="photo-overlay"><div class="photo-title">${t}</div><div class="photo-sub">${s}</div></div>`;d.onclick=()=>onClick(it);return d;}
-function cardAlpy(it,onClick){const d=document.createElement('div');d.className='photo-card';const n=parseInt(String(it.p).replace('.','').trim(),10);const t=[`${it.p}. ${it.hora}`,it.v?`${it.v} m`:``].filter(Boolean).join(', ');const s=[it.z||'',it.d||''].filter(Boolean).join(' · ');d.innerHTML=`<img class="photo" src="${imgAlpy(n)}" alt="${it.hora}"><div class="photo-overlay"><div class="photo-title">${t}</div><div class="photo-sub">${s}</div></div>`;d.onclick=()=>onClick(it,n);return d;}
-function cardSimple(it,onClick){const d=document.createElement('div');d.className='photo-card';d.innerHTML=`<img class="photo" src="${it.img}" alt="${it.title}"><div class="photo-overlay"><div class="photo-title">${it.title}</div></div>`;d.onclick=()=>onClick(it);return d;}
+function cardKoruna(it,onClick){
+  const d=document.createElement('div');
+  d.className='photo-card';
+  const num=parseInt(it.p.replace(/\D/g,''),10)||0; // ✅ číslování fix
+  const t=[`${it.p}. ${it.hora}`,it.v?`${it.v} m`:``].filter(Boolean).join(', ');
+  const s=[it.z||'',it.d||''].filter(Boolean).join(' · ');
+  d.innerHTML=`<img class="photo" src="${imgKoruna(num)}" alt="${it.hora}">
+  <div class="photo-overlay"><div class="photo-title">${t}</div><div class="photo-sub">${s}</div></div>`;
+  d.onclick=()=>onClick(it);
+  return d;
+}
+function cardAlpy(it,onClick){
+  const d=document.createElement('div');
+  d.className='photo-card';
+  const n=parseInt(String(it.p).replace('.','').trim(),10);
+  const t=[`${it.p}. ${it.hora}`,it.v?`${it.v} m`:``].filter(Boolean).join(', ');
+  const s=[it.z||'',it.d||''].filter(Boolean).join(' · ');
+  d.innerHTML=`<img class="photo" src="${imgAlpy(n)}" alt="${it.hora}">
+  <div class="photo-overlay"><div class="photo-title">${t}</div><div class="photo-sub">${s}</div></div>`;
+  d.onclick=()=>onClick(it,n);
+  return d;
+}
+function cardSimple(it,onClick){
+  const d=document.createElement('div');
+  d.className='photo-card';
+  d.innerHTML=`<img class="photo" src="${it.img}" alt="${it.title}">
+  <div class="photo-overlay"><div class="photo-title">${it.title}</div></div>`;
+  d.onclick=()=>onClick(it);
+  return d;
+}
 function renderGallery(el,items,builder){el.innerHTML='';items.forEach(it=>el.appendChild(builder(it)));}
 
-/* Modal */
+/* MODAL */
 const modal=document.getElementById('modal-backdrop');
 const modalContent=document.getElementById('modal-content');
 modal.onclick=e=>{if(e.target===modal)closeModal();};
@@ -367,10 +393,12 @@ modal.onclick=e=>{if(e.target===modal)closeModal();};
 function openModal(html){
   modalContent.innerHTML=html;
   modal.hidden=false;
-  setTimeout(()=>modal.classList.add('show'),10);
+  setTimeout(()=>{
+    modal.classList.add('show');
+    const closeBtn=document.getElementById('modal-close');
+    if(closeBtn) closeBtn.onclick=closeModal; // ✅ teď funguje
+  },10);
   document.body.style.overflow='hidden';
-  const closeBtn=document.getElementById('modal-close');
-  if(closeBtn) closeBtn.onclick=closeModal; // ✅ znovu připojeno
 }
 function closeModal(){
   const box=modal.querySelector('.modal');
@@ -380,9 +408,9 @@ function closeModal(){
   document.body.style.overflow='';
 }
 
-/* Detaily – Koruna i Alpy */
+/* Detaily */
 function showKorunaDetail(it){
-  const num=parseInt(String(it.p).replace(/\D/g,''),10)||0; // ✅ správné číslo
+  const num=parseInt(String(it.p).replace(/\D/g,''),10)||0;
   showDetail(it,imgKoruna(num));
 }
 function showAlpyDetail(it,n){showDetail(it,imgAlpy(n));}
@@ -428,9 +456,11 @@ function showNepalAt(idx){
   const box=modal.querySelector('.modal');
   box.classList.add('fullscreen');
   modal.hidden=false;
-  setTimeout(()=>modal.classList.add('show'),10);
+  setTimeout(()=>{
+    modal.classList.add('show');
+    document.getElementById('modal-close').onclick=closeModal;
+  },10);
   document.body.style.overflow='hidden';
-  document.getElementById('modal-close').onclick=closeModal;
   document.getElementById('nav-left').onclick=e=>{e.stopPropagation();showNepalAt(nepalIndex-1);};
   document.getElementById('nav-right').onclick=e=>{e.stopPropagation();showNepalAt(nepalIndex+1);};
   document.addEventListener('keydown',e=>{
@@ -445,7 +475,7 @@ renderGallery(document.getElementById('koruna-gallery'),korunaData,it=>cardKorun
 renderGallery(document.getElementById('alpy-gallery'),alpyData,it=>cardAlpy(it,showAlpyDetail));
 renderGallery(document.getElementById('nepal-gallery'),nepalData,it=>cardSimple(it,()=>showNepalAt(it.idx-1)));
 
-/* Routing – žádný scroll */
+/* Routing */
 const btns=document.querySelectorAll('.btn');
 const sections=document.querySelectorAll('[data-route-content]');
 function show(route){
