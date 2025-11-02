@@ -28,8 +28,7 @@ html,body{
   background-color:#041633;
 }
 .hero-bg img{
-  width:100%;height:auto;
-  object-fit:contain;object-position:top center;
+  width:100%;height:100%;object-fit:cover;object-position:center;
   background-color:#041633;
 }
 .hero-overlay{
@@ -160,7 +159,7 @@ footer{text-align:center;color:rgba(255,255,255,0.6);padding:30px 0;}
 const RAW="https://raw.githubusercontent.com/suchanek76/website/main/images";
 const imgKoruna=i=>`${RAW}/Koruna/Koruna${String(i).padStart(2,'0')}.jpg`;
 const imgAlpy=i=>`${RAW}/4000/ctyrtisicovka${String(i).padStart(2,'0')}.jpg`;
-const imgNepal=i=>`${RAW}/Nepal/Nepal${String(i+1).padStart(2,'0')}.jpg`; // ✅ oprava indexace
+const imgNepal=i=>`${RAW}/Nepal/Nepal${String(i).padStart(2,'0')}.jpg`; // ✅ opraveno
 
 
 /* ---------- Data: Koruna (z mé tabulky) ---------- */
@@ -298,7 +297,11 @@ const alpyData = [
 ];
 
 /* ---------- Data: Nepál (jen obrázky) ---------- */
-const nepalData = Array.from({length:40}, (_,i)=>({idx:i+1, title:`Nepál ${i+1}`, img:imgNepal(i)}));
+const nepalData = Array.from({length:40}, (_,i)=>({
+  idx:i+1,
+  title:`Nepál ${i+1}`,
+  img:imgNepal(i+1)
+}));
 
 /* Modal systém */
 const modal=document.getElementById('modal-backdrop');
@@ -325,12 +328,8 @@ function showDetail(it,imgSrc){
     <button class="modal-close" onclick="closeModal()">✕</button>
     <div class="meta"><strong>${it.p}. ${it.hora}</strong> ${it.v?`, ${it.v} m`:''}</div>
     <div class="meta">${it.z||''}</div>
-    <div class="meta">${it.d?`${it.d}${it.cas?`, ${it.cas} hod`:''}`:''}</div>
-    <div class="meta">Pohoří: ${it.pohori||''}</div>
-    <div class="meta">Team: ${it.team||''}</div>
-    <div class="meta">Obtížnost: ${it.obt||''}</div>
+    <div class="meta">${it.d||''}</div>
     <img class="main" src="${imgSrc}">
-    <p>${it.povidani||''}</p>
   `);
 }
 
