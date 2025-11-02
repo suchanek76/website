@@ -113,7 +113,11 @@ main{
 }
 .modal .meta{font-size:14px;opacity:.95;margin-bottom:10px;}
 .modal img.main{
-  width:100%;border-radius:8px;object-fit:cover;margin:12px 0;max-height:480px;
+  width:100%;
+  aspect-ratio:3/2;
+  border-radius:8px;
+  object-fit:cover;
+  margin:12px 0;
 }
 footer{text-align:center;color:rgba(255,255,255,0.6);padding:30px 0;}
 
@@ -352,14 +356,28 @@ function openModal(html,isFullscreen=false){
 modal.addEventListener('click',e=>{if(e.target===modal)closeModal();});
 
 /* --- Detail: Koruna / Alpy --- */
-function showDetail(data,i,imgFn){
-  const it=data[i];
+function showDetail(data, i, imgFn) {
+  const it = data[i];
+  const povidaniText = it.povidani && it.povidani.trim() !== "" 
+    ? it.povidani 
+    : "Popis výstupu bude ještě doplněn";
+
   openModal(`
     <button class="modal-close" onclick="closeModal()">✕</button>
-    <h3>${it.p}/${data.length} – ${it.hora} ${it.v} m</h3>
-    ${it.z?`<div class="meta"><strong>Země:</strong> ${it.z}</div>`:""}
-    ${it.d?`<div class="meta"><strong>Datum výstupu:</strong> ${it.d}</div>`:""}
-    <img class="main" src="${imgFn(i+1)}">
+    <h3>${it.p}/${data.length} – ${it.hora} ${it.v ? `${it.v} m` : ""}</h3>
+
+    ${it.z ? `<div class="meta"><strong>Země:</strong> ${it.z}</div>` : ""}
+    ${it.d ? `<div class="meta"><strong>Datum výstupu:</strong> ${it.d}</div>` : ""}
+    ${it.cas ? `<div class="meta"><strong>Čas výstupu:</strong> ${it.cas}</div>` : ""}
+    ${it.team ? `<div class="meta"><strong>Tým:</strong> ${it.team}</div>` : ""}
+    ${it.obt ? `<div class="meta"><strong>Obtížnost:</strong> ${it.obt}</div>` : ""}
+    ${it.pohori ? `<div class="meta"><strong>Pohoří:</strong> ${it.pohori}</div>` : ""}
+
+    <img class="main" src="${imgFn(i + 1)}">
+
+    <div class="meta" style="margin-top:10px;">
+      <strong>Popis:</strong> ${povidaniText}
+    </div>
   `);
 }
 
