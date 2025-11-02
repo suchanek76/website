@@ -112,7 +112,6 @@ main{
   color:white;font-size:22px;cursor:pointer;
 }
 .modal .meta{font-size:14px;opacity:.95;margin-bottom:10px;}
-.modal hr{border:none;border-top:1px solid rgba(255,255,255,0.15);margin:16px 0;}
 .modal img.main{
   width:100%;
   aspect-ratio:3/2;
@@ -374,15 +373,124 @@ function showDetail(data, i, imgFn) {
     ${it.obt ? `<div class="meta"><strong>Obtížnost:</strong> ${it.obt}</div>` : ""}
     ${it.pohori ? `<div class="meta"><strong>Pohoří:</strong> ${it.pohori}</div>` : ""}
 
-    <hr>
-
     <img class="main" src="${imgFn(i + 1)}">
 
     <div class="meta" style="margin-top:10px;">
-      ${povidaniText}
+      <strong>Popis:</strong> ${povidaniText}
     </div>
   `);
 }
+
+/* --- Karty --- */
+function cardKoruna(it,i){
+  const el=document.createElement('div');
+  el.className='photo-card';
+  el.innerHTML=`<img class="photo" src="${imgKoruna(i+1)}">
+  <div class="photo-overlay">
+    <div class="photo-title">${it.p}. ${it.hora} ${it.v?`${it.v} m`:""}</div>
+    <div class="photo-sub">${it.z||""} ${it.d||""}</div>
+  </div>`;
+  el.onclick=()=>showDetail(korunaData,i,imgKoruna);
+  return el;
+}
+function cardAlpy(it,i){
+  const el=document.createElement('div');
+  el.className='photo-card';
+  el.innerHTML=`<img class="photo" src="${imgAlpy(i+1)}">
+  <div class="photo-overlay">
+    <div class="photo-title">${it.p}. ${it.hora} ${it.v?`${it.v} m`:""}</div>
+    <div class="photo-sub">${it.z||""} ${it.d||""}</div>
+  </div>`;
+  el.onclick=()=>showDetail(alpyData,i,imgAlpy);
+  return el;
+}
+function cardSimple(it,i){
+  const el=document.createElement('div');
+  el.className='photo-card';
+  el.innerHTML=`<img class="photo" src="${it.img}">
+  <div class="photo-overlay"><div class="photo-title">${it.title}</div></div>`;
+  el.onclick=()=>openNepalModal(i);
+  return el;
+}
+
+/* --- Galerie render --- */
+function renderGallery(el,data,fn){el.innerHTML='';data.forEach((it,i)=>el.appendChild(fn(it,i)));}
+renderGallery(document.getElementById('koruna-gallery'),korunaData,cardKoruna);
+renderGallery(document.getElementById('alpy-gallery'),alpyData,cardAlpy);
+renderGallery(document.getElementById('nepal-gallery'),nepalData,cardSimple);
+
+/* --- Navigace --- */
+const btns=document.querySelectorAll('.btn');
+const sections=document.querySelectorAll('[data-route-content]');
+function show(route){
+  sections.forEach(s=>s.hidden=(s.id!==route));
+  btns.forEach(b=>b.classList.toggle('active',b.dataset.route===route));
+  history.replaceState(null,'','#'+route);
+  window.scrollTo(0,0);
+}
+btns.forEach(b=>b.addEventListener('click',()=>show(b.dataset.route)));
+window.addEventListener('popstate',()=>show(location.hash.substring(1)||'koruna'));
+show(location.hash?location.hash.substring(1):'koruna');
+
+/* --- Nepál fullscreen --- */
+let nepalIndex=0;
+function openNepalModal(i){
+  nepalIndex=i;
+  openModal(`
+    <button class="nav-arrow left" id="nav-left">❮</button>
+    <button class="nav-arrow right" id="nav-right">❯</button>
+    <h3 id="nepal-title"></h3>
+    <button class="modal-close" id="modal-close">✕</button>
+    <img class="main fade" id="nepal-main" src="">
+  `,true);
+  document.getElementById('modal-close').onclick=closeModal;
+  document.getElementById('nav-left').onclick=e=>{e.stopPropagation();changeNepal(-1);};
+  document.getElementById('nav-right').onclick=e=>{e.stopPropagation();changeNepal(1);};
+  updateNepalModal(true);
+}
+function changeNepal(dir){nepalIndex=(nepalIndex+dir+nepalData.length)%nepalData.length;updateNepalModal();}
+function updateNepalModal(first=false){
+  const it=nepalData[nepalIndex];
+  const img=document.getElementById('nepal-main');
+  const title=document.getElementById('nepal-title');
+  if(!first){img.classList.remove('show');}
+  setTimeout(()=>{
+    img.src=it.img;
+    title.textContent=`Nepál (${nepalIndex+1}/${nepalData.length})`;
+    img.onload=()=>img.classList.add('show');
+  },first?0:150);
+}
+
+/* --- Gesta + klávesnice --- */
+let touchStartX=0,touchEndX=0,touchStartY=0,touchEndY=0;
+document.addEventListener("touchstart",e=>{
+  touchStartX=e.changedTouches[0].screenX;
+  touchStartY=e.changedTouches[0].screenY;
+},false);
+document.addEventListener("touchend",e=>{
+  touchEndX=e.changedTouches[0].screenX;
+  touchEndY=e.changedTouches[0].screenY;
+  handleGesture();
+},false);
+function handleGesture(){
+  if(!modal.classList.contains("show"))return;
+  const dx=touchEndX-touchStartX;
+  const dy=touchEndY-touchStartY;
+  if(Math.abs(dx)>Math.abs(dy)){
+    if(Math.abs(dx)>50){dx>0?changeNepal(-1):changeNepal(1);}
+  }else{
+    if(Math.abs(dy)>60){closeModal();}
+  }
+}
+document.addEventListener('keydown',e=>{
+  const box=modal.querySelector('.modal');
+  if(!modal.classList.contains('show'))return;
+  if(box.classList.contains('fullscreen')){
+    if(e.key==='ArrowLeft')changeNepal(-1);
+    else if(e.key==='ArrowRight')changeNepal(1);
+    else if(e.key==='Escape')closeModal();
+  }
+});
 </script>
 </body>
 </html>
