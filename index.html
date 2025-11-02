@@ -31,10 +31,12 @@ html,body{
   background:var(--dark-blue);
 }
 .hero-bg{
-  position:absolute; inset:0;
+  position:absolute;
+  inset:0;
   background:url("https://raw.githubusercontent.com/suchanek76/website/main/images/background.jpg")
-             no-repeat center top;
-  background-size:cover;
+             no-repeat center center;
+  background-size: 100% auto;     /* ✅ roztáhne přes celou šířku, zachová výšku bez ořezu */
+  background-color:#041633;       /* ✅ tmavé pozadí pro případ volného místa nahoře/dole */
   z-index:0;
 }
 .hero-overlay{
