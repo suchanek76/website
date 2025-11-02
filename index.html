@@ -362,13 +362,29 @@ function renderGallery(el,items,builder){el.innerHTML='';items.forEach(it=>el.ap
 /* Modal */
 const modal=document.getElementById('modal-backdrop');
 const modalContent=document.getElementById('modal-content');
-document.getElementById('modal-close').onclick=closeModal;
 modal.onclick=e=>{if(e.target===modal)closeModal();};
-function openModal(html){modalContent.innerHTML=html;modal.hidden=false;setTimeout(()=>modal.classList.add('show'),10);document.body.style.overflow='hidden';}
-function closeModal(){const box=modal.querySelector('.modal');box.classList.remove('fullscreen');modal.classList.remove('show');setTimeout(()=>{modal.hidden=true;modalContent.innerHTML='';},150);document.body.style.overflow='';}
+
+function openModal(html){
+  modalContent.innerHTML=html;
+  modal.hidden=false;
+  setTimeout(()=>modal.classList.add('show'),10);
+  document.body.style.overflow='hidden';
+  const closeBtn=document.getElementById('modal-close');
+  if(closeBtn) closeBtn.onclick=closeModal; // ✅ znovu připojeno
+}
+function closeModal(){
+  const box=modal.querySelector('.modal');
+  box.classList.remove('fullscreen');
+  modal.classList.remove('show');
+  setTimeout(()=>{modal.hidden=true;modalContent.innerHTML='';},150);
+  document.body.style.overflow='';
+}
 
 /* Detaily – Koruna i Alpy */
-function showKorunaDetail(it){showDetail(it,imgKoruna(it.p));}
+function showKorunaDetail(it){
+  const num=parseInt(String(it.p).replace(/\D/g,''),10)||0; // ✅ správné číslo
+  showDetail(it,imgKoruna(num));
+}
 function showAlpyDetail(it,n){showDetail(it,imgAlpy(n));}
 
 function showDetail(it,imgSrc){
@@ -385,6 +401,7 @@ function showDetail(it,imgSrc){
   const pov=it.povidani?`<p>${it.povidani}</p>`:`<p class="meta">Krátké povídání o výstupu bude doplněno.</p>`;
   openModal(`
     <div>
+      <button class="modal-close" id="modal-close">✕</button>
       <div class="meta"><strong>${hora}</strong>${vyska?', '+vyska:''}</div>
       <div class="meta">${zeme}</div>
       <div class="meta">${datumCas}</div>
@@ -428,14 +445,14 @@ renderGallery(document.getElementById('koruna-gallery'),korunaData,it=>cardKorun
 renderGallery(document.getElementById('alpy-gallery'),alpyData,it=>cardAlpy(it,showAlpyDetail));
 renderGallery(document.getElementById('nepal-gallery'),nepalData,it=>cardSimple(it,()=>showNepalAt(it.idx-1)));
 
-/* Routing – zakáže jakýkoliv scroll */
+/* Routing – žádný scroll */
 const btns=document.querySelectorAll('.btn');
 const sections=document.querySelectorAll('[data-route-content]');
 function show(route){
   sections.forEach(s=>s.hidden=(s.id!==route));
   btns.forEach(b=>b.classList.toggle('active',b.dataset.route===route));
   history.replaceState(null,'','#'+route);
-  window.scrollTo({top:0,left:0,behavior:'instant'});
+  window.scrollTo(0,0);
 }
 btns.forEach(b=>b.addEventListener('click',()=>show(b.dataset.route)));
 window.addEventListener('popstate',()=>show(location.hash.substring(1)||'koruna'));
