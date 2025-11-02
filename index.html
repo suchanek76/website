@@ -43,14 +43,14 @@ html, body {
   position: absolute;
   top: 0;
   left: 0;
-  width: 100%;         /* vyplní celou šířku */
-  height: auto;         /* zachová poměr stran */
-  object-fit: cover;    /* vyplní výšku bez deformace */
-  object-position: top; /* začíná nahoře */
-  min-height: 100%;     /* zajistí, že pokryje výšku okna */
+  width: 100%;
+  height: auto;
+  min-height: 100%;
+  object-fit: cover;
+  object-position: top;
 }
 
-/* Text a navigace přes fotku */
+/* Text a navigace */
 .hero-overlay {
   position: relative;
   z-index: 2;
@@ -180,6 +180,61 @@ main {
   max-height: 480px;
 }
 footer { text-align: center; color: rgba(255,255,255,0.6); padding: 30px 0; }
+
+/* Nepál fullscreen */
+.modal.fullscreen {
+  background: #000;
+  max-width: none;
+  max-height: none;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.modal.fullscreen img.main {
+  max-height: 90vh;
+  max-width: 95vw;
+  object-fit: contain;
+  border-radius: 10px;
+  margin: 0 auto;
+  display: block;
+}
+.modal.fullscreen h3 {
+  position: absolute;
+  top: 20px;
+  left: 30px;
+  color: white;
+  text-shadow: 0 2px 5px rgba(0,0,0,0.8);
+}
+.modal.fullscreen .modal-close {
+  position: absolute;
+  top: 18px;
+  right: 24px;
+  font-size: 30px;
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+  z-index: 10;
+}
+.modal.fullscreen .nav-arrow {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 40px;
+  cursor: pointer;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  padding: 20px;
+  opacity: 0.6;
+  transition: opacity 0.2s;
+}
+.modal.fullscreen .nav-arrow:hover { opacity: 1; }
+.modal.fullscreen .nav-arrow.left { left: 20px; }
+.modal.fullscreen .nav-arrow.right { right: 20px; }
 </style>
 </head>
 <body>
@@ -367,7 +422,7 @@ const nepalData = Array.from({length:40},(_,i)=>({ idx:i+1, title:`Nepál ${i+1}
 function cardKoruna(it,onClick){
   const d=document.createElement('div');
   d.className='photo-card';
-  const num=parseInt(it.p.replace(/\D/g,''),10)||0; // ✅ číslování fix
+  const num=parseInt(it.p.replace(/\D/g,''),10)||0;
   const t=[`${it.p}. ${it.hora}`,it.v?`${it.v} m`:``].filter(Boolean).join(', ');
   const s=[it.z||'',it.d||''].filter(Boolean).join(' · ');
   d.innerHTML=`<img class="photo" src="${imgKoruna(num)}" alt="${it.hora}">
@@ -396,7 +451,6 @@ function cardSimple(it,onClick){
 }
 function renderGallery(el,items,builder){el.innerHTML='';items.forEach(it=>el.appendChild(builder(it)));}
 
-/* MODAL */
 const modal=document.getElementById('modal-backdrop');
 const modalContent=document.getElementById('modal-content');
 modal.onclick=e=>{if(e.target===modal)closeModal();};
@@ -407,7 +461,7 @@ function openModal(html){
   setTimeout(()=>{
     modal.classList.add('show');
     const closeBtn=document.getElementById('modal-close');
-    if(closeBtn) closeBtn.onclick=closeModal; // ✅ teď funguje
+    if(closeBtn) closeBtn.onclick=closeModal;
   },10);
   document.body.style.overflow='hidden';
 }
@@ -419,7 +473,6 @@ function closeModal(){
   document.body.style.overflow='';
 }
 
-/* Detaily */
 function showKorunaDetail(it){
   const num=parseInt(String(it.p).replace(/\D/g,''),10)||0;
   showDetail(it,imgKoruna(num));
@@ -428,31 +481,24 @@ function showAlpyDetail(it,n){showDetail(it,imgAlpy(n));}
 
 function showDetail(it,imgSrc){
   const hora=`${it.p}. ${it.hora||''}`;
-  const vyska=it.v?`${it.v} m`:'';
-  const zeme=it.z||'';
-  let datumCas='';
-  if(it.d&&it.cas)datumCas=`${it.d}, ${it.cas} hod`;
-  else if(it.d)datumCas=it.d;
-  else if(it.cas)datumCas=`${it.cas} hod`;
-  const pohori=it.pohori||'';
-  const team=it.team||'';
-  const obt=it.obt||'';
+  const vyska=it.v?`${it.v} m`:'';const zeme=it.z||'';
+  let datumCas='';if(it.d&&it.cas)datumCas=`${it.d}, ${it.cas} hod`;else if(it.d)datumCas=it.d;else if(it.cas)datumCas=`${it.cas} hod`;
+  const pohori=it.pohori||'';const team=it.team||'';const obt=it.obt||'';
   const pov=it.povidani?`<p>${it.povidani}</p>`:`<p class="meta">Krátké povídání o výstupu bude doplněno.</p>`;
   openModal(`
-    <div>
-      <button class="modal-close" id="modal-close">✕</button>
-      <div class="meta"><strong>${hora}</strong>${vyska?', '+vyska:''}</div>
-      <div class="meta">${zeme}</div>
-      <div class="meta">${datumCas}</div>
-      <div class="meta">${pohori?'Pohoří: '+pohori:''}</div>
-      <div class="meta">${team?'Team: '+team:''}</div>
-      <div class="meta">${obt?'Obtížnost: '+obt:''}</div>
-      <img class="main" src="${imgSrc}" alt="${it.hora}">
-      ${pov}
-    </div>`);
+  <div>
+    <button class="modal-close" id="modal-close">✕</button>
+    <div class="meta"><strong>${hora}</strong>${vyska?', '+vyska:''}</div>
+    <div class="meta">${zeme}</div>
+    <div class="meta">${datumCas}</div>
+    <div class="meta">${pohori?'Pohoří: '+pohori:''}</div>
+    <div class="meta">${team?'Team: '+team:''}</div>
+    <div class="meta">${obt?'Obtížnost: '+obt:''}</div>
+    <img class="main" src="${imgSrc}" alt="${it.hora}">
+    ${pov}
+  </div>`);
 }
 
-/* Nepál slideshow */
 let nepalIndex=0;
 function showNepalAt(idx){
   nepalIndex=(idx+nepalData.length)%nepalData.length;
@@ -481,12 +527,10 @@ function showNepalAt(idx){
   },{once:true});
 }
 
-/* Render */
 renderGallery(document.getElementById('koruna-gallery'),korunaData,it=>cardKoruna(it,showKorunaDetail));
 renderGallery(document.getElementById('alpy-gallery'),alpyData,it=>cardAlpy(it,showAlpyDetail));
 renderGallery(document.getElementById('nepal-gallery'),nepalData,it=>cardSimple(it,()=>showNepalAt(it.idx-1)));
 
-/* Routing */
 const btns=document.querySelectorAll('.btn');
 const sections=document.querySelectorAll('[data-route-content]');
 function show(route){
@@ -500,5 +544,6 @@ window.addEventListener('popstate',()=>show(location.hash.substring(1)||'koruna'
 show(location.hash?location.hash.substring(1):'koruna');
 window.scrollTo(0,0);
 </script>
+
 </body>
 </html>
