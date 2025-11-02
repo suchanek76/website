@@ -62,10 +62,10 @@ html,body{
 /* Galerie */
 main{
   position:relative;
-  margin-top:-420px;
   z-index:3;
   background:none;
-  padding-top:100px; padding-bottom:80px;
+  padding-top:60px;
+  padding-bottom:80px;
 }
 .container{ width:95%; max-width:var(--max-width); margin:0 auto; }
 
@@ -207,59 +207,59 @@ footer{ text-align:center; color:rgba(255,255,255,0.6); padding:30px 0; }
   </div>
 </div>
 
-<footer>© Hodit batoh na záda a jít ...</footer>
+<footer>© Vzít batoh na záda a jít ...</footer>
 
 <script>
-const RAW = "https://raw.githubusercontent.com/suchanek76/website/main/images";
-const imgKoruna = i => `${RAW}/Koruna/Koruna${String(i).padStart(2,'0')}.jpg`;
-const imgAlpy = i => `${RAW}/4000/ctyrtisicovka${String(i).padStart(2,'0')}.jpg`;
-const imgNepal = i => `${RAW}/Nepal/Nepal${String(i).padStart(2,'0')}.jpg`;
+const RAW="https://raw.githubusercontent.com/suchanek76/website/main/images";
+const imgKoruna=i=>`${RAW}/Koruna/Koruna${String(i).padStart(2,'0')}.jpg`;
+const imgAlpy=i=>`${RAW}/4000/ctyrtisicovka${String(i).padStart(2,'0')}.jpg`;
+const imgNepal=i=>`${RAW}/Nepal/Nepal${String(i).padStart(2,'0')}.jpg`;
 
 /* ---------- Data: Koruna (z mé tabulky) ---------- */
 const korunaData = [
-{p:"1/2",hora:"Mont Blanc",v:"4 809",z:"Francie / Itálie",d:"31. 8. 2007",cas:"",team:"",obt:"",pohori:"",povidani:""},
-{p:"3",hora:"Dufourspitze",v:"4 634",z:"Švýcarsko",d:"",cas:"",team:"",obt:"",pohori:"",povidani:""},
-{p:"4",hora:"Grossglockner",v:"3 798",z:"Rakousko",d:"30. 6. 2025",cas:"",team:"",obt:"",pohori:"",povidani:""},
-{p:"5",hora:"Mulhacén",v:"3 479",z:"Španělsko",d:"10. 9. 2022",cas:"",team:"",obt:"",pohori:"",povidani:""},
-{p:"6",hora:"Zugspitze",v:"2 962",z:"Německo",d:"21. 6. 2025",cas:"",team:"",obt:"",pohori:"",povidani:""},
-{p:"7",hora:"Coma Pedrosa",v:"2 942",z:"Andorra",d:"",cas:"",team:"",obt:"",pohori:"",povidani:""},
-{p:"8",hora:"Musala",v:"2 925",z:"Bulharsko",d:"",cas:"",team:"",obt:"",pohori:"",povidani:""},
-{p:"9",hora:"Mytikas",v:"2 917",z:"Řecko",d:"",cas:"",team:"",obt:"",pohori:"",povidani:""},
-{p:"10",hora:"Triglav",v:"2 864",z:"Slovinsko",d:"25. 7. 2022",cas:"",team:"",obt:"",pohori:"",povidani:""},
-{p:"11/12",hora:"Velký Korab",v:"2 764",z:"Albánie / Makedonie",d:"",cas:"",team:"",obt:"",pohori:"",povidani:""},
-{p:"13",hora:"Gerlachovský štít",v:"2 655",z:"Slovensko",d:"24. 7. 2021",cas:"",team:"",obt:"",pohori:"",povidani:""},
-{p:"14",hora:"Vorder Grauspitz",v:"2 599",z:"Lichtenštejnsko",d:"6. 9. 2025",cas:"",team:"",obt:"",pohori:"",povidani:""},
-{p:"15",hora:"Moldoveanu",v:"2 544",z:"Rumunsko",d:"",cas:"",team:"",obt:"",pohori:"",povidani:""},
-{p:"16",hora:"Zla Kolata",v:"2 534",z:"Černá Hora",d:"",cas:"",team:"",obt:"",pohori:"",povidani:""},
-{p:"17",hora:"Rysy",v:"2 499",z:"Polsko",d:"21. 9. 2024",cas:"",team:"",obt:"",pohori:"",povidani:""},
-{p:"18",hora:"Galdhøpiggen",v:"2 469",z:"Norsko",d:"7. 7. 2022",cas:"",team:"",obt:"",pohori:"",povidani:""},
-{p:"19",hora:"Bosanski Maglić",v:"2 386",z:"Bosna a Hercegovina",d:"",cas:"",team:"",obt:"",pohori:"",povidani:""},
-{p:"20",hora:"Midžur",v:"2 169",z:"Srbsko",d:"",cas:"",team:"",obt:"",pohori:"",povidani:""},
-{p:"21",hora:"Hvannadalshnjúkur",v:"2 110",z:"Island",d:"",cas:"",team:"",obt:"",pohori:"",povidani:""},
-{p:"22",hora:"Kebnekaise",v:"2 103",z:"Švédsko",d:"",cas:"",team:"",obt:"",pohori:"",povidani:""},
-{p:"23",hora:"Hoverla",v:"2 061",z:"Ukrajina",d:"",cas:"",team:"",obt:"",pohori:"",povidani:""},
-{p:"24",hora:"Torre",v:"1 993",z:"Portugalsko",d:"28. 3. 2025",cas:"",team:"",obt:"",pohori:"",povidani:""},
-{p:"25",hora:"Narodnaja",v:"1 895",z:"Rusko",d:"",cas:"",team:"",obt:"",pohori:"",povidani:""},
-{p:"26",hora:"Sinjal",v:"1 831",z:"Chorvatsko",d:"",cas:"",team:"",obt:"",pohori:"",povidani:""},
-{p:"27",hora:"Sněžka",v:"1 603",z:"Česko",d:"",cas:"",team:"",obt:"",pohori:"",povidani:""},
-{p:"28",hora:"Ben Nevis",v:"1 344",z:"Spojené království",d:"",cas:"",team:"",obt:"",pohori:"",povidani:""},
-{p:"29",hora:"Halti",v:"1 324",z:"Finsko",d:"",cas:"",team:"",obt:"",pohori:"",povidani:""},
-{p:"30",hora:"Carrauntoohil",v:"1 041",z:"Irsko",d:"",cas:"",team:"",obt:"",pohori:"",povidani:""},
-{p:"31",hora:"Mahya Dağı",v:"1 031",z:"Turecko",d:"",cas:"",team:"",obt:"",pohori:"",povidani:""},
-{p:"32",hora:"Kékes",v:"1 014",z:"Maďarsko",d:"17. 8. 2023",cas:"",team:"",obt:"",pohori:"",povidani:""},
-{p:"33",hora:"Monte Titano",v:"756",z:"San Marino",d:"",cas:"",team:"",obt:"",pohori:"",povidani:""},
-{p:"34",hora:"Signal de Botrange",v:"694",z:"Belgie",d:"6. 10. 2024",cas:"",team:"",obt:"",pohori:"",povidani:""},
-{p:"35",hora:"Kneiff",v:"560",z:"Lucembursko",d:"6. 10. 2024",cas:"",team:"",obt:"",pohori:"",povidani:""},
-{p:"36",hora:"Dealul Bălănești",v:"430",z:"Moldavsko",d:"",cas:"",team:"",obt:"",pohori:"",povidani:""},
-{p:"37",hora:"Dzjaržynskaja hara",v:"345",z:"Bělorusko",d:"",cas:"",team:"",obt:"",pohori:"",povidani:""},
-{p:"38",hora:"Vaalserberg",v:"322",z:"Nizozemsko",d:"6. 10. 2024",cas:"",team:"",obt:"",pohori:"",povidani:""},
-{p:"39",hora:"Suur Munamägi",v:"318",z:"Estonsko",d:"",cas:"",team:"",obt:"",pohori:"",povidani:""},
-{p:"40",hora:"Gaiziņkalns",v:"312",z:"Lotyšsko",d:"",cas:"",team:"",obt:"",pohori:"",povidani:""},
-{p:"41",hora:"Aukštojas",v:"294",z:"Litva",d:"",cas:"",team:"",obt:"",pohori:"",povidani:""},
-{p:"42",hora:"Ta' Dmejrek",v:"253",z:"Malta",d:"",cas:"",team:"",obt:"",pohori:"",povidani:""},
-{p:"43",hora:"Møllehøj",v:"171",z:"Dánsko",d:"",cas:"",team:"",obt:"",pohori:"",povidani:""},
-{p:"44",hora:"Chemin des Révoires",v:"161",z:"Monako",d:"",cas:"",team:"",obt:"",pohori:"",povidani:""},
-{p:"45",hora:"Vatikánské zahrady",v:"75",z:"Vatikán",d:"",cas:"",team:"",obt:"",pohori:"",povidani:""}
+{p:"1",hora:"Mont Blanc",v:"4 809",z:"Francie / Itálie",d:"31. 8. 2007",cas:"",team:"",obt:"",pohori:"",povidani:""},
+{p:"2",hora:"Dufourspitze",v:"4 634",z:"Švýcarsko",d:"",cas:"",team:"",obt:"",pohori:"",povidani:""},
+{p:"3",hora:"Grossglockner",v:"3 798",z:"Rakousko",d:"30. 6. 2025",cas:"",team:"",obt:"",pohori:"",povidani:""},
+{p:"4",hora:"Mulhacén",v:"3 479",z:"Španělsko",d:"10. 9. 2022",cas:"",team:"",obt:"",pohori:"",povidani:""},
+{p:"5",hora:"Zugspitze",v:"2 962",z:"Německo",d:"21. 6. 2025",cas:"",team:"",obt:"",pohori:"",povidani:""},
+{p:"6",hora:"Coma Pedrosa",v:"2 942",z:"Andorra",d:"",cas:"",team:"",obt:"",pohori:"",povidani:""},
+{p:"7",hora:"Musala",v:"2 925",z:"Bulharsko",d:"",cas:"",team:"",obt:"",pohori:"",povidani:""},
+{p:"8",hora:"Mytikas",v:"2 917",z:"Řecko",d:"",cas:"",team:"",obt:"",pohori:"",povidani:""},
+{p:"9",hora:"Triglav",v:"2 864",z:"Slovinsko",d:"25. 7. 2022",cas:"",team:"",obt:"",pohori:"",povidani:""},
+{p:"10",hora:"Velký Korab",v:"2 764",z:"Albánie / Makedonie",d:"",cas:"",team:"",obt:"",pohori:"",povidani:""},
+{p:"11",hora:"Gerlachovský štít",v:"2 655",z:"Slovensko",d:"24. 7. 2021",cas:"",team:"",obt:"",pohori:"",povidani:""},
+{p:"12",hora:"Vorder Grauspitz",v:"2 599",z:"Lichtenštejnsko",d:"6. 9. 2025",cas:"",team:"",obt:"",pohori:"",povidani:""},
+{p:"13",hora:"Moldoveanu",v:"2 544",z:"Rumunsko",d:"",cas:"",team:"",obt:"",pohori:"",povidani:""},
+{p:"14",hora:"Zla Kolata",v:"2 534",z:"Černá Hora",d:"",cas:"",team:"",obt:"",pohori:"",povidani:""},
+{p:"15",hora:"Rysy",v:"2 499",z:"Polsko",d:"21. 9. 2024",cas:"",team:"",obt:"",pohori:"",povidani:""},
+{p:"16",hora:"Galdhøpiggen",v:"2 469",z:"Norsko",d:"7. 7. 2022",cas:"",team:"",obt:"",pohori:"",povidani:""},
+{p:"17",hora:"Bosanski Maglić",v:"2 386",z:"Bosna a Hercegovina",d:"",cas:"",team:"",obt:"",pohori:"",povidani:""},
+{p:"18",hora:"Midžur",v:"2 169",z:"Srbsko",d:"",cas:"",team:"",obt:"",pohori:"",povidani:""},
+{p:"19",hora:"Hvannadalshnjúkur",v:"2 110",z:"Island",d:"",cas:"",team:"",obt:"",pohori:"",povidani:""},
+{p:"20",hora:"Kebnekaise",v:"2 103",z:"Švédsko",d:"",cas:"",team:"",obt:"",pohori:"",povidani:""},
+{p:"21",hora:"Hoverla",v:"2 061",z:"Ukrajina",d:"",cas:"",team:"",obt:"",pohori:"",povidani:""},
+{p:"22",hora:"Torre",v:"1 993",z:"Portugalsko",d:"28. 3. 2025",cas:"",team:"",obt:"",pohori:"",povidani:""},
+{p:"23",hora:"Narodnaja",v:"1 895",z:"Rusko",d:"",cas:"",team:"",obt:"",pohori:"",povidani:""},
+{p:"24",hora:"Sinjal",v:"1 831",z:"Chorvatsko",d:"",cas:"",team:"",obt:"",pohori:"",povidani:""},
+{p:"25",hora:"Sněžka",v:"1 603",z:"Česko",d:"",cas:"",team:"",obt:"",pohori:"",povidani:""},
+{p:"26",hora:"Ben Nevis",v:"1 344",z:"Spojené království",d:"",cas:"",team:"",obt:"",pohori:"",povidani:""},
+{p:"27",hora:"Halti",v:"1 324",z:"Finsko",d:"",cas:"",team:"",obt:"",pohori:"",povidani:""},
+{p:"28",hora:"Carrauntoohil",v:"1 041",z:"Irsko",d:"",cas:"",team:"",obt:"",pohori:"",povidani:""},
+{p:"29",hora:"Mahya Dağı",v:"1 031",z:"Turecko",d:"",cas:"",team:"",obt:"",pohori:"",povidani:""},
+{p:"30",hora:"Kékes",v:"1 014",z:"Maďarsko",d:"17. 8. 2023",cas:"",team:"",obt:"",pohori:"",povidani:""},
+{p:"31",hora:"Monte Titano",v:"756",z:"San Marino",d:"",cas:"",team:"",obt:"",pohori:"",povidani:""},
+{p:"32",hora:"Signal de Botrange",v:"694",z:"Belgie",d:"6. 10. 2024",cas:"",team:"",obt:"",pohori:"",povidani:""},
+{p:"33",hora:"Kneiff",v:"560",z:"Lucembursko",d:"6. 10. 2024",cas:"",team:"",obt:"",pohori:"",povidani:""},
+{p:"34",hora:"Dealul Bălănești",v:"430",z:"Moldavsko",d:"",cas:"",team:"",obt:"",pohori:"",povidani:""},
+{p:"35",hora:"Dzjaržynskaja hara",v:"345",z:"Bělorusko",d:"",cas:"",team:"",obt:"",pohori:"",povidani:""},
+{p:"36",hora:"Vaalserberg",v:"322",z:"Nizozemsko",d:"6. 10. 2024",cas:"",team:"",obt:"",pohori:"",povidani:""},
+{p:"37",hora:"Suur Munamägi",v:"318",z:"Estonsko",d:"",cas:"",team:"",obt:"",pohori:"",povidani:""},
+{p:"38",hora:"Gaiziņkalns",v:"312",z:"Lotyšsko",d:"",cas:"",team:"",obt:"",pohori:"",povidani:""},
+{p:"39",hora:"Aukštojas",v:"294",z:"Litva",d:"",cas:"",team:"",obt:"",pohori:"",povidani:""},
+{p:"40",hora:"Ta' Dmejrek",v:"253",z:"Malta",d:"",cas:"",team:"",obt:"",pohori:"",povidani:""},
+{p:"41",hora:"Møllehøj",v:"171",z:"Dánsko",d:"",cas:"",team:"",obt:"",pohori:"",povidani:""},
+{p:"42",hora:"Chemin des Révoires",v:"161",z:"Monako",d:"",cas:"",team:"",obt:"",pohori:"",povidani:""},
+{p:"43",hora:"Vatikánské zahrady",v:"75",z:"Vatikán",d:"",cas:"",team:"",obt:"",pohori:"",povidani:""}
 ];
 
 /* ---------- Data: Alpy 4000 (z mé tabulky) ---------- */
@@ -366,34 +366,11 @@ modal.onclick=e=>{if(e.target===modal)closeModal();};
 function openModal(html){modalContent.innerHTML=html;modal.hidden=false;setTimeout(()=>modal.classList.add('show'),10);document.body.style.overflow='hidden';}
 function closeModal(){const box=modal.querySelector('.modal');box.classList.remove('fullscreen');modal.classList.remove('show');setTimeout(()=>{modal.hidden=true;modalContent.innerHTML='';},150);document.body.style.overflow='';}
 
-/* Detail Koruna – stejný jako Alpy */
-function showKorunaDetail(it){
-  const hora=`${it.p}. ${it.hora||''}`;
-  const vyska=it.v?`${it.v} m`:'';
-  const zeme=it.z||'';
-  let datumCas='';
-  if(it.d&&it.cas)datumCas=`${it.d}, ${it.cas} hod`;
-  else if(it.d)datumCas=it.d;
-  else if(it.cas)datumCas=`${it.cas} hod`;
-  const pohori=it.pohori||'';
-  const team=it.team||'';
-  const obt=it.obt||'';
-  const pov=it.povidani?`<p>${it.povidani}</p>`:`<p class="meta">Krátké povídání o výstupu bude doplněno.</p>`;
-  openModal(`
-    <div>
-      <div class="meta"><strong>${hora}</strong>${vyska?', '+vyska:''}</div>
-      <div class="meta">${zeme}</div>
-      <div class="meta">${datumCas}</div>
-      <div class="meta">${pohori?'Pohoří: '+pohori:''}</div>
-      <div class="meta">${team?'Team: '+team:''}</div>
-      <div class="meta">${obt?'Obtížnost: '+obt:''}</div>
-      <img class="main" src="${imgKoruna(it.p)}" alt="${it.hora}">
-      ${pov}
-    </div>`);
-}
+/* Detaily – Koruna i Alpy */
+function showKorunaDetail(it){showDetail(it,imgKoruna(it.p));}
+function showAlpyDetail(it,n){showDetail(it,imgAlpy(n));}
 
-/* Detail Alpy */
-function showAlpyDetail(it,orderNum){
+function showDetail(it,imgSrc){
   const hora=`${it.p}. ${it.hora||''}`;
   const vyska=it.v?`${it.v} m`:'';
   const zeme=it.z||'';
@@ -413,7 +390,7 @@ function showAlpyDetail(it,orderNum){
       <div class="meta">${pohori?'Pohoří: '+pohori:''}</div>
       <div class="meta">${team?'Team: '+team:''}</div>
       <div class="meta">${obt?'Obtížnost: '+obt:''}</div>
-      <img class="main" src="${imgAlpy(orderNum)}" alt="${it.hora}">
+      <img class="main" src="${imgSrc}" alt="${it.hora}">
       ${pov}
     </div>`);
 }
@@ -423,14 +400,13 @@ let nepalIndex=0;
 function showNepalAt(idx){
   nepalIndex=(idx+nepalData.length)%nepalData.length;
   const it=nepalData[nepalIndex];
-  const html=`
+  modalContent.innerHTML=`
     <button class="nav-arrow left" id="nav-left">❮</button>
     <button class="nav-arrow right" id="nav-right">❯</button>
     <h3>${it.title}</h3>
     <button class="modal-close" id="modal-close">✕</button>
     <img class="main" id="nepal-main" src="${it.img}" alt="${it.title}">
   `;
-  modalContent.innerHTML=html;
   const box=modal.querySelector('.modal');
   box.classList.add('fullscreen');
   modal.hidden=false;
@@ -444,14 +420,6 @@ function showNepalAt(idx){
     if(e.key==='ArrowRight')showNepalAt(nepalIndex+1);
     if(e.key==='Escape')closeModal();
   },{once:true});
-  const img=document.getElementById('nepal-main');
-  let sx=null,sy=null,st=null;
-  img.addEventListener('touchstart',ev=>{const t=ev.touches[0];sx=t.clientX;sy=t.clientY;st=Date.now();},{passive:true});
-  img.addEventListener('touchend',ev=>{
-    if(sx===null)return;
-    const t=ev.changedTouches[0];const dx=t.clientX-sx,dy=t.clientY-sy,dt=Date.now()-st;
-    sx=null;if(Math.abs(dx)>40&&Math.abs(dx)>Math.abs(dy)&&dt<600){dx>0?showNepalAt(nepalIndex-1):showNepalAt(nepalIndex+1);}
-  },{passive:true});
 }
 
 /* Render */
