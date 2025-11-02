@@ -160,7 +160,8 @@ footer{text-align:center;color:rgba(255,255,255,0.6);padding:30px 0;}
 const RAW="https://raw.githubusercontent.com/suchanek76/website/main/images";
 const imgKoruna=i=>`${RAW}/Koruna/Koruna${String(i).padStart(2,'0')}.jpg`;
 const imgAlpy=i=>`${RAW}/4000/ctyrtisicovka${String(i).padStart(2,'0')}.jpg`;
-const imgNepal=i=>`${RAW}/Nepal/Nepal${String(i).padStart(2,'0')}.jpg`;
+const imgNepal=i=>`${RAW}/Nepal/Nepal${String(i+1).padStart(2,'0')}.jpg`; // ✅ oprava indexace
+
 
 /* ---------- Data: Koruna (z mé tabulky) ---------- */
 const korunaData = [
@@ -297,69 +298,53 @@ const alpyData = [
 ];
 
 /* ---------- Data: Nepál (jen obrázky) ---------- */
-const nepalData=Array.from({length:40},(_,i)=>({idx:i,title:`Nepál ${i+1}`,img:imgNepal(i+1)}));
+const nepalData = Array.from({length:40}, (_,i)=>({idx:i+1, title:`Nepál ${i+1}`, img:imgNepal(i)}));
 
-/* --- Pomocné funkce --- */
+/* Modal systém */
 const modal=document.getElementById('modal-backdrop');
 const modalContent=document.getElementById('modal-content');
 modal.onclick=e=>{if(e.target===modal)closeModal();};
 function closeModal(){
   modal.classList.remove('show');
+  modal.querySelector('.modal').classList.remove('fullscreen');
   setTimeout(()=>{modal.hidden=true;modalContent.innerHTML='';},150);
   document.body.style.overflow='';
 }
-function openModal(html){
+function openModal(html,isFullscreen=false){
+  const box=modal.querySelector('.modal');
+  box.classList.toggle('fullscreen',isFullscreen);
   modalContent.innerHTML=html;
   modal.hidden=false;
   setTimeout(()=>modal.classList.add('show'),10);
   document.body.style.overflow='hidden';
 }
 
-/* --- Galerie karty --- */
-function cardKoruna(it){const n=parseInt(it.p,10);
-  const el=document.createElement('div');el.className='photo-card';
-  el.innerHTML=`<img class="photo" src="${imgKoruna(n)}">
-  <div class="photo-overlay"><div class="photo-title">${it.p}. ${it.hora}</div><div class="photo-sub">${it.z} · ${it.d}</div></div>`;
-  el.onclick=()=>showDetail(it,imgKoruna(n));return el;}
-function cardAlpy(it){const n=parseInt(it.p,10);
-  const el=document.createElement('div');el.className='photo-card';
-  el.innerHTML=`<img class="photo" src="${imgAlpy(n)}">
-  <div class="photo-overlay"><div class="photo-title">${it.p}. ${it.hora}</div><div class="photo-sub">${it.z} · ${it.d}</div></div>`;
-  el.onclick=()=>showDetail(it,imgAlpy(n));return el;}
-function cardSimple(it,i){
-  const el=document.createElement('div');el.className='photo-card';
-  el.innerHTML=`<img class="photo" src="${it.img}">
-  <div class="photo-overlay"><div class="photo-title">${it.title}</div></div>`;
-  el.onclick=()=>openNepalModal(i);return el;}
-function renderGallery(el,data,fn){el.innerHTML='';data.forEach((it,i)=>el.appendChild(fn(it,i)));}
-
-/* --- Detailní modální okno Koruna + Alpy --- */
+/* Koruna + Alpy detail */
 function showDetail(it,imgSrc){
   openModal(`
-  <button class="modal-close" onclick="closeModal()">✕</button>
-  <div class="meta"><strong>${it.p}. ${it.hora}</strong> ${it.v?`, ${it.v} m`:''}</div>
-  <div class="meta">${it.z||''}</div>
-  <div class="meta">${it.d||''}</div>
-  <img class="main" src="${imgSrc}">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <div class="meta"><strong>${it.p}. ${it.hora}</strong> ${it.v?`, ${it.v} m`:''}</div>
+    <div class="meta">${it.z||''}</div>
+    <div class="meta">${it.d?`${it.d}${it.cas?`, ${it.cas} hod`:''}`:''}</div>
+    <div class="meta">Pohoří: ${it.pohori||''}</div>
+    <div class="meta">Team: ${it.team||''}</div>
+    <div class="meta">Obtížnost: ${it.obt||''}</div>
+    <img class="main" src="${imgSrc}">
+    <p>${it.povidani||''}</p>
   `);
 }
 
-/* --- Nepál slideshow --- */
+/* Nepál slideshow */
 let nepalIndex=0;
-function openNepalModal(startIndex){
-  nepalIndex=startIndex;
-  modalContent.innerHTML=`
+function openNepalModal(i){
+  nepalIndex=i;
+  openModal(`
     <button class="nav-arrow left" id="nav-left">❮</button>
     <button class="nav-arrow right" id="nav-right">❯</button>
     <h3 id="nepal-title"></h3>
     <button class="modal-close" id="modal-close">✕</button>
     <img class="main" id="nepal-main" src="">
-  `;
-  const box=modal.querySelector('.modal');
-  box.classList.add('fullscreen');
-  modal.hidden=false;
-  setTimeout(()=>modal.classList.add('show'),10);
-  document.body.style.overflow='hidden';
+  `,true);
   document.getElementById('modal-close').onclick=closeModal;
   document.getElementById('nav-left').onclick=e=>{e.stopPropagation();changeNepal(-1);};
   document.getElementById('nav-right').onclick=e=>{e.stopPropagation();changeNepal(1);};
@@ -371,18 +356,34 @@ function changeNepal(dir){
 }
 function updateNepalModal(){
   const it=nepalData[nepalIndex];
-  const img=document.getElementById('nepal-main');
-  const title=document.getElementById('nepal-title');
-  img.src=it.img;
-  title.textContent=`Nepál (${nepalIndex+1}/${nepalData.length})`;
+  document.getElementById('nepal-main').src=it.img;
+  document.getElementById('nepal-title').textContent=`Nepál (${nepalIndex+1}/${nepalData.length})`;
 }
 
-/* --- Render všech --- */
+/* Karty */
+function cardKoruna(it){const n=parseInt(it.p,10);
+  const el=document.createElement('div');
+  el.className='photo-card';
+  el.innerHTML=`<img class="photo" src="${imgKoruna(n)}"><div class="photo-overlay"><div class="photo-title">${it.p}. ${it.hora}</div><div class="photo-sub">${it.z} · ${it.d}</div></div>`;
+  el.onclick=()=>showDetail(it,imgKoruna(n));return el;}
+function cardAlpy(it){const n=parseInt(it.p,10);
+  const el=document.createElement('div');
+  el.className='photo-card';
+  el.innerHTML=`<img class="photo" src="${imgAlpy(n)}"><div class="photo-overlay"><div class="photo-title">${it.p}. ${it.hora}</div><div class="photo-sub">${it.z} · ${it.d}</div></div>`;
+  el.onclick=()=>showDetail(it,imgAlpy(n));return el;}
+function cardSimple(it,i){
+  const el=document.createElement('div');
+  el.className='photo-card';
+  el.innerHTML=`<img class="photo" src="${it.img}"><div class="photo-overlay"><div class="photo-title">${it.title}</div></div>`;
+  el.onclick=()=>openNepalModal(i);return el;}
+
+/* Render */
+function renderGallery(el,data,fn){el.innerHTML='';data.forEach((it,i)=>el.appendChild(fn(it,i)));}
 renderGallery(document.getElementById('koruna-gallery'),korunaData,cardKoruna);
 renderGallery(document.getElementById('alpy-gallery'),alpyData,cardAlpy);
 renderGallery(document.getElementById('nepal-gallery'),nepalData,cardSimple);
 
-/* --- Přepínání sekcí --- */
+/* Přepínání sekcí */
 const btns=document.querySelectorAll('.btn');
 const sections=document.querySelectorAll('[data-route-content]');
 function show(route){
