@@ -17,7 +17,7 @@ body {
   color: var(--accent);
   background: var(--dark-blue);
   overflow-x: hidden;
-  scroll-behavior: smooth;
+  scroll-behavior: auto; /* zabrání sjíždění po načtení */
 }
 
 /* === HERO OBRÁZEK === */
@@ -100,7 +100,7 @@ main { padding: 60px 0 80px; }
   background: rgba(0,0,0,0.7);
   display: flex; justify-content: center; align-items: center;
   opacity: 0; pointer-events: none;
-  transition: opacity .25s ease;
+  transition: opacity .35s ease;
   z-index: 9999;
 }
 .modal-backdrop.show { opacity: 1; pointer-events: auto; }
@@ -113,7 +113,6 @@ main { padding: 60px 0 80px; }
   overflow: auto;
   color: white;
   position: relative;
-  transition: transform .3s ease;
 }
 .modal-close {
   position: absolute; right: 16px; top: 16px;
@@ -149,7 +148,6 @@ main { padding: 60px 0 80px; }
 
 footer { text-align: center; color: rgba(255,255,255,0.6); padding: 30px 0; }
 
-/* === RESPONSIVITA === */
 @media(max-width:900px) { .hero-overlay { padding-top: 35vh; } .btn { padding: 12px 18px; font-size: 15px; } }
 @media(max-width:600px) { .hero-overlay { padding-top: 30vh; } .nav { flex-direction: column; gap: 10px; } .btn { width: 180px; text-align: center; } }
 </style>
@@ -175,11 +173,9 @@ footer { text-align: center; color: rgba(255,255,255,0.6); padding: 30px 0; }
     <section id="koruna" data-route-content>
       <div id="koruna-gallery" class="gallery grid-3"></div>
     </section>
-
     <section id="alpy" data-route-content hidden>
       <div id="alpy-gallery" class="gallery grid-3"></div>
     </section>
-
     <section id="nepal" data-route-content hidden>
       <div id="nepal-gallery" class="gallery grid-4"></div>
     </section>
@@ -193,17 +189,16 @@ footer { text-align: center; color: rgba(255,255,255,0.6); padding: 30px 0; }
 <footer>© Vzít batoh na záda a jít ...</footer>
 
 <script>
-/* === NAVIGACE SEKCÍ === */
+/* === NAVIGACE === */
 function setupNavigation(){
   const buttons=document.querySelectorAll('.btn');
   const sections=document.querySelectorAll('[data-route-content]');
   function show(route){
     sections.forEach(s=>s.hidden=(s.id!==route));
     buttons.forEach(b=>b.classList.toggle('active',b.dataset.route===route));
-    history.replaceState(null,'','#'+route);
   }
   buttons.forEach(b=>b.addEventListener('click',()=>show(b.dataset.route)));
-  show(location.hash?location.hash.substring(1):'koruna');
+  show('koruna');
 }
 setupNavigation();
 
@@ -356,12 +351,12 @@ function openModal(html,isFull=false){
   box.classList.toggle('fullscreen',isFull);
   modalContent.innerHTML=html;
   modal.hidden=false;
-  setTimeout(()=>modal.classList.add('show'),10);
+  requestAnimationFrame(()=>modal.classList.add('show'));
   document.body.style.overflow='hidden';
 }
 function closeModal(){
   modal.classList.remove('show');
-  setTimeout(()=>{modal.hidden=true;modalContent.innerHTML='';document.body.style.overflow='';},200);
+  setTimeout(()=>{modal.hidden=true;modalContent.innerHTML='';document.body.style.overflow='';},300);
 }
 modal.onclick=e=>{if(e.target===modal)closeModal();};
 
@@ -369,7 +364,7 @@ modal.onclick=e=>{if(e.target===modal)closeModal();};
 function card(item,imgSrc,onClick){
   const div=document.createElement('div');
   div.className='photo-card';
-  div.innerHTML=`<img class="photo" src="${imgSrc}"><div class="photo-overlay"><div class="photo-title">${item.hora||item.title}</div><div class="photo-sub">${item.z||''} ${item.d?('· '+item.d):''}</div></div>`;
+  div.innerHTML=`<img class="photo" src="${imgSrc}"><div class="photo-overlay"><div class="photo-title">${item.hora||item.title}</div><div class="photo-sub">${item.z||''}${item.d?(' · '+item.d):''}</div></div>`;
   div.onclick=onClick;
   return div;
 }
@@ -382,10 +377,17 @@ function renderAll(){
   koruna.innerHTML=''; alpy.innerHTML=''; nepal.innerHTML='';
 
   korunaData.forEach((it,i)=>koruna.appendChild(card(it,`${RAW}/Koruna/Koruna${String(i+1).padStart(2,'0')}.jpg`,
-    ()=>openModal(`<button class='modal-close' onclick='closeModal()'>✕</button><h3>${it.hora} (${it.v} m)</h3><div>${it.z}</div><div>${it.d||''}</div><img class='main' src='${RAW}/Koruna/Koruna${String(i+1).padStart(2,'0')}.jpg'>`)
+    ()=>openModal(`<button class='modal-close' onclick='closeModal()'>✕</button>
+    <h3>${it.hora} (${it.v} m)</h3>
+    <div>${it.z||''}</div>
+    <div>${it.d||''}</div>
+    <img class='main' src='${RAW}/Koruna/Koruna${String(i+1).padStart(2,'0')}.jpg'>`)
   )));
   alpyData.forEach((it,i)=>alpy.appendChild(card(it,`${RAW}/4000/ctyrtisicovka${String(i+1).padStart(2,'0')}.jpg`,
-    ()=>openModal(`<button class='modal-close' onclick='closeModal()'>✕</button><h3>${it.hora} (${it.v} m)</h3><div>${it.z}</div><img class='main' src='${RAW}/4000/ctyrtisicovka${String(i+1).padStart(2,'0')}.jpg'>`)
+    ()=>openModal(`<button class='modal-close' onclick='closeModal()'>✕</button>
+    <h3>${it.hora} (${it.v} m)</h3>
+    <div>${it.z||''}</div>
+    <img class='main' src='${RAW}/4000/ctyrtisicovka${String(i+1).padStart(2,'0')}.jpg'>`)
   )));
   nepalData.forEach((it,i)=>nepal.appendChild(card(it,it.img,()=>openNepalModal(i))));
 }
@@ -395,7 +397,11 @@ renderAll();
 let nepalIndex=0;
 function openNepalModal(i){
   nepalIndex=i;
-  openModal(`<button class="nav-arrow left" id="nav-left">❮</button><button class="nav-arrow right" id="nav-right">❯</button><h3 id="nepal-title"></h3><button class="modal-close" id="modal-close">✕</button><img class="main" id="nepal-main" src="">`,true);
+  openModal(`<button class="nav-arrow left" id="nav-left">❮</button>
+    <button class="nav-arrow right" id="nav-right">❯</button>
+    <h3 id="nepal-title"></h3>
+    <button class="modal-close" id="modal-close">✕</button>
+    <img class="main" id="nepal-main" src="">`,true);
   document.getElementById('modal-close').onclick=closeModal;
   document.getElementById('nav-left').onclick=e=>{e.stopPropagation();changeNepal(-1);};
   document.getElementById('nav-right').onclick=e=>{e.stopPropagation();changeNepal(1);};
