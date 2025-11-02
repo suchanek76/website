@@ -373,11 +373,11 @@ function showDetail(data, i, imgFn) {
 
   openModal(`
     <button class="modal-close" onclick="closeModal()">✕</button>
-    <h3>${it.p}/${data.length} – ${it.hora} ${it.v ? `${it.v} m` : ""}</h3>
-    <hr>
+    <h3 style="margin-bottom:6px;">${it.p}/${data.length} – ${it.hora} ${it.v ? `${it.v} m` : ""}</h3>
+    <hr style="margin:10px 0 14px 0; border:none; border-top:1px solid rgba(255,255,255,0.15);">
     ${info}
-    <img class="main" src="${imgFn(i + 1)}" alt="${it.hora}">
-    <div class="meta" style="margin-top:12px;text-align:justify;">
+    <img class="main" src="${imgFn(i + 1)}" alt="${it.hora}" style="margin:10px 0 6px 0;">
+    <div class="meta" style="margin-top:6px; line-height:1.5; text-align:justify;">
       ${povidaniText}
     </div>
   `);
