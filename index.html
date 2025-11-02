@@ -6,7 +6,6 @@
 <title>Vzít batoh na záda a jít ...</title>
 
 <style>
-/* === ZÁKLADNÍ NASTAVENÍ === */
 :root {
   --dark-blue: #041633;
   --accent: #ffffff;
@@ -32,6 +31,7 @@ body {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  object-position: center;
 }
 .hero-overlay {
   position: absolute;
@@ -61,22 +61,6 @@ body {
 }
 .btn:hover { background: rgba(255,255,255,0.3); transform: scale(1.04); }
 .btn.active { background: #fff; color: var(--dark-blue); }
-
-/* === STICKY NAVIGACE === */
-.sticky-nav {
-  position: fixed;
-  top: 0; left: 0; right: 0;
-  background: rgba(4,22,51,0.9);
-  backdrop-filter: blur(6px);
-  padding: 10px 0;
-  display: flex;
-  justify-content: center;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.3);
-  transform: translateY(-100%);
-  transition: transform 0.4s ease;
-  z-index: 999;
-}
-.sticky-nav.show { transform: translateY(0); }
 
 /* === GALERIE === */
 main { padding: 60px 0 80px; }
@@ -116,7 +100,7 @@ main { padding: 60px 0 80px; }
   background: rgba(0,0,0,0.7);
   display: flex; justify-content: center; align-items: center;
   opacity: 0; pointer-events: none;
-  transition: opacity .2s;
+  transition: opacity .25s ease;
   z-index: 9999;
 }
 .modal-backdrop.show { opacity: 1; pointer-events: auto; }
@@ -129,6 +113,7 @@ main { padding: 60px 0 80px; }
   overflow: auto;
   color: white;
   position: relative;
+  transition: transform .3s ease;
 }
 .modal-close {
   position: absolute; right: 16px; top: 16px;
@@ -172,7 +157,6 @@ footer { text-align: center; color: rgba(255,255,255,0.6); padding: 30px 0; }
 
 <body>
 
-<!-- === HERO OBRÁZEK + TLAČÍTKA === -->
 <header class="hero">
   <div class="hero-bg">
     <img src="https://raw.githubusercontent.com/suchanek76/website/main/images/background.jpg" alt="background">
@@ -186,19 +170,8 @@ footer { text-align: center; color: rgba(255,255,255,0.6); padding: 30px 0; }
   </div>
 </header>
 
-<!-- === STICKY NAVIGACE (po scrollu) === -->
-<div class="sticky-nav" id="sticky-nav">
-  <div class="nav">
-    <button class="btn active" data-route="koruna">Koruna Evropy</button>
-    <button class="btn" data-route="alpy">Alpské čtyřtisícovky</button>
-    <button class="btn" data-route="nepal">Nepál</button>
-  </div>
-</div>
-
-<!-- === GALERIE === -->
 <main>
   <div class="container">
-
     <section id="koruna" data-route-content>
       <div id="koruna-gallery" class="gallery grid-3"></div>
     </section>
@@ -210,11 +183,9 @@ footer { text-align: center; color: rgba(255,255,255,0.6); padding: 30px 0; }
     <section id="nepal" data-route-content hidden>
       <div id="nepal-gallery" class="gallery grid-4"></div>
     </section>
-
   </div>
 </main>
 
-<!-- === MODAL OKNO === -->
 <div id="modal-backdrop" class="modal-backdrop" hidden>
   <div class="modal"><div id="modal-content"></div></div>
 </div>
@@ -222,30 +193,20 @@ footer { text-align: center; color: rgba(255,255,255,0.6); padding: 30px 0; }
 <footer>© Vzít batoh na záda a jít ...</footer>
 
 <script>
-/* === STICKY NAV === */
-const stickyNav = document.getElementById('sticky-nav');
-window.addEventListener('scroll',()=>{
-  stickyNav.classList.toggle('show', window.scrollY > window.innerHeight * 0.6);
-});
-
 /* === NAVIGACE SEKCÍ === */
 function setupNavigation(){
-  const buttons = document.querySelectorAll('.btn');
-  const sections = document.querySelectorAll('[data-route-content]');
-  
+  const buttons=document.querySelectorAll('.btn');
+  const sections=document.querySelectorAll('[data-route-content]');
   function show(route){
-    sections.forEach(s => s.hidden = (s.id !== route));
-    buttons.forEach(b => b.classList.toggle('active', b.dataset.route === route));
+    sections.forEach(s=>s.hidden=(s.id!==route));
+    buttons.forEach(b=>b.classList.toggle('active',b.dataset.route===route));
     history.replaceState(null,'','#'+route);
-    const sec = document.getElementById(route);
-    if(sec) sec.scrollIntoView({behavior:"smooth"});
   }
-  
-  buttons.forEach(b => b.addEventListener('click', ()=> show(b.dataset.route)));
-  window.addEventListener('popstate',()=> show(location.hash.substring(1) || 'koruna'));
-  show(location.hash ? location.hash.substring(1) : 'koruna');
+  buttons.forEach(b=>b.addEventListener('click',()=>show(b.dataset.route)));
+  show(location.hash?location.hash.substring(1):'koruna');
 }
 setupNavigation();
+
 
 /* === DATA === */
 const RAW="https://raw.githubusercontent.com/suchanek76/website/main/images";
@@ -384,8 +345,8 @@ const alpyData = [
 ];
 
 /* ---------- Data: Nepál ---------- */
-const imgNepal = i => `${RAW}/Nepal/Nepal${String(i).padStart(2,'0')}.jpg`;
-const nepalData = Array.from({length:20},(_,i)=>({title:`Nepál ${i+1}`,img:imgNepal(i+1)}));
+const imgNepal=i=>`${RAW}/Nepal/Nepal${String(i).padStart(2,'0')}.jpg`;
+const nepalData=Array.from({length:20},(_,i)=>({title:`Nepál ${i+1}`,img:imgNepal(i+1)}));
 
 /* === MODAL === */
 const modal=document.getElementById('modal-backdrop');
@@ -408,76 +369,65 @@ modal.onclick=e=>{if(e.target===modal)closeModal();};
 function card(item,imgSrc,onClick){
   const div=document.createElement('div');
   div.className='photo-card';
-  div.innerHTML=`
-    <img class="photo" src="${imgSrc}">
-    <div class="photo-overlay">
-      <div class="photo-title">${item.hora||item.title}</div>
-      <div class="photo-sub">${item.z||''} ${item.d?('· '+item.d):''}</div>
-    </div>`;
+  div.innerHTML=`<img class="photo" src="${imgSrc}"><div class="photo-overlay"><div class="photo-title">${item.hora||item.title}</div><div class="photo-sub">${item.z||''} ${item.d?('· '+item.d):''}</div></div>`;
   div.onclick=onClick;
   return div;
 }
 
-/* === RENDER GALERIÍ === */
+/* === RENDER === */
 function renderAll(){
-  const korunaGallery=document.getElementById('koruna-gallery');
-  const alpyGallery=document.getElementById('alpy-gallery');
-  const nepalGallery=document.getElementById('nepal-gallery');
+  const koruna=document.getElementById('koruna-gallery');
+  const alpy=document.getElementById('alpy-gallery');
+  const nepal=document.getElementById('nepal-gallery');
+  koruna.innerHTML=''; alpy.innerHTML=''; nepal.innerHTML='';
 
-  korunaGallery.innerHTML='';
-  alpyGallery.innerHTML='';
-  nepalGallery.innerHTML='';
-
-  korunaData.forEach((it,i)=>korunaGallery.appendChild(
-    card(it,`${RAW}/Koruna/Koruna${String(i+1).padStart(2,'0')}.jpg`,()=>openModal(`
-      <button class='modal-close' onclick='closeModal()'>✕</button>
-      <h3>${it.hora} (${it.v} m)</h3>
-      <div class='meta'>${it.z}</div>
-      <div class='meta'>${it.d||''}</div>
-      <img class='main' src='${RAW}/Koruna/Koruna${String(i+1).padStart(2,'0')}.jpg'>
-    `))
-  ));
-
-  alpyData.forEach((it,i)=>alpyGallery.appendChild(
-    card(it,`${RAW}/4000/ctyrtisicovka${String(i+1).padStart(2,'0')}.jpg`,()=>openModal(`
-      <button class='modal-close' onclick='closeModal()'>✕</button>
-      <h3>${it.hora} (${it.v} m)</h3>
-      <div class='meta'>${it.z}</div>
-      <div class='meta'>${it.d||''}</div>
-      <img class='main' src='${RAW}/4000/ctyrtisicovka${String(i+1).padStart(2,'0')}.jpg'>
-    `))
-  ));
-
-  nepalData.forEach((it,i)=>nepalGallery.appendChild(
-    card(it,it.img,()=>openNepalModal(i))
-  ));
+  korunaData.forEach((it,i)=>koruna.appendChild(card(it,`${RAW}/Koruna/Koruna${String(i+1).padStart(2,'0')}.jpg`,
+    ()=>openModal(`<button class='modal-close' onclick='closeModal()'>✕</button><h3>${it.hora} (${it.v} m)</h3><div>${it.z}</div><div>${it.d||''}</div><img class='main' src='${RAW}/Koruna/Koruna${String(i+1).padStart(2,'0')}.jpg'>`)
+  )));
+  alpyData.forEach((it,i)=>alpy.appendChild(card(it,`${RAW}/4000/ctyrtisicovka${String(i+1).padStart(2,'0')}.jpg`,
+    ()=>openModal(`<button class='modal-close' onclick='closeModal()'>✕</button><h3>${it.hora} (${it.v} m)</h3><div>${it.z}</div><img class='main' src='${RAW}/4000/ctyrtisicovka${String(i+1).padStart(2,'0')}.jpg'>`)
+  )));
+  nepalData.forEach((it,i)=>nepal.appendChild(card(it,it.img,()=>openNepalModal(i))));
 }
 renderAll();
 
-/* === NEPÁL FULLSCREEN MODAL === */
+/* === NEPÁL FULLSCREEN === */
 let nepalIndex=0;
 function openNepalModal(i){
   nepalIndex=i;
-  openModal(`
-    <button class="nav-arrow left" id="nav-left">❮</button>
-    <button class="nav-arrow right" id="nav-right">❯</button>
-    <h3 id="nepal-title"></h3>
-    <button class="modal-close" id="modal-close">✕</button>
-    <img class="main" id="nepal-main" src="">
-  `,true);
+  openModal(`<button class="nav-arrow left" id="nav-left">❮</button><button class="nav-arrow right" id="nav-right">❯</button><h3 id="nepal-title"></h3><button class="modal-close" id="modal-close">✕</button><img class="main" id="nepal-main" src="">`,true);
   document.getElementById('modal-close').onclick=closeModal;
   document.getElementById('nav-left').onclick=e=>{e.stopPropagation();changeNepal(-1);};
   document.getElementById('nav-right').onclick=e=>{e.stopPropagation();changeNepal(1);};
   updateNepalModal();
 }
-function changeNepal(dir){
-  nepalIndex=(nepalIndex+dir+nepalData.length)%nepalData.length;
-  updateNepalModal();
-}
+function changeNepal(dir){nepalIndex=(nepalIndex+dir+nepalData.length)%nepalData.length;updateNepalModal();}
 function updateNepalModal(){
   const it=nepalData[nepalIndex];
   document.getElementById('nepal-main').src=it.img;
   document.getElementById('nepal-title').textContent=`${it.title} (${nepalIndex+1}/${nepalData.length})`;
+}
+
+/* === SWIPE GESTA === */
+let touchStartX=0,touchEndX=0,touchStartY=0,touchEndY=0;
+document.addEventListener("touchstart",e=>{
+  touchStartX=e.changedTouches[0].screenX;
+  touchStartY=e.changedTouches[0].screenY;
+},false);
+document.addEventListener("touchend",e=>{
+  touchEndX=e.changedTouches[0].screenX;
+  touchEndY=e.changedTouches[0].screenY;
+  handleGesture();
+},false);
+function handleGesture(){
+  if(!modal.classList.contains("show"))return;
+  const dx=touchEndX-touchStartX;
+  const dy=touchEndY-touchStartY;
+  if(Math.abs(dx)>Math.abs(dy)){
+    if(Math.abs(dx)>50){dx>0?changeNepal(-1):changeNepal(1);}
+  }else{
+    if(Math.abs(dy)>60){closeModal();}
+  }
 }
 </script>
 
