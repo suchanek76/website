@@ -105,7 +105,7 @@ main{
 .modal-backdrop.show{opacity:1;pointer-events:auto;}
 .modal{
   width:100%;max-width:980px;max-height:92vh;background:#071431;
-  border-radius:10px;padding:18px;color:#fff;overflow:auto;position:relative;
+  border-radius:10px;padding:22px 24px;color:#fff;overflow:auto;position:relative;
 }
 .modal-close{
   position:absolute;right:16px;top:16px;background:none;border:none;
@@ -114,27 +114,41 @@ main{
 .modal h3 {
   font-size: 20px;
   font-weight: 700;
-  margin-bottom: 6px;
+  margin-bottom: 8px;
   text-align: left;
   color: #fff;
 }
-.modal .meta {
-  font-size: 14px;
-  opacity: .95;
-  margin-bottom: 6px;
-  line-height: 1.4;
-}
 .modal hr {
-  margin: 10px 0 14px 0;
+  margin: 10px 0 16px 0;
   border: none;
   border-top: 1px solid rgba(255, 255, 255, 0.15);
+}
+.modal .meta-grid {
+  display: grid;
+  grid-template-columns: 150px 1fr;
+  gap: 4px 10px;
+  font-size: 14px;
+  opacity: 0.95;
+  margin-bottom: 10px;
+  line-height: 1.4;
+}
+.modal .meta-grid div:first-child {
+  font-weight: 600;
+  color: #d8e2ff;
 }
 .modal img.main{
   width:100%;
   aspect-ratio:3/2;
   border-radius:8px;
   object-fit:cover;
-  margin:12px 0;
+  margin:14px 0;
+}
+.modal .povidani {
+  font-size: 14px;
+  opacity: .95;
+  margin-top: 4px;
+  line-height: 1.5;
+  text-align: justify;
 }
 footer{text-align:center;color:rgba(255,255,255,0.6);padding:30px 0;}
 
@@ -167,11 +181,13 @@ footer{text-align:center;color:rgba(255,255,255,0.6);padding:30px 0;}
 @media(max-width:900px){
   .hero-overlay{padding-top:35vh;}
   .btn{padding:12px 18px;font-size:15px;}
+  .modal .meta-grid{grid-template-columns:120px 1fr;}
 }
 @media(max-width:600px){
   .hero-overlay{padding-top:30vh;}
   .nav{flex-direction:column;gap:10px;}
   .btn{width:180px;text-align:center;}
+  .modal .meta-grid{grid-template-columns:100px 1fr;}
 }
 </style>
 </head>
@@ -379,24 +395,22 @@ function showDetail(data, i, imgFn) {
     ? it.povidani 
     : "Popis výstupu bude ještě doplněn";
 
-  const info = `
-    ${it.z ? `<div class="meta"><strong>Země:</strong> ${it.z}</div>` : ""}
-    ${it.d ? `<div class="meta"><strong>Datum výstupu:</strong> ${it.d}</div>` : ""}
-    ${it.cas ? `<div class="meta"><strong>Čas výstupu:</strong> ${it.cas}</div>` : ""}
-    ${it.team ? `<div class="meta"><strong>Tým:</strong> ${it.team}</div>` : ""}
-    ${it.obt ? `<div class="meta"><strong>Obtížnost:</strong> ${it.obt}</div>` : ""}
-    ${it.pohori ? `<div class="meta"><strong>Pohoří:</strong> ${it.pohori}</div>` : ""}
+  const meta = `
+    ${it.z ? `<div>Země:</div><div>${it.z}</div>` : ""}
+    ${it.d ? `<div>Datum výstupu:</div><div>${it.d}</div>` : ""}
+    ${it.cas ? `<div>Čas výstupu:</div><div>${it.cas}</div>` : ""}
+    ${it.team ? `<div>Tým:</div><div>${it.team}</div>` : ""}
+    ${it.obt ? `<div>Obtížnost:</div><div>${it.obt}</div>` : ""}
+    ${it.pohori ? `<div>Pohoří:</div><div>${it.pohori}</div>` : ""}
   `;
 
   openModal(`
     <button class="modal-close" onclick="closeModal()">✕</button>
-    <h3 style="margin-bottom:6px;">${it.p}/${data.length} – ${it.hora} ${it.v ? `${it.v} m` : ""}</h3>
-    <hr style="margin:10px 0 14px 0; border:none; border-top:1px solid rgba(255,255,255,0.15);">
-    ${info}
-    <img class="main" src="${imgFn(i + 1)}" alt="${it.hora}" style="margin:10px 0 6px 0;">
-    <div class="meta" style="margin-top:6px; line-height:1.5; text-align:justify;">
-      ${povidaniText}
-    </div>
+    <h3>${it.p}/${data.length} – ${it.hora} ${it.v ? `${it.v} m` : ""}</h3>
+    <hr>
+    <div class="meta-grid">${meta}</div>
+    <img class="main" src="${imgFn(i + 1)}" alt="${it.hora}">
+    <div class="povidani">${povidaniText}</div>
   `);
 }
 
