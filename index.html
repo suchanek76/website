@@ -397,14 +397,14 @@ function showDetail(data, i, imgFn) {
     ? it.povidani 
     : "Popis výstupu bude ještě doplněn";
 
-  const meta = `
-    ${it.z ? `<div>Země:</div><div>${it.z}</div>` : ""}
-    ${it.d ? `<div>Datum výstupu:</div><div>${it.d}</div>` : ""}
-    ${it.cas ? `<div>Čas výstupu:</div><div>${it.cas}</div>` : ""}
-    ${it.team ? `<div>Tým:</div><div>${it.team}</div>` : ""}
-    ${it.obt ? `<div>Obtížnost:</div><div>${it.obt}</div>` : ""}
-    ${it.pohori ? `<div>Pohoří:</div><div>${it.pohori}</div>` : ""}
-  `;
+  const meta = [
+  it.z ? `<div>Země:</div><div>${it.z}</div>` : "",
+  it.d ? `<div>Datum výstupu:</div><div>${it.d}</div>` : "",
+  it.cas ? `<div>Čas výstupu:</div><div>${it.cas}</div>` : "",
+  it.team ? `<div>Tým:</div><div>${it.team}</div>` : "",
+  it.obt ? `<div>Obtížnost:</div><div>${it.obt}</div>` : "",
+  it.pohori ? `<div>Pohoří:</div><div>${it.pohori}</div>` : ""
+].join("");
 
   openModal(`
     <button class="modal-close" onclick="closeModal()">✕</button>
