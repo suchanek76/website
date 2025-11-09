@@ -497,26 +497,29 @@ document.addEventListener("keydown",e=>{
 });
 
 /* --- Galerie render --- */
-function renderGallery(el,data,fn){
-  el.innerHTML='';
-  data.forEach((it,i)=>el.appendChild(fn(it,i)));
-}
-renderGallery(document.getElementById("koruna-gallery"),korunaData,cardKoruna);
-renderGallery(document.getElementById("alpy-gallery"),alpyData,cardAlpy);
-renderGallery(document.getElementById("nepal-gallery"),nepalData,cardSimple);
+document.addEventListener("DOMContentLoaded", () => {
+  function renderGallery(el, data, fn) {
+    el.innerHTML = "";
+    data.forEach((it, i) => el.appendChild(fn(it, i)));
+  }
 
-/* --- Navigace --- */
-const btns=document.querySelectorAll(".btn");
-const sections=document.querySelectorAll("[data-route-content]");
-function show(route){
-  sections.forEach(s=>s.hidden=(s.id!==route));
-  btns.forEach(b=>b.classList.toggle("active",b.dataset.route===route));
-  history.replaceState(null,'','#'+route);
-  window.scrollTo({top:0,left:0,behavior:"instant"});
-}
-btns.forEach(b=>b.addEventListener("click",()=>show(b.dataset.route)));
-window.addEventListener("popstate",()=>show(location.hash.substring(1)||"koruna"));
-show(location.hash?location.hash.substring(1):"koruna");
+  renderGallery(document.getElementById("koruna-gallery"), korunaData, cardKoruna);
+  renderGallery(document.getElementById("alpy-gallery"), alpyData, cardAlpy);
+  renderGallery(document.getElementById("nepal-gallery"), nepalData, cardSimple);
+
+  /* --- Navigace --- */
+  const btns = document.querySelectorAll(".btn");
+  const sections = document.querySelectorAll("[data-route-content]");
+  function show(route) {
+    sections.forEach(s => s.hidden = (s.id !== route));
+    btns.forEach(b => b.classList.toggle("active", b.dataset.route === route));
+    history.replaceState(null, "", "#" + route);
+    window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+  }
+  btns.forEach(b => b.addEventListener("click", () => show(b.dataset.route)));
+  window.addEventListener("popstate", () => show(location.hash.substring(1) || "koruna"));
+  show(location.hash ? location.hash.substring(1) : "koruna");
+});
 
 </script>
 </body>
