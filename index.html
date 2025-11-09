@@ -3,17 +3,18 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Vzít batoh na záda a jít...</title>
+<title>Vzít batoh na záda a jít ...</title>
 <style>
 :root {
-  --dark-blue:#041633;
-  --accent:#fff;
+  --dark-blue: #041633;
+  --accent: #ffffff;
+  --max-width: 1200px;
 }
 *{box-sizing:border-box;margin:0;padding:0;}
-body{
-  font-family:Inter,system-ui,Arial;
-  background:var(--dark-blue);
+html,body{
+  font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,Arial;
   color:var(--accent);
+  background:var(--dark-blue);
   overflow-x:hidden;
   scroll-behavior:auto!important;
 }
@@ -23,7 +24,17 @@ body{
   position:relative;
   width:100%;
   height:100vh;
+  background:var(--dark-blue);
   overflow:hidden;
+}
+.hero-bg{
+  position:absolute;
+  inset:0;
+  z-index:0;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  background-color:#041633;
 }
 .hero-bg img{
   width:100%;
@@ -34,33 +45,38 @@ body{
 .hero-overlay{
   position:absolute;
   inset:0;
+  z-index:2;
   display:flex;
-  justify-content:center;
   align-items:flex-start;
+  justify-content:center;
   padding-top:40vh;
 }
 .nav{
   display:flex;
+  gap:14px;
   flex-wrap:wrap;
-  gap:12px;
   justify-content:center;
 }
 .btn{
-  background:rgba(255,255,255,0.1);
-  border:1px solid rgba(255,255,255,0.3);
-  padding:12px 20px;
-  border-radius:8px;
+  background:rgba(255,255,255,0.12);
+  border:1px solid rgba(255,255,255,0.25);
+  padding:14px 22px;
   color:white;
+  border-radius:8px;
   font-weight:600;
   cursor:pointer;
-  transition:all .2s;
+  transition:background .25s,transform .2s;
 }
-.btn:hover{background:rgba(255,255,255,0.3);}
-.btn.active{background:white;color:var(--dark-blue);}
+.btn:hover{background:rgba(255,255,255,0.3);transform:scale(1.04);}
+.btn.active{background:#fff;color:var(--dark-blue);}
 
 /* Galerie */
-main{padding:60px 0 80px;}
-.container{width:95%;max-width:1200px;margin:auto;}
+main{
+  position:relative;
+  z-index:3;
+  padding:60px 0 80px;
+}
+.container{width:95%;max-width:var(--max-width);margin:0 auto;}
 .gallery{display:grid;gap:16px;}
 .grid-3{grid-template-columns:repeat(3,1fr);}
 .grid-4{grid-template-columns:repeat(4,1fr);}
@@ -68,75 +84,134 @@ main{padding:60px 0 80px;}
 @media(max-width:600px){.grid-3,.grid-4{grid-template-columns:1fr;}}
 
 /* Karty */
-.photo-card{position:relative;overflow:hidden;border-radius:10px;cursor:pointer;}
-.photo-card img{width:100%;aspect-ratio:3/2;object-fit:cover;transition:transform .3s;}
-.photo-card:hover img{transform:scale(1.04);}
+.photo-card{position:relative;overflow:hidden;border-radius:10px;cursor:pointer;background:#000;}
+.photo-card img.photo{width:100%;aspect-ratio:3/2;object-fit:cover;transition:transform .35s ease;}
+.photo-card:hover img.photo{transform:scale(1.04);}
 .photo-overlay{
-  position:absolute;bottom:0;left:0;right:0;
+  position:absolute;left:0;right:0;bottom:0;padding:10px;
   background:linear-gradient(to top,rgba(0,0,0,0.7),rgba(0,0,0,0));
-  padding:10px;
+  color:#fff;
 }
-.photo-title{font-weight:700;font-size:14px;}
-.photo-sub{font-size:12px;opacity:0.85;}
+.photo-title{font-weight:700;font-size:14px;margin:0;}
+.photo-sub{font-size:12px;opacity:0.9;margin-top:3px;}
 
-/* Fullscreen modal */
+/* Modal */
 .modal-backdrop{
-  position:fixed;inset:0;background:rgba(0,0,0,0.9);
-  display:flex;justify-content:center;align-items:center;
-  z-index:10000;padding:24px;
-  opacity:0;pointer-events:none;transition:opacity .25s;
+  position:fixed;inset:0;background:rgba(0,0,0,0.7);
+  display:flex;align-items:center;justify-content:center;
+  z-index:9999;padding:24px;
+  opacity:0;pointer-events:none;transition:opacity .18s;
 }
 .modal-backdrop.show{opacity:1;pointer-events:auto;}
 .modal{
-  position:relative;
-  width:100%;height:100%;
-  display:flex;align-items:center;justify-content:center;
-  flex-direction:column;
-  text-align:center;
+  width:100%;max-width:980px;max-height:92vh;background:#071431;
+  border-radius:10px;padding:22px 24px;color:#fff;overflow:auto;position:relative;
 }
-.modal img{
-  max-width:95vw;max-height:75vh;
-  object-fit:contain;
-  border-radius:10px;
-  opacity:0;transition:opacity .3s;
-}
-.modal img.show{opacity:1;}
-.modal h3{
-  position:absolute;top:20px;left:30px;
-  font-size:20px;font-weight:700;
-  text-shadow:0 2px 5px rgba(0,0,0,0.8);
-}
-.modal-info{
-  max-width:800px;
-  margin-top:18px;
-  text-align:left;
-  font-size:14px;
-  color:rgba(255,255,255,0.9);
-  line-height:1.6;
-}
-.modal-info strong{color:white;}
 .modal-close{
-  position:absolute;top:18px;right:24px;
-  background:none;border:none;color:white;
-  font-size:30px;cursor:pointer;
+  position:absolute;right:16px;top:16px;background:none;border:none;
+  color:white;font-size:22px;cursor:pointer;
 }
-.nav-arrow{
-  position:absolute;top:50%;
-  transform:translateY(-50%);
-  background:none;border:none;color:white;
-  font-size:40px;cursor:pointer;opacity:.6;
-  transition:opacity .2s;
+.modal h3 {
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 8px;
+  text-align: left;
+  color: #fff;
 }
-.nav-arrow:hover{opacity:1;}
-.nav-arrow.left{left:20px;}
-.nav-arrow.right{right:20px;}
+.modal hr {
+  margin: 10px 0 16px 0;
+  border: none;
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+/* meta grid */
+.modal .meta-grid {
+  display: grid;
+  grid-template-columns: 150px 1fr;
+  gap: 4px 10px;
+  font-size: 14px;
+  opacity: 0.95;
+  margin-bottom: 10px;
+  line-height: 1.4;
+}
+.modal .meta-grid div:first-child {
+  font-weight: 600;
+  color: #d8e2ff;
+}
+
+/* obrázková mřížka v modálu (2–6 fotek) */
+.modal .img-grid{
+  display:grid;
+  gap:10px;
+  grid-template-columns: repeat(2, 1fr);
+}
+.modal .img-grid .grid-img{
+  width:100%;
+  aspect-ratio:3/2;
+  object-fit:cover;
+  border-radius:8px;
+  display:block;
+}
+@media(min-width:820px){
+  .modal .img-grid{
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.modal .povidani {
+  font-size: 14px;
+  opacity: .95;
+  margin-top: 6px;
+  line-height: 1.5;
+  text-align: justify;
+}
 footer{text-align:center;color:rgba(255,255,255,0.6);padding:30px 0;}
+
+/* Fullscreen modal (Nepál) */
+.modal.fullscreen{
+  background:#000;max-width:none;max-height:none;width:100%;height:100%;
+  padding:0;display:flex;align-items:center;justify-content:center;
+}
+.modal.fullscreen img.main{
+  max-height:90vh;max-width:95vw;object-fit:contain;border-radius:10px;margin:0 auto;display:block;
+}
+.modal.fullscreen h3{
+  position:absolute;top:20px;left:30px;color:white;text-shadow:0 2px 5px rgba(0,0,0,0.8);
+}
+.modal.fullscreen .modal-close{
+  position:absolute;top:18px;right:24px;font-size:30px;background:none;border:none;color:white;cursor:pointer;z-index:10;
+}
+.modal.fullscreen .nav-arrow{
+  background:none;border:none;color:white;font-size:40px;cursor:pointer;
+  position:absolute;top:50%;transform:translateY(-50%);padding:20px;opacity:0.6;transition:opacity .2s;
+}
+.modal.fullscreen .nav-arrow:hover{opacity:1;}
+.modal.fullscreen .nav-arrow.left{left:20px;}
+.modal.fullscreen .nav-arrow.right{right:20px;}
+
+/* Fade efekt */
+.fade { opacity:0; transition:opacity .4s ease; }
+.fade.show { opacity:1; }
+
+@media(max-width:900px){
+  .hero-overlay{padding-top:35vh;}
+  .btn{padding:12px 18px;font-size:15px;}
+  .modal .meta-grid{grid-template-columns:120px 1fr;}
+}
+@media(max-width:600px){
+  .hero-overlay{padding-top:30vh;}
+  .nav{flex-direction:column;gap:10px;}
+  .btn{width:180px;text-align:center;}
+  .modal .meta-grid{grid-template-columns:100px 1fr;}
+}
 </style>
 </head>
 <body>
 
 <header class="hero">
-  <div class="hero-bg"><img src="https://raw.githubusercontent.com/suchanek76/website/main/images/background.jpg" alt=""></div>
+  <div class="hero-bg">
+    <img src="https://raw.githubusercontent.com/suchanek76/website/main/images/background.jpg" alt="background">
+  </div>
   <div class="hero-overlay">
     <div class="nav">
       <button class="btn active" data-route="koruna">Koruna Evropy</button>
@@ -160,19 +235,13 @@ footer{text-align:center;color:rgba(255,255,255,0.6);padding:30px 0;}
   </div>
 </main>
 
-<!-- 🔹 přidáno info box -->
 <div id="modal-backdrop" class="modal-backdrop" hidden>
   <div class="modal">
-    <button class="nav-arrow left" id="nav-left">❮</button>
-    <button class="nav-arrow right" id="nav-right">❯</button>
-    <h3 id="modal-title"></h3>
-    <button class="modal-close" id="modal-close">✕</button>
-    <img id="modal-img" src="">
-    <div id="modal-info" class="modal-info"></div>
+    <div id="modal-content"></div>
   </div>
 </div>
 
-<footer>© Vzít batoh na záda a jít...</footer>
+<footer>© Vzít batoh na záda a jít ...</footer>
 
 <script>
 const RAW="https://raw.githubusercontent.com/suchanek76/website/main/images";
@@ -180,7 +249,8 @@ const imgKoruna=i=>`${RAW}/Koruna/Koruna${String(i).padStart(2,'0')}.jpg`;
 const imgAlpy=i=>`${RAW}/4000/ctyrtisicovka${String(i).padStart(2,'0')}.jpg`;
 const imgNepal=i=>`${RAW}/Nepal/Nepal${String(i).padStart(2,'0')}.jpg`;
 
-/* ---------- Data: Koruna Evropy ---------- */
+/* ---------- Data: Koruna Evropy ----------
+   (ponecháno jako dřív, můžeš doplňovat imgs:[…] kde chceš) */
 const korunaData = [
 {p:"1",hora:"Mont Blanc",v:"4807",z:"Francie / Itálie",d:"31. 8. 2007",cas:"7:09",team:"1. Karel, Duštič, 2. Mrňous, Radka, Petr Moravec",obt:"B",pohori:"Mont Blank",imgs:[1,2,3,4],povidani:"Popis výstupu bude ještě doplněn"},
 {p:"2",hora:"Dufourspitze",v:"4634",z:"Švýcarsko",d:"",cas:"",team:"",obt:"",pohori:"Monte Rosa",imgs:[5,6],povidani:"Popis výstupu bude ještě doplněn"},
@@ -227,7 +297,8 @@ const korunaData = [
 {p:"43",hora:"Vatikánské zahrady",v:"75",z:"Vatikán",imgs:[69],povidani:"Popis výstupu bude ještě doplněn"}
 ];
 
-/* ---------- Data: Alpy 4000 ---------- */
+/* ---------- Data: Alpy 4000 ----------
+   (verze s imgs:[…] připravená pro 2–6 fotek; můžeš libovolně doplňovat) */
 const alpyData = [
 {p:"1",hora:"Mont Blanc",v:"4 807",z:"Francie / Itálie",d:"31. 8. 2007",cas:"7:09",team:"1. Karel, Duštič,    2. Mrňous, Radka, Petr Moravec",obt:"B",pohori:"Mont Blank",imgs:[1,2,3,4],povidani:""},
 {p:"2",hora:"Mont Blanc di Courmayeur",v:"4 765",z:"Itálie",obt:"B+",pohori:"Mont Blank",imgs:[5,6],povidani:""},
@@ -313,32 +384,96 @@ const alpyData = [
 {p:"82",hora:"Les Droites",v:"4 000",z:"Francie",obt:"C",pohori:"Aiguille Verte",imgs:[120],povidani:""}
 ];
 
-/* ---------- Data: Nepál ---------- */
+/* --- Modal funkce --- */
+const modal=document.getElementById('modal-backdrop');
+const modalContent=document.getElementById('modal-content');
+
+function closeModal(){
+  modal.classList.remove('show');
+  modal.querySelector('.modal').classList.remove('fullscreen');
+  setTimeout(()=>{modal.hidden=true;modalContent.innerHTML='';document.body.style.overflow='';},180);
+}
+function openModal(html,isFullscreen=false){
+  const box=modal.querySelector('.modal');
+  box.classList.toggle('fullscreen',isFullscreen);
+  modalContent.innerHTML=html;
+  modal.hidden=false;
+  requestAnimationFrame(()=>{modal.classList.add('show');document.body.style.overflow='hidden';});
+}
+modal.addEventListener('click',e=>{if(e.target===modal)closeModal();});
+
+/* --- Detail: Koruna / Alpy (více fotek do mřížky) --- */
+function buildImgGrid(imgFn, nums, alt){
+  const safe = (Array.isArray(nums) && nums.length ? nums : []).slice(0,6);
+  if(!safe.length) return `<div class="img-grid"><img class="grid-img" src="${imgFn(1)}" alt="${alt}" loading="lazy"></div>`;
+  const items = safe.map(n=>`<img class="grid-img" src="${imgFn(n)}" alt="${alt}" loading="lazy">`).join('');
+  return `<div class="img-grid">${items}</div>`;
+}
+function showDetail(data, i, imgFn) {
+  const it = data[i];
+  const povidaniText = it.povidani && it.povidani.trim() !== "" ? it.povidani : "Popis výstupu bude ještě doplněn";
+  const meta = `
+    ${it.z ? `<div>Země:</div><div>${it.z}</div>` : ""}
+    ${it.d ? `<div>Datum výstupu:</div><div>${it.d}</div>` : ""}
+    ${it.cas ? `<div>Čas výstupu:</div><div>${it.cas}</div>` : ""}
+    ${it.team ? `<div>Tým:</div><div>${it.team}</div>` : ""}
+    ${it.obt ? `<div>Obtížnost:</div><div>${it.obt}</div>` : ""}
+    ${it.pohori ? `<div>Pohoří:</div><div>${it.pohori}</div>` : ""}
+  `;
+  // pokud není definované imgs, použij fotku dané karty
+  const imgs = Array.isArray(it.imgs) && it.imgs.length ? it.imgs : [i+1];
+  openModal(`
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <h3>${it.p}/${data.length} – ${it.hora} ${it.v ? `${it.v} m` : ""}</h3>
+    <hr>
+    <div class="meta-grid">${meta}</div>
+    ${buildImgGrid(imgFn, imgs, it.hora)}
+    <div class="povidani">${povidaniText}</div>
+  `);
+}
+
+/* --- Karty --- */
+function cardKoruna(it,i){
+  const el=document.createElement('div');
+  el.className='photo-card';
+  el.innerHTML=`<img class="photo" src="${imgKoruna(i+1)}" loading="lazy" alt="${it.hora}">
+  <div class="photo-overlay">
+    <div class="photo-title">${it.p}. ${it.hora} ${it.v?`${it.v} m`:""}</div>
+    <div class="photo-sub">${it.z||""} ${it.d||""}</div>
+  </div>`;
+  el.onclick=()=>showDetail(korunaData,i,imgKoruna);
+  return el;
+}
+function cardAlpy(it,i){
+  const el=document.createElement('div');
+  el.className='photo-card';
+  el.innerHTML=`<img class="photo" src="${imgAlpy(i+1)}" loading="lazy" alt="${it.hora}">
+  <div class="photo-overlay">
+    <div class="photo-title">${it.p}. ${it.hora} ${it.v?`${it.v} m`:""}</div>
+    <div class="photo-sub">${it.z||""} ${it.d||""}</div>
+  </div>`;
+  el.onclick=()=>showDetail(alpyData,i,imgAlpy);
+  return el;
+}
+function cardSimple(it,i){
+  const el=document.createElement('div');
+  el.className='photo-card';
+  el.innerHTML=`<img class="photo" src="${it.img}" loading="lazy" alt="${it.title}">
+  <div class="photo-overlay"><div class="photo-title">${it.title}</div></div>`;
+  el.onclick=()=>openNepalModal(i);
+  return el;
+}
+
+/* --- Nepál data + fullscreen --- */
 const nepalData = Array.from({length:40},(_,i)=>({idx:i,title:`Nepál ${i+1}`,img:imgNepal(i+1)}));
 
-function resolveImgs(it,i){return (Array.isArray(it.imgs)&&it.imgs.length)?it.imgs:[i+1];}
-function card(it,i,srcFn,arr,type){
-  const imgs=resolveImgs(it,i);
-  const div=document.createElement('div');
-  div.className='photo-card';
-  div.innerHTML=`
-    <img src="${srcFn(imgs[0])}" alt="">
-    <div class="photo-overlay">
-      <div class="photo-title">${it.hora} ${it.v?it.v+" m":""}</div>
-      <div class="photo-sub">${it.z||""} ${it.d||""}</div>
-    </div>`;
-  div.onclick=()=>openGalleryModal(arr,i,srcFn,type);
-  return div;
-}
-function renderGallery(id,data,fn){
-  const el=document.getElementById(id);
-  el.innerHTML='';
-  data.forEach((it,i)=>el.appendChild(fn(it,i)));
-}
-renderGallery('koruna-gallery',korunaData,(it,i)=>card(it,i,imgKoruna,korunaData,'koruna'));
-renderGallery('alpy-gallery',alpyData,(it,i)=>card(it,i,imgAlpy,alpyData,'alpy'));
-renderGallery('nepal-gallery',nepalData,(it,i)=>card(it,i,imgNepal,nepalData,'nepal'));
+/* --- Galerie render --- */
+function renderGallery(el,data,fn){el.innerHTML='';data.forEach((it,i)=>el.appendChild(fn(it,i)));}
+renderGallery(document.getElementById('koruna-gallery'),korunaData,cardKoruna);
+renderGallery(document.getElementById('alpy-gallery'),alpyData,cardAlpy);
+renderGallery(document.getElementById('nepal-gallery'),nepalData,cardSimple);
 
+/* --- Navigace (scroll to top i na mobilu/tabletu) --- */
 const btns=document.querySelectorAll('.btn');
 const sections=document.querySelectorAll('[data-route-content]');
 function show(route){
@@ -347,72 +482,68 @@ function show(route){
   history.replaceState(null,'','#'+route);
   window.scrollTo({top:0,left:0,behavior:'instant'});
 }
-btns.forEach(b=>b.onclick=()=>show(b.dataset.route));
-show(location.hash.substring(1)||'koruna');
+btns.forEach(b=>b.addEventListener('click',()=>show(b.dataset.route)));
+window.addEventListener('popstate',()=>show(location.hash.substring(1)||'koruna'));
+show(location.hash?location.hash.substring(1):'koruna');
 
-/* --- fullscreen modal --- */
-const modal=document.getElementById('modal-backdrop');
-const img=document.getElementById('modal-img');
-const title=document.getElementById('modal-title');
-const info=document.getElementById('modal-info');
-let currentArr=[],currentIndex=0,currentSrc=null,currentPhotoIndex=0;
-
-function openGalleryModal(arr,index,srcFn,type){
-  currentArr=arr; currentIndex=index; currentSrc=srcFn; currentPhotoIndex=0;
-  modal.hidden=false; modal.classList.add('show');
-  updateModal(true);
+/* --- Nepál fullscreen --- */
+let nepalIndex=0;
+function openNepalModal(i){
+  nepalIndex=i;
+  openModal(`
+    <button class="nav-arrow left" id="nav-left">❮</button>
+    <button class="nav-arrow right" id="nav-right">❯</button>
+    <h3 id="nepal-title"></h3>
+    <button class="modal-close" id="modal-close">✕</button>
+    <img class="main fade" id="nepal-main" src="">
+  `,true);
+  document.getElementById('modal-close').onclick=closeModal;
+  document.getElementById('nav-left').onclick=e=>{e.stopPropagation();changeNepal(-1);};
+  document.getElementById('nav-right').onclick=e=>{e.stopPropagation();changeNepal(1);};
+  updateNepalModal(true);
 }
-function updateModal(first=false){
-  const it=currentArr[currentIndex];
-  const imgs=resolveImgs(it,currentIndex);
-  const photoId=imgs[Math.min(currentPhotoIndex,imgs.length-1)];
-  img.classList.remove('show');
+function changeNepal(dir){nepalIndex=(nepalIndex+dir+nepalData.length)%nepalData.length;updateNepalModal();}
+function updateNepalModal(first=false){
+  const it=nepalData[nepalIndex];
+  const img=document.getElementById('nepal-main');
+  const title=document.getElementById('nepal-title');
+  if(!first){img.classList.remove('show');}
   setTimeout(()=>{
-    img.src=currentSrc(photoId);
-    title.textContent=`${it.hora} (${currentIndex+1}/${currentArr.length}) • foto ${currentPhotoIndex+1}/${imgs.length}`;
-    info.innerHTML=`
-      ${it.z?`<strong>Země:</strong> ${it.z}<br>`:""}
-      ${it.d?`<strong>Datum:</strong> ${it.d}<br>`:""}
-      ${it.cas?`<strong>Čas:</strong> ${it.cas}<br>`:""}
-      ${it.team?`<strong>Tým:</strong> ${it.team}<br>`:""}
-      ${it.obt?`<strong>Obtížnost:</strong> ${it.obt}<br>`:""}
-      ${it.pohori?`<strong>Pohoří:</strong> ${it.pohori}<br>`:""}
-      <br>${it.povidani||"Popis výstupu bude doplněn."}`;
+    img.src=it.img;
+    title.textContent=`Nepál (${nepalIndex+1}/${nepalData.length})`;
     img.onload=()=>img.classList.add('show');
   },first?0:150);
 }
-function closeModal(){modal.classList.remove('show');setTimeout(()=>modal.hidden=true,180);}
-function changeModal(dir){
-  const imgsHere=resolveImgs(currentArr[currentIndex],currentIndex);
-  currentPhotoIndex+=dir;
-  if(currentPhotoIndex<0){
-    currentIndex=(currentIndex-1+currentArr.length)%currentArr.length;
-    const prevImgs=resolveImgs(currentArr[currentIndex],currentIndex);
-    currentPhotoIndex=prevImgs.length-1;
-  }else if(currentPhotoIndex>=imgsHere.length){
-    currentIndex=(currentIndex+1)%currentArr.length;
-    currentPhotoIndex=0;
-  }
-  updateModal();
-}
-document.getElementById('nav-left').onclick=e=>{e.stopPropagation();changeModal(-1);};
-document.getElementById('nav-right').onclick=e=>{e.stopPropagation();changeModal(1);};
-document.getElementById('modal-close').onclick=closeModal;
-modal.onclick=e=>{if(e.target===modal)closeModal();};
 
-let sx=0,sy=0,ex=0,ey=0;
-modal.addEventListener('touchstart',e=>{sx=e.changedTouches[0].screenX;sy=e.changedTouches[0].screenY;});
-modal.addEventListener('touchend',e=>{
-  ex=e.changedTouches[0].screenX;ey=e.changedTouches[0].screenY;
-  const dx=ex-sx,dy=ey-sy;
-  if(Math.abs(dx)>Math.abs(dy)){if(Math.abs(dx)>50){dx>0?changeModal(-1):changeModal(1);} }
-  else if(Math.abs(dy)>60)closeModal();
-});
+/* --- Gesta + klávesnice --- */
+let touchStartX=0,touchEndX=0,touchStartY=0,touchEndY=0;
+document.addEventListener("touchstart",e=>{
+  touchStartX=e.changedTouches[0].screenX;
+  touchStartY=e.changedTouches[0].screenY;
+},false);
+document.addEventListener("touchend",e=>{
+  touchEndX=e.changedTouches[0].screenX;
+  touchEndY=e.changedTouches[0].screenY;
+  handleGesture();
+},false);
+function handleGesture(){
+  if(!modal.classList.contains("show"))return;
+  const dx=touchEndX-touchStartX;
+  const dy=touchEndY-touchStartY;
+  if(Math.abs(dx)>Math.abs(dy)){
+    if(Math.abs(dx)>50){dx>0?changeNepal(-1):changeNepal(1);}
+  }else{
+    if(Math.abs(dy)>60){closeModal();}
+  }
+}
 document.addEventListener('keydown',e=>{
-  if(modal.hidden)return;
-  if(e.key==='ArrowLeft')changeModal(-1);
-  if(e.key==='ArrowRight')changeModal(1);
-  if(e.key==='Escape')closeModal();
+  const box=modal.querySelector('.modal');
+  if(!modal.classList.contains('show'))return;
+  if(box.classList.contains('fullscreen')){
+    if(e.key==='ArrowLeft')changeNepal(-1);
+    else if(e.key==='ArrowRight')changeNepal(1);
+    else if(e.key==='Escape')closeModal();
+  }
 });
 </script>
 </body>
