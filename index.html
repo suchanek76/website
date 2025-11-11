@@ -145,11 +145,18 @@ main{position:relative;z-index:3;padding:60px 0 80px;}
 .modal .povidani {
   font-size: 14px;
   opacity: .95;
-  margin-top: 18px;           /* 🔹 větší mezera nad textem */
+  margin-top: 22px;
+  padding-top: 12px;
   line-height: 1.6;
   text-align: justify;
-  white-space: pre-line;      /* respektuje nové řádky (\n) */
-  text-indent: 1.5em;         /* odsazení prvního řádku odstavce */
+  white-space: pre-line;                /* respektuje nové řádky (\n) */
+  border-top: 1px solid rgba(255,255,255,0.15); /* jemná oddělovací linka */
+}
+
+.modal .povidani br {
+  display: block;
+  margin-bottom: 6px;                  /* 🔹 menší mezera mezi odstavci */
+  content: "";
 }
 
 /* Fullscreen */
