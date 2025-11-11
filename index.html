@@ -366,13 +366,20 @@ function openMountainSlideshow(index,photoIndex,type){
   updateMountainModal(true);
 }
 function changeMountain(dir){activeIndex=(activeIndex+dir+activeSet.length)%activeSet.length;updateMountainModal();}
-function updateMountainModal(first=false){
-  const imgEl=document.getElementById("mountain-main");
-  const title=document.getElementById("mountain-title");
-  const fn=activeType==="koruna"?imgKoruna:imgAlpy;
-  const url=fn(activeSet[activeIndex]);
-  if(!first)imgEl.classList.remove("show");
-  setTimeout(()=>{imgEl.src=url;title.textContent=`Foto ${activeIndex+1}/${activeSet.length}`;imgEl.onload=()=>imgEl.classList.add("show");},first?0:150);
+function updateMountainModal(first = false) {
+  const imgEl = document.getElementById("mountain-main");
+  const title = document.getElementById("mountain-title");
+  const data = activeType === "koruna" ? korunaData : alpyData;
+  const fn = activeType === "koruna" ? imgKoruna : imgAlpy;
+  const url = fn(activeSet[activeIndex]);
+  const mountainName = data.find(d => d.imgs === activeSet)?.hora || "";
+
+  if (!first) imgEl.classList.remove("show");
+  setTimeout(() => {
+    imgEl.src = url;
+    title.textContent = `${mountainName} ${activeIndex + 1}/${activeSet.length}`;
+    imgEl.onload = () => imgEl.classList.add("show");
+  }, first ? 0 : 150);
 }
 
 /* --- Gesta --- */
@@ -391,8 +398,19 @@ const nepalData=Array.from({length:40},(_,i)=>({idx:i,title:`Nepál ${i+1}`,img:
 let nepalIndex=0;
 function openNepalModal(i){nepalIndex=i;openModal(`<button class="nav-arrow left" id="nav-left">❮</button><button class="nav-arrow right" id="nav-right">❯</button><h3 id="nepal-title"></h3><button class="modal-close" id="modal-close">✕</button><img class="main fade" id="nepal-main" src="">`,true);document.getElementById("modal-close").onclick=closeModal;document.getElementById("nav-left").onclick=e=>{e.stopPropagation();changeNepal(-1);};document.getElementById("nav-right").onclick=e=>{e.stopPropagation();changeNepal(1);};updateNepalModal(true);}
 function changeNepal(dir){nepalIndex=(nepalIndex+dir+nepalData.length)%nepalData.length;updateNepalModal();}
-function updateNepalModal(first=false){const it=nepalData[nepalIndex];const img=document.getElementById("nepal-main");const title=document.getElementById("nepal-title");if(!first)img.classList.remove("show");setTimeout(()=>{img.src=it.img;title.textContent=`${it.title} (${nepalIndex+1}/${nepalData.length})`;img.onload=()=>img.classList.add("show");},first?0:150);}
-
+function updateNepalModal(first = false) {
+  const it = nepalData[nepalIndex];
+  const img = document.getElementById("nepal-main");
+  const title = document.getElementById("nepal-title");
+  if (!first) img.classList.remove("show");
+  setTimeout(() => {
+    img.src = it.img;
+    // změna formátu z "(1/40)" na "1/40"
+    title.textContent = `Nepál ${nepalIndex + 1}/${nepalData.length}`;
+    img.onload = () => img.classList.add("show");
+  }, first ? 0 : 150);
+}
+  
 /* --- Galerie render + navigace --- */
 document.addEventListener("DOMContentLoaded",()=>{
   function renderGallery(el,data,fn){el.innerHTML="";data.forEach((it,i)=>el.appendChild(fn(it,i)));}
