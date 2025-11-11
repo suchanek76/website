@@ -65,11 +65,51 @@ html,body{
 /* Galerie */
 main{position:relative;z-index:3;padding:60px 0 80px;}
 .container{width:95%;max-width:var(--max-width);margin:0 auto;}
-.gallery{display:grid;gap:16px;}
-.grid-3{grid-template-columns:repeat(3,1fr);}
-.grid-4{grid-template-columns:repeat(4,1fr);}
-@media(max-width:1000px){.grid-3,.grid-4{grid-template-columns:repeat(2,1fr);}}
-@media(max-width:600px){.grid-3,.grid-4{grid-template-columns:1fr;}}
+.gallery { display: grid; gap: 16px; }
+
+/* --- Galerie Koruna + Alpy --- */
+.grid-3 { grid-template-columns: repeat(3, 1fr); }
+
+/* --- Galerie Nepál zůstává .grid-4 beze změny --- */
+.grid-4 { grid-template-columns: repeat(4, 1fr); }
+
+/* Tablet (šířka pod 1000px) → stále 3 fotky */
+@media (max-width: 1000px) {
+  .grid-3 { grid-template-columns: repeat(3, 1fr); }
+}
+
+/* Mobil na šířku → 2 fotky */
+@media (max-width: 800px) and (orientation: landscape) {
+  .grid-3 { grid-template-columns: repeat(2, 1fr); }
+}
+
+/* Mobil na výšku → 1 fotka */
+@media (max-width: 600px) and (orientation: portrait) {
+  .grid-3 { grid-template-columns: 1fr; }
+}
+
+/* --- Modální okno (Koruna, Alpy) --- */
+.modal .img-grid {
+  display: grid;
+  gap: 10px;
+  grid-template-columns: repeat(3, 1fr);
+}
+
+/* Tablet */
+@media (max-width: 1000px) {
+  .modal .img-grid { grid-template-columns: repeat(3, 1fr); }
+}
+
+/* Mobil na šířku */
+@media (max-width: 800px) and (orientation: landscape) {
+  .modal .img-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+/* Mobil na výšku */
+@media (max-width: 600px) and (orientation: portrait) {
+  .modal .img-grid { grid-template-columns: 1fr; }
+}
+
 
 /* Karty */
 .photo-card{position:relative;overflow:hidden;border-radius:10px;cursor:pointer;background:#000;}
