@@ -168,13 +168,13 @@ const imgNepal  = i => i===0 ? `${RAW}/Nepal/Nepal000.jpg` : `${RAW}/Nepal/Nepal
 const korunaData = [
 {p:"1",hora:"Mont Blanc",v:"4807",z:"Francie / Itálie",d:"31. 8. 2007",cas:"7:09",team:"1. Karel, Duštič, 2. Mrňous, Radka, Petr Moravec",obt:"B",pohori:"Mont Blank",imgs:[11,11,11,11],povidani:"Popis výstupu bude ještě doplněn"},
 {p:"2",hora:"Dufourspitze",v:"4634",z:"Švýcarsko",d:"",cas:"",team:"",obt:"",pohori:"Monte Rosa",imgs:[0],povidani:"Popis výstupu bude ještě doplněn"},
-{p:"3",hora:"Grossglockner",v:"3798",z:"Rakousko",d:"30. 6. 2025",cas:"",team:"Karel, Bára, Luky",obt:"B",pohori:"Vysoké Taury",imgs:[031,032,033,034,035,036],povidani:"Popis výstupu bude ještě doplněn"},
-{p:"4",hora:"Mulhacén",v:"3479",z:"Španělsko",d:"10. 9. 2022",cas:"",team:"Karel, Míša, Pedro",obt:"A",pohori:"Sierra Nevada",imgs:[041],povidani:"Popis výstupu bude ještě doplněn"},
-{p:"5",hora:"Zugspitze",v:"2962",z:"Německo",d:"21. 6. 2025",cas:"",team:"Karel",obt:"",pohori:"Wetterstein",imgs:[051],povidani:"Popis výstupu bude ještě doplněn"},
+{p:"3",hora:"Grossglockner",v:"3798",z:"Rakousko",d:"30. 6. 2025",cas:"",team:"Karel, Bára, Luky",obt:"B",pohori:"Vysoké Taury",imgs:[31,32,33,34,35,36],povidani:"Popis výstupu bude ještě doplněn"},
+{p:"4",hora:"Mulhacén",v:"3479",z:"Španělsko",d:"10. 9. 2022",cas:"",team:"Karel, Míša, Pedro",obt:"A",pohori:"Sierra Nevada",imgs:[41],povidani:"Popis výstupu bude ještě doplněn"},
+{p:"5",hora:"Zugspitze",v:"2962",z:"Německo",d:"21. 6. 2025",cas:"",team:"Karel",obt:"",pohori:"Wetterstein",imgs:[51],povidani:"Popis výstupu bude ještě doplněn"},
 {p:"6",hora:"Coma Pedrosa",v:"2942",z:"Andorra",imgs:[0],povidani:"Popis výstupu bude ještě doplněn"},
 {p:"7",hora:"Musala",v:"2925",z:"Bulharsko",imgs:[0],povidani:"Popis výstupu bude ještě doplněn"},
 {p:"8",hora:"Mytikas",v:"2917",z:"Řecko",imgs:[0],povidani:"Popis výstupu bude ještě doplněn"},
-{p:"9",hora:"Triglav",v:"2864",z:"Slovinsko",d:"25. 7. 2022",imgs:[091],povidani:"Popis výstupu bude ještě doplněn"},
+{p:"9",hora:"Triglav",v:"2864",z:"Slovinsko",d:"25. 7. 2022",imgs:[91],povidani:"Popis výstupu bude ještě doplněn"},
 {p:"10",hora:"Velký Korab",v:"2764",z:"Albánie / Makedonie",imgs:[0],povidani:"Popis výstupu bude ještě doplněn"},
 {p:"11",hora:"Gerlachovský štít",v:"2655",z:"Slovensko",d:"24. 7. 2021",imgs:[111],povidani:"Popis výstupu bude ještě doplněn"},
 {p:"12",hora:"Vorder Grauspitz",v:"2599",z:"Lichtenštejnsko",d:"6. 9. 2025",imgs:[121],povidani:"Popis výstupu bude ještě doplněn"},
@@ -311,7 +311,7 @@ modal.addEventListener("click",e=>{if(e.target===modal)closeModal();});
 
 /* --- Obrázky Koruna/Alpy --- */
 async function buildImgGrid(imgFn,nums,alt,dataIndex,dataArr,type){
-  const safe=Array.isArray(nums)?nums.slice(0,6):[];
+  const safe=Array.isArray(nums)?nums.slice(0,9):[];
   const html=[];
   for(const n of safe){
     const url=imgFn(n);
