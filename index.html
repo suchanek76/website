@@ -422,7 +422,12 @@ document.addEventListener("DOMContentLoaded",()=>{
   renderGallery(document.getElementById("alpy-gallery"),alpyData,cardAlpy);
   renderGallery(document.getElementById("nepal-gallery"),nepalData,cardSimple);
   const btns=document.querySelectorAll(".btn");const sections=document.querySelectorAll("[data-route-content]");
-  function show(route){sections.forEach(s=>s.hidden=(s.id!==route));btns.forEach(b=>b.classList.toggle("active",b.dataset.route===route));history.replaceState(null,"","#"+route);window.scrollTo({top:0,left:0,behavior:"instant"});}
+  function show(route){
+  sections.forEach(s => s.hidden = (s.id !== route));
+  btns.forEach(b => b.classList.toggle("active", b.dataset.route === route));
+  history.replaceState(null, "", "#" + route);
+  window.scrollTo(0, 0); // vždy vrátí stránku nahoru i na mobilech
+}
   btns.forEach(b=>b.addEventListener("click",()=>show(b.dataset.route)));
   window.addEventListener("popstate",()=>show(location.hash.substring(1)||"koruna"));
   show(location.hash?location.hash.substring(1):"koruna");
