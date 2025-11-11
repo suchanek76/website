@@ -346,11 +346,13 @@ async function showDetail(data,i,imgFn,type){
 }
 
 /* --- Fullscreen slideshow pro Koruna/Alpy --- */
-let activeSet=[],activeIndex=0,activeType="";
+let activeSet=[],activeIndex=0,activeType="",activeMountainName="";
 function openMountainSlideshow(index,photoIndex,type){
   activeType=type;
   const data=type==="koruna"?korunaData:alpyData;
-  activeSet=data[index].imgs||[];
+  const item=data[index];
+  activeSet=item.imgs||[];
+  activeMountainName=item.hora;
   if(activeSet.length===0)activeSet=[0];
   activeIndex=photoIndex;
   openModal(`
@@ -365,21 +367,23 @@ function openMountainSlideshow(index,photoIndex,type){
   document.getElementById("nav-right").onclick=e=>{e.stopPropagation();changeMountain(1);};
   updateMountainModal(true);
 }
-function changeMountain(dir){activeIndex=(activeIndex+dir+activeSet.length)%activeSet.length;updateMountainModal();}
-function updateMountainModal(first = false) {
-  const imgEl = document.getElementById("mountain-main");
-  const title = document.getElementById("mountain-title");
-  const data = activeType === "koruna" ? korunaData : alpyData;
-  const fn = activeType === "koruna" ? imgKoruna : imgAlpy;
-  const url = fn(activeSet[activeIndex]);
-  const mountainName = data.find(d => d.imgs === activeSet)?.hora || "";
 
-  if (!first) imgEl.classList.remove("show");
-  setTimeout(() => {
-    imgEl.src = url;
-    title.textContent = `${mountainName} ${activeIndex + 1}/${activeSet.length}`;
-    imgEl.onload = () => imgEl.classList.add("show");
-  }, first ? 0 : 150);
+function changeMountain(dir){
+  activeIndex=(activeIndex+dir+activeSet.length)%activeSet.length;
+  updateMountainModal();
+}
+
+function updateMountainModal(first=false){
+  const imgEl=document.getElementById("mountain-main");
+  const title=document.getElementById("mountain-title");
+  const fn=activeType==="koruna"?imgKoruna:imgAlpy;
+  const url=fn(activeSet[activeIndex]);
+  if(!first)imgEl.classList.remove("show");
+  setTimeout(()=>{
+    imgEl.src=url;
+    title.textContent=`${activeMountainName} ${activeIndex+1}/${activeSet.length}`;
+    imgEl.onload=()=>imgEl.classList.add("show");
+  },first?0:150);
 }
 
 /* --- Gesta --- */
