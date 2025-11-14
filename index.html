@@ -594,7 +594,7 @@ document.addEventListener("DOMContentLoaded",()=>{
     sections.forEach(s=>s.hidden=(s.id!==route));
     btns.forEach(b=>b.classList.toggle("active",b.dataset.route===route));
     history.replaceState(null,"","#"+route);
-    window.scrollTo({top:0,left:0,behavior:"instant"});
+    window.scrollTo(0,0);
   }
 
   btns.forEach(b=>b.addEventListener("click",()=>show(b.dataset.route)));
