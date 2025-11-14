@@ -350,16 +350,6 @@ const alpyData = [
 {p:"82",hora:"Les Droites",v:"4 000",z:"Francie",obt:"C",pohori:"Aiguille Verte",imgs:[0],povidani:""}
 ];
 
-/* --- Kontrola existence obrázku --- */
-async function imageExists(url){
-  try{
-    const res = await fetch(url, { method: "HEAD" });
-    return res.ok;
-  }catch{
-    return false;
-  }
-}
-
 /* --- Modal --- */
 const modal = document.getElementById("modal-backdrop");
 const modalContent = document.getElementById("modal-content");
@@ -389,14 +379,15 @@ modal.addEventListener("click", e => {
 });
 
 /* --- Obrázky Koruna/Alpy --- */
-async function buildImgGrid(imgFn,nums,alt,dataIndex,dataArr,type){
+function buildImgGrid(imgFn,nums,alt,dataIndex,dataArr,type){
   const safe = Array.isArray(nums)? nums.slice(0,9) : [];
   const html = [];
-  for(const n of safe){
+  for(let i=0;i<safe.length;i++){
+    const n = safe[i];
     const url = imgFn(n);
-    if(await imageExists(url)){
-      html.push(`<img class="grid-img" src="${url}" alt="${alt}" onclick="openMountainSlideshow(${dataIndex},${safe.indexOf(n)},'${type}')">`);
-    }
+    html.push(
+      `<img class="grid-img" src="${url}" alt="${alt}" onclick="openMountainSlideshow(${dataIndex},${i},'${type}')">`
+    );
   }
   if(html.length===0){
     html.push(`<img class="grid-img" src="${imgFn(0)}" alt="placeholder">`);
@@ -404,7 +395,7 @@ async function buildImgGrid(imgFn,nums,alt,dataIndex,dataArr,type){
   return `<div class="img-grid">${html.join("")}</div>`;
 }
 
-async function showDetail(data,i,imgFn,type){
+function showDetail(data,i,imgFn,type){
   const it = data[i];
   const meta = `
     ${it.z?`<div>Země:</div><div>${it.z}</div>`:""}
@@ -416,12 +407,14 @@ async function showDetail(data,i,imgFn,type){
   `;
   const imgs = it.imgs || [];
   const povidani = it.povidani || "Popis výstupu bude ještě doplněn";
+  const gridHtml = buildImgGrid(imgFn,imgs,it.hora,i,data,type);
+
   openModal(`
     <button class="modal-close" onclick="closeModal()">✕</button>
     <h3>${it.p}/${data.length} – ${it.hora} ${it.v?`${it.v} m`:""}</h3>
     <hr>
     <div class="meta-grid">${meta}</div>
-    ${await buildImgGrid(imgFn,imgs,it.hora,i,data,type)}
+    ${gridHtml}
     <div class="povidani">${povidani}</div>
   `);
 }
