@@ -587,12 +587,20 @@ document.addEventListener("DOMContentLoaded",()=>{
     sections.forEach(s=>s.hidden=(s.id!==route));
     btns.forEach(b=>b.classList.toggle("active",b.dataset.route===route));
     history.replaceState(null,"","#"+route);
-    window.scrollTo(0,0);
+
+// Posuneme se těsně POD hero (tj. na začátek galerie)
+const heroHeight = document.querySelector(".hero").offsetHeight;
+window.scrollTo(0, heroHeight - 20);
   }
 
   btns.forEach(b=>b.addEventListener("click",()=>show(b.dataset.route)));
   window.addEventListener("popstate",()=>show(location.hash.substring(1)||"koruna"));
-  show(location.hash?location.hash.substring(1):"koruna");
+  // --- Výchozí stav: zobrazíme hero a nic neskrýváme ---
+if (!location.hash) {
+  // Nic neotevíráme → uživatel vidí hero nahoře
+} else {
+  show(location.hash.substring(1));
+}
 });
 </script>
 
