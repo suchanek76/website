@@ -94,12 +94,34 @@ html,body{
 .btn.active{background:#fff;color:var(--dark-blue);}
 
 /* Galerie */
-main{
+main {
   position: relative;
   z-index: 3;
-  margin-top: -60px;
+  margin-top: -80px;     /* PC – jemné zvednutí, galerie nebude nalepená */
   padding: 20px 0 80px;
 }
+
+/* Tablety na šířku */
+@media (max-width: 1100px) {
+  main {
+    margin-top: -60px;
+  }
+}
+
+/* Tablety na výšku */
+@media (max-width: 900px) {
+  main {
+    margin-top: -40px;
+  }
+}
+
+/* Mobily na výšku i šířku */
+@media (max-width: 600px) {
+  main {
+    margin-top: -20px;
+  }
+}
+
 
 .container{width:95%;max-width:var(--max-width);margin:0 auto;}
 .gallery { display: grid; gap: 16px; }
@@ -332,13 +354,6 @@ main{
 <div id="modal-backdrop" class="modal-backdrop" hidden>
   <div class="modal"><div id="modal-content"></div></div>
 </div>
-
-footer {
-  text-align: center;
-  padding: 20px 0;
-  font-size: 14px;
-  opacity: 0.8;
-}
   
 <footer>© Vzít batoh na záda a jít ...</footer>
 
