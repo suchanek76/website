@@ -639,7 +639,47 @@ document.addEventListener("keydown", e=>{
   if(e.key === "ArrowRight"){ activeType ? changeMountain(1) : changeNepal(1); }
 });
 
+  
+/* --- Karty --- */
+function cardKoruna(it,i){
+  const el=document.createElement("div");
+  el.className="photo-card";
+  const firstImg=(it.imgs&&it.imgs.length>0)?it.imgs[0]:0;
+  el.innerHTML=`
+    <img class="photo" src="${imgKoruna(firstImg)}" loading="lazy">
+    <div class="photo-overlay">
+      <div class="photo-title">${it.p}. ${it.hora} ${it.v ? `${it.v} m` : ""}</div>
+      <div class="photo-sub">${it.z || ""} ${it.d || ""}</div>
+    </div>`;
+  el.onclick=()=>showDetail(korunaData,i,imgKoruna,"koruna");
+  return el;
+}
 
+function cardAlpy(it,i){
+  const el=document.createElement("div");
+  el.className="photo-card";
+  const firstImg=(it.imgs&&it.imgs.length>0)?it.imgs[0]:0;
+  el.innerHTML=`
+    <img class="photo" src="${imgAlpy(firstImg)}" loading="lazy">
+    <div class="photo-overlay">
+      <div class="photo-title">${it.p}. ${it.hora} ${it.v ? `${it.v} m` : ""}</div>
+      <div class="photo-sub">${it.z || ""} ${it.d || ""}</div>
+    </div>`;
+  el.onclick=()=>showDetail(alpyData,i,imgAlpy,"alpy");
+  return el;
+}
+
+function cardSimple(it,i){
+  const el=document.createElement("div");
+  el.className="photo-card";
+  el.innerHTML=`
+    <img class="photo" src="${it.img}" loading="lazy">
+    <div class="photo-overlay"><div class="photo-title">${it.title}</div></div>`;
+  el.onclick=()=>openNepalModal(i);
+  return el;
+}
+
+  
 /* --------------------------------------------------------
    Galerie + navigace
    -------------------------------------------------------- */
