@@ -26,13 +26,38 @@ html,body{
 }
 
 /* Hero */
-.hero{
-  position:relative;
+/* Default – PC */
+.hero-bg img{
   width:100%;
-  height:100vh;
-  background:var(--dark-blue);
-  overflow:hidden;
+  height:100%;
+  object-fit:cover;
+  object-position:center;
 }
+
+/* iPad – minimální ořez */
+@media (min-width:768px) and (max-width:1024px) {
+  .hero-bg img{
+    object-fit:contain;
+    background-color:#041633; /* vyplní pruhy nad/pod obrazem */
+  }
+}
+
+/* Mobil na výšku – menší ořez, obrázek vyšší */
+@media (max-width:600px) and (orientation:portrait) {
+  .hero-bg img{
+    object-fit:cover;
+    object-position:center top; /* víc nahoře → méně řeže */
+  }
+}
+
+/* Mobil na šířku – střední kompromis */
+@media (max-width:800px) and (orientation:landscape) {
+  .hero-bg img{
+    object-fit:cover;
+    object-position:center 30%;
+  }
+}
+
 .hero-bg{
   position:absolute;
   inset:0;
