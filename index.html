@@ -489,9 +489,6 @@ modal.addEventListener("touchend", e=>{
         dx > 0 ? changeNepal(-1) : changeNepal(1);
       }
     }
-  }else if(Math.abs(dy) > 60){
-    closeModal();
-  }
 });
 
 document.addEventListener("keydown", e=>{
@@ -540,8 +537,14 @@ function cardSimple(it,i){
   return el;
 }
 
+
 /* --- Nepál fullscreen --- */
-const nepalData = Array.from({length:40},(_,i)=>({idx:i,title:`Nepál ${i+1}`,img:imgNepal(i+1)}));
+const nepalData = Array.from({length:40},(_,i)=>({
+  idx:i,
+  title:`Nepál ${i+1}`,
+  img:imgNepal(i+1)
+}));
+
 let nepalIndex=0;
 
 function openNepalModal(i){
@@ -553,60 +556,70 @@ function openNepalModal(i){
     <button class="modal-close" id="modal-close">✕</button>
     <img class="main fade" id="nepal-main" src="">
   `,true);
-  document.getElementById("modal-close").onclick=closeModal;
-  document.getElementById("nav-left").onclick=e=>{e.stopPropagation();changeNepal(-1);};
-  document.getElementById("nav-right").onclick=e=>{e.stopPropagation();changeNepal(1);};
+
+  document.getElementById("modal-close").onclick = closeModal;
+  document.getElementById("nav-left").onclick = e => { e.stopPropagation(); changeNepal(-1); };
+  document.getElementById("nav-right").onclick = e => { e.stopPropagation(); changeNepal(1); };
+
   updateNepalModal(true);
 }
 
 function changeNepal(dir){
-  nepalIndex=(nepalIndex+dir+nepalData.length)%nepalData.length;
+  nepalIndex = (nepalIndex + dir + nepalData.length) % nepalData.length;
   updateNepalModal();
 }
 
 function updateNepalModal(first=false){
-  const it=nepalData[nepalIndex];
-  const img=document.getElementById("nepal-main");
-  const title=document.getElementById("nepal-title");
+  const it = nepalData[nepalIndex];
+  const img = document.getElementById("nepal-main");
+  const title = document.getElementById("nepal-title");
+
   if(!first) img.classList.remove("show");
+
   setTimeout(()=>{
-    img.src=it.img;
-    title.textContent=`Nepál ${nepalIndex+1}/${nepalData.length}`;
-    img.onload=()=>img.classList.add("show");
-  },first?0:150);
+    img.src = it.img;
+    title.textContent = `Nepál ${nepalIndex+1}/${nepalData.length}`;
+    img.onload = () => img.classList.add("show");
+  }, first ? 0 : 150);
 }
+
 
 /* --- Galerie render + navigace --- */
 document.addEventListener("DOMContentLoaded",()=>{
+
   function renderGallery(el,data,fn){
-    el.innerHTML="";
+    el.innerHTML = "";
     data.forEach((it,i)=>el.appendChild(fn(it,i)));
   }
+
   renderGallery(document.getElementById("koruna-gallery"),korunaData,cardKoruna);
   renderGallery(document.getElementById("alpy-gallery"),alpyData,cardAlpy);
   renderGallery(document.getElementById("nepal-gallery"),nepalData,cardSimple);
 
-  const btns=document.querySelectorAll(".btn");
-  const sections=document.querySelectorAll("[data-route-content]");
+  const btns = document.querySelectorAll(".btn");
+  const sections = document.querySelectorAll("[data-route-content]");
 
   function show(route){
-    sections.forEach(s=>s.hidden=(s.id!==route));
-    btns.forEach(b=>b.classList.toggle("active",b.dataset.route===route));
+    sections.forEach(s => s.hidden = (s.id !== route));
+    btns.forEach(b => b.classList.toggle("active", b.dataset.route === route));
+
     history.replaceState(null,"","#"+route);
 
-// Posuneme se těsně POD hero (tj. na začátek galerie)
-const heroHeight = document.querySelector(".hero").offsetHeight;
-window.scrollTo(0, heroHeight - 20);
+    /* ❗ ŽÁDNÉ SCROLLOVÁNÍ — stránka zůstane nahoře */
   }
 
-  btns.forEach(b=>b.addEventListener("click",()=>show(b.dataset.route)));
-  window.addEventListener("popstate",()=>show(location.hash.substring(1)||"koruna"));
-  // --- Výchozí stav: zobrazíme hero a nic neskrýváme ---
-if (!location.hash) {
-  // Nic neotevíráme → uživatel vidí hero nahoře
-} else {
-  show(location.hash.substring(1));
-}
+  btns.forEach(b => b.addEventListener("click", ()=>show(b.dataset.route)));
+
+  window.addEventListener("popstate", ()=>{
+    show(location.hash.substring(1) || "koruna");
+  });
+
+  /* Výchozí stav — pokud není hash, zobrazí se hero */
+  if (!location.hash){
+    // necháme výchozí Korunu, ale uživatel zůstane nahoře
+  } else {
+    show(location.hash.substring(1));
+  }
 });
 </script>
 
