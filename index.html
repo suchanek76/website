@@ -78,7 +78,24 @@ main{
 .grid-3 { grid-template-columns: repeat(3, 1fr); }
 
 /* Nepál */
-.grid-4 { grid-template-columns: repeat(4, 1fr); }
+/* PC + tablet = 4 v řadě */
+#nepal-gallery.grid-4 {
+  grid-template-columns: repeat(4, 1fr);
+}
+
+/* Mobil na šířku = 2 v řadě */
+@media (max-width: 800px) and (orientation: landscape) {
+  #nepal-gallery.grid-4 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Mobil na výšku = 1 v řadě */
+@media (max-width: 600px) and (orientation: portrait) {
+  #nepal-gallery.grid-4 {
+    grid-template-columns: 1fr;
+  }
+}}
 
 /* Tablet */
 @media (max-width: 1000px) {
