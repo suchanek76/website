@@ -4,6 +4,7 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>Vzít batoh na záda a jít ...</title>
+
 <style>
 :root {
   --dark-blue: #041633;
@@ -66,60 +67,67 @@ html,body{
 main{
   position: relative;
   z-index: 3;
-  margin-top: -150px;   /* posune galerii výš */
-  padding: 20px 0 80px; /* menší horní mezera */
+  margin-top: -150px;
+  padding: 20px 0 80px;
 }
 
 .container{width:95%;max-width:var(--max-width);margin:0 auto;}
 .gallery { display: grid; gap: 16px; }
 
-/* --- Galerie Koruna + Alpy --- */
+/* Koruna + Alpy galerie */
 .grid-3 { grid-template-columns: repeat(3, 1fr); }
 
-/* --- Galerie Nepál zůstává .grid-4 beze změny --- */
+/* Nepál */
 .grid-4 { grid-template-columns: repeat(4, 1fr); }
 
-/* Tablet (šířka pod 1000px) → stále 3 fotky */
+/* Tablet */
 @media (max-width: 1000px) {
   .grid-3 { grid-template-columns: repeat(3, 1fr); }
 }
 
-/* Mobil na šířku → 2 fotky */
+/* Mobil na šířku */
 @media (max-width: 800px) and (orientation: landscape) {
   .grid-3 { grid-template-columns: repeat(2, 1fr); }
 }
 
-/* Mobil na výšku → 1 fotka */
+/* Mobil na výšku */
 @media (max-width: 600px) and (orientation: portrait) {
   .grid-3 { grid-template-columns: 1fr; }
 }
 
-/* --- Modální okno (Koruna, Alpy) --- */
+/* Modalový grid */
 .modal .img-grid {
   display: grid;
   gap: 10px;
   grid-template-columns: repeat(3, 1fr);
 }
-
-/* Tablet */
 @media (max-width: 1000px) {
   .modal .img-grid { grid-template-columns: repeat(3, 1fr); }
 }
-
-/* Mobil na šířku */
 @media (max-width: 800px) and (orientation: landscape) {
   .modal .img-grid { grid-template-columns: repeat(2, 1fr); }
 }
-
-/* Mobil na výšku */
 @media (max-width: 600px) and (orientation: portrait) {
   .modal .img-grid { grid-template-columns: 1fr; }
 }
 
 /* Karty */
-.photo-card{position:relative;overflow:hidden;border-radius:10px;cursor:pointer;background:#000;}
-.photo-card img.photo{width:100%;aspect-ratio:3/2;object-fit:cover;transition:transform .35s ease;}
-.photo-card:hover img.photo{transform:scale(1.04);}
+.photo-card{
+  position:relative;
+  overflow:hidden;
+  border-radius:10px;
+  cursor:pointer;
+  background:#000;
+}
+.photo-card img.photo{
+  width:100%;
+  aspect-ratio:3/2;
+  object-fit:cover;
+  transition:transform .35s ease;
+}
+.photo-card:hover img.photo{
+  transform:scale(1.04);
+}
 .photo-overlay{
   position:absolute;left:0;right:0;bottom:0;padding:10px;
   background:linear-gradient(to top,rgba(0,0,0,0.7),rgba(0,0,0,0));
@@ -135,6 +143,7 @@ main{
   opacity:0;pointer-events:none;transition:opacity .18s;
 }
 .modal-backdrop.show{opacity:1;pointer-events:auto;}
+
 .modal{
   width:100%;max-width:980px;max-height:92vh;background:#071431;
   border-radius:10px;padding:22px 24px;color:#fff;overflow:auto;position:relative;
@@ -143,11 +152,28 @@ main{
   position:absolute;right:16px;top:16px;background:none;border:none;
   color:white;font-size:22px;cursor:pointer;
 }
+
 .modal h3{font-size:20px;font-weight:700;margin-bottom:8px;}
 .modal hr{margin:10px 0 16px 0;border:none;border-top:1px solid rgba(255,255,255,0.15);}
-.modal .meta-grid{display:grid;grid-template-columns:150px 1fr;gap:4px 10px;font-size:14px;opacity:.95;margin-bottom:10px;line-height:1.4;}
+.modal .meta-grid{
+  display:grid;
+  grid-template-columns:150px 1fr;
+  gap:4px 10px;
+  font-size:14px;
+  opacity:.95;
+  margin-bottom:12px;
+  line-height:1.4;
+}
 .modal .meta-grid div:first-child{font-weight:600;color:#d8e2ff;}
-.modal .img-grid .grid-img{width:100%;aspect-ratio:3/2;object-fit:cover;border-radius:8px;cursor:pointer;}
+
+.modal .img-grid .grid-img{
+  width:100%;
+  aspect-ratio:3/2;
+  object-fit:cover;
+  border-radius:8px;
+  cursor:pointer;
+}
+
 .modal .povidani {
   font-size: 14px;
   opacity: .95;
@@ -155,27 +181,43 @@ main{
   padding-top: 12px;
   line-height: 1.6;
   text-align: justify;
-  white-space: pre-line;                /* respektuje nové řádky (\n) */
-  border-top: 1px solid rgba(255,255,255,0.15); /* jemná oddělovací linka */
+  white-space: pre-line;
+  border-top: 1px solid rgba(255,255,255,0.15);
 }
-
 .modal .povidani br {
   display: block;
-  margin-bottom: 6px;                  /* 🔹 menší mezera mezi odstavci */
-  content: "";
+  margin-bottom: 6px;
 }
 
 /* Fullscreen */
-.modal.fullscreen{background:#000;max-width:none;max-height:none;width:100%;height:100%;padding:0;display:flex;align-items:center;justify-content:center;}
-.modal.fullscreen img.main{max-height:90vh;max-width:95vw;object-fit:contain;border-radius:10px;}
-.modal.fullscreen h3{position:absolute;top:20px;left:30px;color:white;text-shadow:0 2px 5px rgba(0,0,0,0.8);}
-.modal.fullscreen .modal-close{position:absolute;top:18px;right:24px;font-size:30px;background:none;border:none;color:white;cursor:pointer;z-index:10;}
-.modal.fullscreen .nav-arrow{background:none;border:none;color:white;font-size:40px;cursor:pointer;position:absolute;top:50%;transform:translateY(-50%);padding:20px;opacity:0.6;transition:opacity .2s;}
+.modal.fullscreen{
+  background:#000;max-width:none;max-height:none;
+  width:100%;height:100%;padding:0;
+  display:flex;align-items:center;justify-content:center;
+}
+.modal.fullscreen img.main{
+  max-height:90vh;max-width:95vw;
+  object-fit:contain;border-radius:10px;
+}
+.modal.fullscreen h3{
+  position:absolute;top:20px;left:30px;
+  color:white;text-shadow:0 2px 5px rgba(0,0,0,0.8);
+}
+.modal.fullscreen .modal-close{
+  position:absolute;top:18px;right:24px;font-size:30px;
+}
+.modal.fullscreen .nav-arrow{
+  background:none;border:none;color:white;font-size:40px;
+  cursor:pointer;position:absolute;top:50%;
+  transform:translateY(-50%);padding:20px;
+  opacity:0.6;transition:opacity .2s;
+}
 .modal.fullscreen .nav-arrow:hover{opacity:1;}
 .modal.fullscreen .nav-arrow.left{left:20px;}
 .modal.fullscreen .nav-arrow.right{right:20px;}
-.fade { opacity:0; transition:opacity .4s ease; }
-.fade.show { opacity:1; }
+
+.fade{opacity:0;transition:opacity .4s ease;}
+.fade.show{opacity:1;}
 
 @media(max-width:900px){
   .hero-overlay{padding-top:8vh;}
@@ -190,10 +232,15 @@ main{
 }
 </style>
 </head>
+
+
 <body>
 
 <header class="hero">
-  <div class="hero-bg"><img src="https://raw.githubusercontent.com/suchanek76/website/main/images/background.jpg" alt=""></div>
+  <div class="hero-bg">
+    <img src="https://raw.githubusercontent.com/suchanek76/website/main/images/background.jpg" alt="">
+  </div>
+
   <div class="hero-overlay">
     <div class="nav">
       <button class="btn active" data-route="koruna">Koruna Evropy</button>
@@ -205,22 +252,40 @@ main{
 
 <main>
   <div class="container">
-    <section id="koruna" data-route-content><div id="koruna-gallery" class="gallery grid-3"></div></section>
-    <section id="alpy" data-route-content hidden><div id="alpy-gallery" class="gallery grid-3"></div></section>
-    <section id="nepal" data-route-content hidden><div id="nepal-gallery" class="gallery grid-4"></div></section>
+    <section id="koruna" data-route-content>
+      <div id="koruna-gallery" class="gallery grid-3"></div>
+    </section>
+
+    <section id="alpy" data-route-content hidden>
+      <div id="alpy-gallery" class="gallery grid-3"></div>
+    </section>
+
+    <section id="nepal" data-route-content hidden>
+      <div id="nepal-gallery" class="gallery grid-4"></div>
+    </section>
   </div>
 </main>
 
-<div id="modal-backdrop" class="modal-backdrop" hidden><div class="modal"><div id="modal-content"></div></div></div>
+<div id="modal-backdrop" class="modal-backdrop" hidden>
+  <div class="modal"><div id="modal-content"></div></div>
+</div>
+
 <footer>© Vzít batoh na záda a jít ...</footer>
 
+
 <script>
+/* URL kořen */
 const RAW="https://raw.githubusercontent.com/suchanek76/website/main/images";
 
-/* ---------- Obrázkové funkce ---------- */
-const imgKoruna = i => i===0 ? `${RAW}/Koruna/Koruna000.jpg` : `${RAW}/Koruna/Koruna${String(i).padStart(3,'0')}.jpg`;
-const imgAlpy   = i => i===0 ? `${RAW}/4000/ctyrtisicovka000.jpg` : `${RAW}/4000/ctyrtisicovka${String(i).padStart(3,'0')}.jpg`;
-const imgNepal  = i => i===0 ? `${RAW}/Nepal/Nepal000.jpg` : `${RAW}/Nepal/Nepal${String(i).padStart(2,'0')}.jpg`;
+/* Obrázkové funkce */
+const imgKoruna = i => i===0 ? `${RAW}/Koruna/Koruna000.jpg`
+                             : `${RAW}/Koruna/Koruna${String(i).padStart(3,'0')}.jpg`;
+
+const imgAlpy   = i => i===0 ? `${RAW}/4000/ctyrtisicovka000.jpg`
+                             : `${RAW}/4000/ctyrtisicovka${String(i).padStart(3,'0')}.jpg`;
+
+const imgNepal  = i => i===0 ? `${RAW}/Nepal/Nepal000.jpg`
+                             : `${RAW}/Nepal/Nepal${String(i).padStart(2,'0')}.jpg`;
 
 
 /* ---------- Data: Koruna Evropy ---------- */
@@ -364,8 +429,8 @@ function closeModal(){
   modal.classList.remove("show");
   setTimeout(()=>{
     modal.hidden = true;
-    modalContent.innerHTML = "";
-    document.body.style.overflow = "";
+    modalContent.innerHTML="";
+    document.body.style.overflow="";
   },200);
 }
 
@@ -373,36 +438,50 @@ function openModal(html,isFullscreen=false){
   const box = modal.querySelector(".modal");
   box.classList.toggle("fullscreen",isFullscreen);
   modalContent.innerHTML = html;
+
   modal.hidden = false;
   requestAnimationFrame(()=>{
     modal.classList.add("show");
-    document.body.style.overflow = "hidden";
+    document.body.style.overflow="hidden";
   });
 }
 
-modal.addEventListener("click", e => {
+modal.addEventListener("click", e=>{
   if(e.target === modal) closeModal();
 });
 
-/* --- Obrázky Koruna/Alpy --- */
-function buildImgGrid(imgFn,nums,alt,dataIndex,dataArr,type){
-  const safe = Array.isArray(nums)? nums.slice(0,9) : [];
-  const html = [];
+
+/* --------------------------------------------------------
+   Vytvoření gridu obrázků pro modal
+   -------------------------------------------------------- */
+function buildImgGrid(imgFn,nums,alt,dataIndex,type){
+  const safe = Array.isArray(nums) ? nums.slice(0,9) : [];
+  const html=[];
+
   for(let i=0;i<safe.length;i++){
-    const n = safe[i];
-    const url = imgFn(n);
-    html.push(
-      `<img class="grid-img" src="${url}" alt="${alt}" onclick="openMountainSlideshow(${dataIndex},${i},'${type}')">`
-    );
+    const url = imgFn(safe[i]);
+    html.push(`
+      <img class="grid-img"
+           src="${url}"
+           alt="${alt}"
+           onclick="openMountainSlideshow(${dataIndex},${i},'${type}')">
+    `);
   }
+
   if(html.length===0){
     html.push(`<img class="grid-img" src="${imgFn(0)}" alt="placeholder">`);
   }
+
   return `<div class="img-grid">${html.join("")}</div>`;
 }
 
+
+/* --------------------------------------------------------
+   Detail hory (modal)
+   -------------------------------------------------------- */
 function showDetail(data,i,imgFn,type){
   const it = data[i];
+
   const meta = `
     ${it.z?`<div>Země:</div><div>${it.z}</div>`:""}
     ${it.d?`<div>Datum výstupu:</div><div>${it.d}</div>`:""}
@@ -411,43 +490,45 @@ function showDetail(data,i,imgFn,type){
     ${it.obt?`<div>Obtížnost:</div><div>${it.obt}</div>`:""}
     ${it.pohori?`<div>Pohoří:</div><div>${it.pohori}</div>`:""}
   `;
-  const imgs = it.imgs || [];
-  const povidani = it.povidani || "Popis výstupu bude ještě doplněn";
-  const gridHtml = buildImgGrid(imgFn,imgs,it.hora,i,data,type);
+
+  const grid = buildImgGrid(imgFn,it.imgs,it.hora,i,type);
 
   openModal(`
     <button class="modal-close" onclick="closeModal()">✕</button>
     <h3>${it.p}/${data.length} – ${it.hora} ${it.v?`${it.v} m`:""}</h3>
     <hr>
     <div class="meta-grid">${meta}</div>
-    ${gridHtml}
-    <div class="povidani">${povidani}</div>
+    ${grid}
+    <div class="povidani">${it.povidani || "Popis výstupu bude ještě doplněn"}</div>
   `);
 }
 
-/* --- Fullscreen slideshow pro Koruna/Alpy --- */
-let activeSet = [], activeIndex = 0, activeType = "", activeMountainName = "";
+
+/* --------------------------------------------------------
+   Fullscreen slideshow — Koruna + Alpy
+   -------------------------------------------------------- */
+let activeSet=[], activeIndex=0, activeType="", activeMountainName="";
 
 function openMountainSlideshow(index,photoIndex,type){
   activeType = type;
-  const data = type === "koruna" ? korunaData : alpyData;
+  const data = type==="koruna" ? korunaData : alpyData;
   const item = data[index];
-  activeSet = item.imgs || [];
+
+  activeSet = item.imgs && item.imgs.length ? item.imgs.slice() : [0];
   activeMountainName = item.hora;
-  if(activeSet.length===0) activeSet = [0];
   activeIndex = photoIndex;
 
   openModal(`
     <button class="nav-arrow left" id="nav-left">❮</button>
     <button class="nav-arrow right" id="nav-right">❯</button>
     <h3 id="mountain-title"></h3>
-    <button class="modal-close" id="modal-close">✕</button>
+    <button class="modal-close" id="close-mtn">✕</button>
     <img class="main fade" id="mountain-main" src="">
   `,true);
 
-  document.getElementById("modal-close").onclick = closeModal;
-  document.getElementById("nav-left").onclick = e => { e.stopPropagation(); changeMountain(-1); };
-  document.getElementById("nav-right").onclick = e => { e.stopPropagation(); changeMountain(1); };
+  document.getElementById("close-mtn").onclick = closeModal;
+  document.getElementById("nav-left").onclick = e=>{e.stopPropagation();changeMountain(-1);};
+  document.getElementById("nav-right").onclick = e=>{e.stopPropagation();changeMountain(1);};
 
   updateMountainModal(true);
 }
@@ -458,87 +539,23 @@ function changeMountain(dir){
 }
 
 function updateMountainModal(first=false){
-  const imgEl = document.getElementById("mountain-main");
+  const img = document.getElementById("mountain-main");
   const title = document.getElementById("mountain-title");
-  const fn = activeType === "koruna" ? imgKoruna : imgAlpy;
-  const url = fn(activeSet[activeIndex]);
+  const fn = activeType==="koruna" ? imgKoruna : imgAlpy;
 
-  if(!first) imgEl.classList.remove("show");
+  if(!first) img.classList.remove("show");
+
   setTimeout(()=>{
-    imgEl.src = url;
+    img.src = fn(activeSet[activeIndex]);
     title.textContent = `${activeMountainName} ${activeIndex+1}/${activeSet.length}`;
-    imgEl.onload = () => imgEl.classList.add("show");
-  }, first ? 0 : 150);
-}
-
-/* --- Gesta --- */
-let sx=0, sy=0, ex=0, ey=0;
-modal.addEventListener("touchstart", e=>{
-  sx = e.changedTouches[0].screenX;
-  sy = e.changedTouches[0].screenY;
-});
-modal.addEventListener("touchend", e=>{
-  ex = e.changedTouches[0].screenX;
-  ey = e.changedTouches[0].screenY;
-  const dx = ex - sx, dy = ey - sy;
-  if(Math.abs(dx) > Math.abs(dy)){
-    if(Math.abs(dx) > 50){
-      if(activeType){
-        dx > 0 ? changeMountain(-1) : changeMountain(1);
-      }else{
-        dx > 0 ? changeNepal(-1) : changeNepal(1);
-      }
-    }
-});
-
-document.addEventListener("keydown", e=>{
-  if(!modal.classList.contains("show")) return;
-  if(e.key === "Escape") closeModal();
-  if(e.key === "ArrowLeft"){ activeType ? changeMountain(-1) : changeNepal(-1); }
-  if(e.key === "ArrowRight"){ activeType ? changeMountain(1) : changeNepal(1); }
-});
-
-/* --- Karty --- */
-function cardKoruna(it,i){
-  const el=document.createElement("div");
-  el.className="photo-card";
-  const firstImg=(it.imgs&&it.imgs.length>0)?it.imgs[0]:0;
-  el.innerHTML=`
-    <img class="photo" src="${imgKoruna(firstImg)}" loading="lazy">
-    <div class="photo-overlay">
-      <div class="photo-title">${it.p}. ${it.hora} ${it.v?`${it.v} m`:""}</div>
-      <div class="photo-sub">${it.z||""} ${it.d||""}</div>
-    </div>`;
-  el.onclick=()=>showDetail(korunaData,i,imgKoruna,"koruna");
-  return el;
-}
-
-function cardAlpy(it,i){
-  const el=document.createElement("div");
-  el.className="photo-card";
-  const firstImg=(it.imgs&&it.imgs.length>0)?it.imgs[0]:0;
-  el.innerHTML=`
-    <img class="photo" src="${imgAlpy(firstImg)}" loading="lazy">
-    <div class="photo-overlay">
-      <div class="photo-title">${it.p}. ${it.hora} ${it.v?`${it.v} m`:""}</div>
-      <div class="photo-sub">${it.z||""} ${it.d||""}</div>
-    </div>`;
-  el.onclick=()=>showDetail(alpyData,i,imgAlpy,"alpy");
-  return el;
-}
-
-function cardSimple(it,i){
-  const el=document.createElement("div");
-  el.className="photo-card";
-  el.innerHTML=`
-    <img class="photo" src="${it.img}" loading="lazy">
-    <div class="photo-overlay"><div class="photo-title">${it.title}</div></div>`;
-  el.onclick=()=>openNepalModal(i);
-  return el;
+    img.onload = ()=>img.classList.add("show");
+  }, first?0:150);
 }
 
 
-/* --- Nepál fullscreen --- */
+/* --------------------------------------------------------
+   Nepál fullscreen
+   -------------------------------------------------------- */
 const nepalData = Array.from({length:40},(_,i)=>({
   idx:i,
   title:`Nepál ${i+1}`,
@@ -549,17 +566,18 @@ let nepalIndex=0;
 
 function openNepalModal(i){
   nepalIndex=i;
+
   openModal(`
     <button class="nav-arrow left" id="nav-left">❮</button>
     <button class="nav-arrow right" id="nav-right">❯</button>
     <h3 id="nepal-title"></h3>
-    <button class="modal-close" id="modal-close">✕</button>
+    <button class="modal-close" id="close-nepal">✕</button>
     <img class="main fade" id="nepal-main" src="">
   `,true);
 
-  document.getElementById("modal-close").onclick = closeModal;
-  document.getElementById("nav-left").onclick = e => { e.stopPropagation(); changeNepal(-1); };
-  document.getElementById("nav-right").onclick = e => { e.stopPropagation(); changeNepal(1); };
+  document.getElementById("close-nepal").onclick = closeModal;
+  document.getElementById("nav-left").onclick = e=>{e.stopPropagation();changeNepal(-1);};
+  document.getElementById("nav-right").onclick = e=>{e.stopPropagation();changeNepal(1);};
 
   updateNepalModal(true);
 }
@@ -579,33 +597,74 @@ function updateNepalModal(first=false){
   setTimeout(()=>{
     img.src = it.img;
     title.textContent = `Nepál ${nepalIndex+1}/${nepalData.length}`;
-    img.onload = () => img.classList.add("show");
-  }, first ? 0 : 150);
+    img.onload = ()=>img.classList.add("show");
+  }, first?0:150);
 }
 
 
-/* --- Galerie render + navigace --- */
+/* --------------------------------------------------------
+   Swipe gesta — pouze listování, ne zavírání
+   -------------------------------------------------------- */
+let sx=0, sy=0, ex=0, ey=0;
+
+modal.addEventListener("touchstart", e=>{
+  sx = e.changedTouches[0].screenX;
+  sy = e.changedTouches[0].screenY;
+});
+
+modal.addEventListener("touchend", e=>{
+  ex = e.changedTouches[0].screenX;
+  ey = e.changedTouches[0].screenY;
+
+  const dx = ex - sx;
+  const dy = ey - sy;
+
+  /* horizontální swipe → slideshow */
+  if(Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 50){
+    if(activeType){
+      dx > 0 ? changeMountain(-1) : changeMountain(1);
+    } else {
+      dx > 0 ? changeNepal(-1) : changeNepal(1);
+    }
+  }
+});
+
+
+/* Klávesy */
+document.addEventListener("keydown", e=>{
+  if(!modal.classList.contains("show")) return;
+
+  if(e.key === "Escape") closeModal();
+  if(e.key === "ArrowLeft"){ activeType ? changeMountain(-1) : changeNepal(-1); }
+  if(e.key === "ArrowRight"){ activeType ? changeMountain(1) : changeNepal(1); }
+});
+
+
+/* --------------------------------------------------------
+   Galerie + navigace
+   -------------------------------------------------------- */
 document.addEventListener("DOMContentLoaded",()=>{
 
   function renderGallery(el,data,fn){
-    el.innerHTML = "";
+    el.innerHTML="";
     data.forEach((it,i)=>el.appendChild(fn(it,i)));
   }
 
-  renderGallery(document.getElementById("koruna-gallery"),korunaData,cardKoruna);
-  renderGallery(document.getElementById("alpy-gallery"),alpyData,cardAlpy);
-  renderGallery(document.getElementById("nepal-gallery"),nepalData,cardSimple);
+  /* PO VLOŽENÍ DATSE TI TOTO ZAPLNÍ */
+  renderGallery(document.getElementById("koruna-gallery"), korunaData, cardKoruna);
+  renderGallery(document.getElementById("alpy-gallery"),   alpyData,   cardAlpy);
+  renderGallery(document.getElementById("nepal-gallery"),  nepalData,  cardSimple);
 
   const btns = document.querySelectorAll(".btn");
   const sections = document.querySelectorAll("[data-route-content]");
 
   function show(route){
-    sections.forEach(s => s.hidden = (s.id !== route));
-    btns.forEach(b => b.classList.toggle("active", b.dataset.route === route));
+    sections.forEach(s=>s.hidden = (s.id !== route));
+    btns.forEach(b=>b.classList.toggle("active", b.dataset.route===route));
 
     history.replaceState(null,"","#"+route);
 
-    /* ❗ ŽÁDNÉ SCROLLOVÁNÍ — stránka zůstane nahoře */
+    /* žádný scroll — hero zůstává nahoře */
   }
 
   btns.forEach(b => b.addEventListener("click", ()=>show(b.dataset.route)));
@@ -614,9 +673,8 @@ document.addEventListener("DOMContentLoaded",()=>{
     show(location.hash.substring(1) || "koruna");
   });
 
-  /* Výchozí stav — pokud není hash, zobrazí se hero */
-  if (!location.hash){
-    // necháme výchozí Korunu, ale uživatel zůstane nahoře
+  if(!location.hash){
+    /* výchozí hero */
   } else {
     show(location.hash.substring(1));
   }
