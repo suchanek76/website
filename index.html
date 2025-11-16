@@ -675,4 +675,302 @@ document.addEventListener("DOMContentLoaded",()=>{
 </script>
 
 </body>
+</html>/* --- Modal --- */
+const modal = document.getElementById("modal-backdrop");
+const modalContent = document.getElementById("modal-content");
+
+function closeModal(){
+  modal.classList.remove("show");
+  setTimeout(()=>{
+    modal.hidden = true;
+    modalContent.innerHTML="";
+    document.body.style.overflow="";
+  },200);
+}
+
+function openModal(html,isFullscreen=false){
+  const box = modal.querySelector(".modal");
+  box.classList.toggle("fullscreen",isFullscreen);
+  modalContent.innerHTML = html;
+
+  modal.hidden = false;
+  requestAnimationFrame(()=>{
+    modal.classList.add("show");
+    document.body.style.overflow="hidden";
+  });
+}
+
+modal.addEventListener("click", e=>{
+  if(e.target === modal) closeModal();
+});
+
+
+/* --------------------------------------------------------
+   Vytvoření gridu obrázků pro modal
+   -------------------------------------------------------- */
+function buildImgGrid(imgFn,nums,alt,dataIndex,type){
+  const safe = Array.isArray(nums) ? nums.slice(0,9) : [];
+  const html=[];
+
+  for(let i=0;i<safe.length;i++){
+    const url = imgFn(safe[i]);
+    html.push(`
+      <img class="grid-img"
+           src="${url}"
+           alt="${alt}"
+           onclick="openMountainSlideshow(${dataIndex},${i},'${type}')">
+    `);
+  }
+
+  if(html.length===0){
+    html.push(`<img class="grid-img" src="${imgFn(0)}" alt="placeholder">`);
+  }
+
+  return `<div class="img-grid">${html.join("")}</div>`;
+}
+
+
+/* --------------------------------------------------------
+   Detail hory (modal)
+   -------------------------------------------------------- */
+function showDetail(data,i,imgFn,type){
+  const it = data[i];
+
+  const meta = `
+    ${it.z?`<div>Země:</div><div>${it.z}</div>`:""}
+    ${it.d?`<div>Datum výstupu:</div><div>${it.d}</div>`:""}
+    ${it.cas?`<div>Čas výstupu:</div><div>${it.cas}</div>`:""}
+    ${it.team?`<div>Tým:</div><div>${it.team}</div>`:""}
+    ${it.obt?`<div>Obtížnost:</div><div>${it.obt}</div>`:""}
+    ${it.pohori?`<div>Pohoří:</div><div>${it.pohori}</div>`:""}
+  `;
+
+  const grid = buildImgGrid(imgFn,it.imgs,it.hora,i,type);
+
+  openModal(`
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <h3>${it.p}/${data.length} – ${it.hora} ${it.v?`${it.v} m`:""}</h3>
+    <hr>
+    <div class="meta-grid">${meta}</div>
+    ${grid}
+    <div class="povidani">${it.povidani || "Popis výstupu bude ještě doplněn"}</div>
+  `);
+}
+
+
+/* --------------------------------------------------------
+   Fullscreen slideshow — Koruna + Alpy
+   -------------------------------------------------------- */
+let activeSet=[], activeIndex=0, activeType="", activeMountainName="";
+
+function openMountainSlideshow(index,photoIndex,type){
+  activeType = type;
+  const data = type==="koruna" ? korunaData : alpyData;
+  const item = data[index];
+
+  activeSet = item.imgs && item.imgs.length ? item.imgs.slice() : [0];
+  activeMountainName = item.hora;
+  activeIndex = photoIndex;
+
+  openModal(`
+    <button class="nav-arrow left" id="nav-left">❮</button>
+    <button class="nav-arrow right" id="nav-right">❯</button>
+    <h3 id="mountain-title"></h3>
+    <button class="modal-close" id="close-mtn">✕</button>
+    <img class="main fade" id="mountain-main" src="">
+  `,true);
+
+  document.getElementById("close-mtn").onclick = closeModal;
+  document.getElementById("nav-left").onclick = e=>{e.stopPropagation();changeMountain(-1);};
+  document.getElementById("nav-right").onclick = e=>{e.stopPropagation();changeMountain(1);};
+
+  updateMountainModal(true);
+}
+
+function changeMountain(dir){
+  activeIndex = (activeIndex + dir + activeSet.length) % activeSet.length;
+  updateMountainModal();
+}
+
+function updateMountainModal(first=false){
+  const img = document.getElementById("mountain-main");
+  const title = document.getElementById("mountain-title");
+  const fn = activeType==="koruna" ? imgKoruna : imgAlpy;
+
+  if(!first) img.classList.remove("show");
+
+  setTimeout(()=>{
+    img.src = fn(activeSet[activeIndex]);
+    title.textContent = `${activeMountainName} ${activeIndex+1}/${activeSet.length}`;
+    img.onload = ()=>img.classList.add("show");
+  }, first?0:150);
+}
+
+
+/* --------------------------------------------------------
+   Nepál fullscreen
+   -------------------------------------------------------- */
+const nepalData = Array.from({length:40},(_,i)=>({
+  idx:i,
+  title:`Nepál ${i+1}`,
+  img:imgNepal(i+1)
+}));
+
+let nepalIndex=0;
+
+function openNepalModal(i){
+  nepalIndex=i;
+
+  openModal(`
+    <button class="nav-arrow left" id="nav-left">❮</button>
+    <button class="nav-arrow right" id="nav-right">❯</button>
+    <h3 id="nepal-title"></h3>
+    <button class="modal-close" id="close-nepal">✕</button>
+    <img class="main fade" id="nepal-main" src="">
+  `,true);
+
+  document.getElementById("close-nepal").onclick = closeModal;
+  document.getElementById("nav-left").onclick = e=>{e.stopPropagation();changeNepal(-1);};
+  document.getElementById("nav-right").onclick = e=>{e.stopPropagation();changeNepal(1);};
+
+  updateNepalModal(true);
+}
+
+function changeNepal(dir){
+  nepalIndex = (nepalIndex + dir + nepalData.length) % nepalData.length;
+  updateNepalModal();
+}
+
+function updateNepalModal(first=false){
+  const it = nepalData[nepalIndex];
+  const img = document.getElementById("nepal-main");
+  const title = document.getElementById("nepal-title");
+
+  if(!first) img.classList.remove("show");
+
+  setTimeout(()=>{
+    img.src = it.img;
+    title.textContent = `Nepál ${nepalIndex+1}/${nepalData.length}`;
+    img.onload = ()=>img.classList.add("show");
+  }, first?0:150);
+}
+
+
+/* --------------------------------------------------------
+   Swipe gesta — pouze listování, ne zavírání
+   -------------------------------------------------------- */
+let sx=0, sy=0, ex=0, ey=0;
+
+modal.addEventListener("touchstart", e=>{
+  sx = e.changedTouches[0].screenX;
+  sy = e.changedTouches[0].screenY;
+});
+
+modal.addEventListener("touchend", e=>{
+  ex = e.changedTouches[0].screenX;
+  ey = e.changedTouches[0].screenY;
+
+  const dx = ex - sx;
+  const dy = ey - sy;
+
+  /* horizontální swipe → slideshow */
+  if(Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 50){
+    if(activeType){
+      dx > 0 ? changeMountain(-1) : changeMountain(1);
+    } else {
+      dx > 0 ? changeNepal(-1) : changeNepal(1);
+    }
+  }
+});
+
+
+/* Klávesy */
+document.addEventListener("keydown", e=>{
+  if(!modal.classList.contains("show")) return;
+
+  if(e.key === "Escape") closeModal();
+  if(e.key === "ArrowLeft"){ activeType ? changeMountain(-1) : changeNepal(-1); }
+  if(e.key === "ArrowRight"){ activeType ? changeMountain(1) : changeNepal(1); }
+});
+
+
+/* --- Karty --- */
+function cardKoruna(it,i){
+  const el=document.createElement("div");
+  el.className="photo-card";
+  const firstImg=(it.imgs&&it.imgs.length>0)?it.imgs[0]:0;
+  el.innerHTML=`
+    <img class="photo" src="${imgKoruna(firstImg)}" loading="lazy">
+    <div class="photo-overlay">
+      <div class="photo-title">${it.p}. ${it.hora} ${it.v ? `${it.v} m` : ""}</div>
+      <div class="photo-sub">${it.z || ""} ${it.d || ""}</div>
+    </div>`;
+  el.onclick=()=>showDetail(korunaData,i,imgKoruna,"koruna");
+  return el;
+}
+
+function cardAlpy(it,i){
+  const el=document.createElement("div");
+  el.className="photo-card";
+  const firstImg=(it.imgs&&it.imgs.length>0)?it.imgs[0]:0;
+  el.innerHTML=`
+    <img class="photo" src="${imgAlpy(firstImg)}" loading="lazy">
+    <div class="photo-overlay">
+      <div class="photo-title">${it.p}. ${it.hora} ${it.v ? `${it.v} m` : ""}</div>
+      <div class="photo-sub">${it.z || ""} ${it.d || ""}</div>
+    </div>`;
+  el.onclick=()=>showDetail(alpyData,i,imgAlpy,"alpy");
+  return el;
+}
+
+function cardSimple(it,i){
+  const el=document.createElement("div");
+  el.className="photo-card";
+  el.innerHTML=`
+    <img class="photo" src="${it.img}" loading="lazy">
+    <div class="photo-overlay"><div class="photo-title">${it.title}</div></div>`;
+  el.onclick=()=>openNepalModal(i);
+  return el;
+}
+
+
+/* --------------------------------------------------------
+   Galerie + navigace
+   -------------------------------------------------------- */
+document.addEventListener("DOMContentLoaded",()=>{
+
+  function renderGallery(el,data,fn){
+    el.innerHTML="";
+    data.forEach((it,i)=>el.appendChild(fn(it,i)));
+  }
+
+  /* Naplnění galerií */
+  renderGallery(document.getElementById("koruna-gallery"), korunaData, cardKoruna);
+  renderGallery(document.getElementById("alpy-gallery"),   alpyData,   cardAlpy);
+  renderGallery(document.getElementById("nepal-gallery"),  nepalData,  cardSimple);
+
+  const btns = document.querySelectorAll(".btn");
+  const sections = document.querySelectorAll("[data-route-content]");
+
+  function show(route){
+    sections.forEach(s=>s.hidden = (s.id !== route));
+    btns.forEach(b=>b.classList.toggle("active", b.dataset.route===route));
+
+    history.replaceState(null,"","#"+route);
+    /* žádný scroll – hero zůstává nahoře */
+  }
+
+  btns.forEach(b => b.addEventListener("click", ()=>show(b.dataset.route)));
+
+  window.addEventListener("popstate", ()=>{
+    show(location.hash.substring(1) || "koruna");
+  });
+
+  if(location.hash){
+    show(location.hash.substring(1));
+  }
+});
+</script>
+
+</body>
 </html>
