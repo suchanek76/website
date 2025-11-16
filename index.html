@@ -55,27 +55,30 @@ html,body{
   object-position:center;
 }
 
-/* iPad – minimální ořez */
+/* iPad – žádný ořez */
 @media (min-width:768px) and (max-width:1024px){
   .hero-bg img{
-    object-fit:contain;
-    background-color:#041633; /* pruhy kolem fotky */
+    object-fit: contain !important;
+    object-position: center;
+    background-color: #041633; /* pruhy splynou */
   }
 }
 
-/* Mobil na výšku – menší ořez, důraz na horní část */
-@media (max-width:600px) and (orientation:portrait){
+/* Mobil na výšku – žádný ořez */
+@media (max-width:600px) and (orientation: portrait){
   .hero-bg img{
-    object-fit:cover;
-    object-position:center top;
+    object-fit: contain !important;
+    object-position: center;
+    background-color: #041633;
   }
 }
 
-/* Mobil na šířku – kompromis */
-@media (max-width:800px) and (orientation:landscape){
+/* Mobil na šířku – kompromisní zarovnání bez ořezu */
+@media (max-width:800px) and (orientation: landscape){
   .hero-bg img{
-    object-fit:cover;
-    object-position:center 30%;
+    object-fit: contain !important;
+    object-position: center;
+    background-color: #041633;
   }
 }
 
