@@ -1,3 +1,5 @@
+<!doctype html>
+<html lang="cs">
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
@@ -397,7 +399,7 @@ main{
   opacity:1;
 }
 
-/* Úprava meta-grid na menších zařízení */
+/* Úprava meta-grid na menších zařízeních */
 @media(max-width:900px){
   .modal .meta-grid{
     grid-template-columns:120px 1fr;
@@ -421,6 +423,57 @@ footer{
 </style>
 </head>
 
+<body>
+
+<header class="hero">
+  <div class="hero-bg">
+    <img src="https://raw.githubusercontent.com/suchanek76/website/main/images/background.jpg" alt="">
+  </div>
+
+  <div class="hero-overlay">
+    <div class="nav">
+      <button class="btn active" data-route="koruna">Koruna Evropy</button>
+      <button class="btn" data-route="alpy">Alpské čtyřtisícovky</button>
+      <button class="btn" data-route="nepal">Nepál</button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <div class="container">
+    <section id="koruna" data-route-content>
+      <div id="koruna-gallery" class="gallery grid-3"></div>
+    </section>
+
+    <section id="alpy" data-route-content hidden>
+      <div id="alpy-gallery" class="gallery grid-3"></div>
+    </section>
+
+    <section id="nepal" data-route-content hidden>
+      <div id="nepal-gallery" class="gallery grid-4"></div>
+    </section>
+  </div>
+</main>
+
+<div id="modal-backdrop" class="modal-backdrop" hidden>
+  <div class="modal"><div id="modal-content"></div></div>
+</div>
+
+<footer>© Vzít batoh na záda a jít ...</footer>
+
+<script>
+/* URL kořen */
+const RAW="https://raw.githubusercontent.com/suchanek76/website/main/images";
+
+/* Obrázkové funkce */
+const imgKoruna = i => i===0 ? `${RAW}/Koruna/Koruna000.jpg`
+                             : `${RAW}/Koruna/Koruna${String(i).padStart(3,'0')}.jpg`;
+
+const imgAlpy   = i => i===0 ? `${RAW}/4000/ctyrtisicovka000.jpg`
+                             : `${RAW}/4000/ctyrtisicovka${String(i).padStart(3,'0')}.jpg`;
+
+const imgNepal  = i => i===0 ? `${RAW}/Nepal/Nepal000.jpg`
+                             : `${RAW}/Nepal/Nepal${String(i).padStart(2,'0')}.jpg`;
 
 
 /* ---------- Data: Koruna Evropy ---------- */
@@ -774,7 +827,7 @@ document.addEventListener("keydown", e=>{
   if(e.key === "ArrowRight"){ activeType ? changeMountain(1) : changeNepal(1); }
 });
 
-  
+
 /* --- Karty --- */
 function cardKoruna(it,i){
   const el=document.createElement("div");
@@ -814,7 +867,7 @@ function cardSimple(it,i){
   return el;
 }
 
-  
+
 /* --------------------------------------------------------
    Galerie + navigace
    -------------------------------------------------------- */
@@ -825,7 +878,7 @@ document.addEventListener("DOMContentLoaded",()=>{
     data.forEach((it,i)=>el.appendChild(fn(it,i)));
   }
 
-  /* PO VLOŽENÍ DATSE TI TOTO ZAPLNÍ */
+  /* Naplnění galerií */
   renderGallery(document.getElementById("koruna-gallery"), korunaData, cardKoruna);
   renderGallery(document.getElementById("alpy-gallery"),   alpyData,   cardAlpy);
   renderGallery(document.getElementById("nepal-gallery"),  nepalData,  cardSimple);
@@ -838,8 +891,7 @@ document.addEventListener("DOMContentLoaded",()=>{
     btns.forEach(b=>b.classList.toggle("active", b.dataset.route===route));
 
     history.replaceState(null,"","#"+route);
-
-    /* žádný scroll — hero zůstává nahoře */
+    /* žádný scroll – hero zůstává nahoře */
   }
 
   btns.forEach(b => b.addEventListener("click", ()=>show(b.dataset.route)));
@@ -848,9 +900,7 @@ document.addEventListener("DOMContentLoaded",()=>{
     show(location.hash.substring(1) || "koruna");
   });
 
-  if(!location.hash){
-    /* výchozí hero */
-  } else {
+  if(location.hash){
     show(location.hash.substring(1));
   }
 });
