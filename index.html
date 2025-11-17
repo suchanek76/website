@@ -64,12 +64,12 @@ html,body{
   }
 }
 
-/* Mobil na výšku – žádný ořez */
+/* Mobil na výšku – fotka přes celou obrazovku, žádné pruhy */
 @media (max-width:600px) and (orientation: portrait){
   .hero-bg img{
-    object-fit: contain !important;
+    object-fit: cover !important;
     object-position: center;
-    background-color: #041633;
+    background-color: transparent !important;
   }
 }
 
