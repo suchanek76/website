@@ -6,191 +6,93 @@
 <title>Vzít batoh na záda a jít ...</title>
 <style>
 :root {
-  --dark-blue: #041633;
-  --accent: #ffffff;
-  --max-width: 1200px;
+--dark-blue: #041633;
+--accent: #ffffff;
+--max-width: 1200px;
 }
 *{box-sizing:border-box;margin:0;padding:0;}
 html,body{
-  font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,Arial;
-  color:var(--accent);
-  background:var(--dark-blue);
-  overflow-x:hidden;
-  scroll-behavior:auto!important;
+font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,Arial;
+color:var(--accent);
+background:var(--dark-blue);
+overflow-x:hidden;
+scroll-behavior:auto!important;
 }
+
 
 /* Hero */
 .hero{
-  position:relative;
-  width:100%;
-  height:100vh;
-  background:var(--dark-blue);
-  overflow:hidden;
+position:relative;
+width:100%;
+height:100vh;
+background:var(--dark-blue);
+overflow:hidden;
 }
 .hero-bg{
-  position:absolute;
-  inset:0;
-  display:flex;
-  justify-content:center;
-  align-items:center;
+position:absolute;
+inset:0;
+display:flex;
+justify-content:center;
+align-items:center;
 }
 .hero-bg img{
-  width:100%;
-  height:100%;
-  object-fit:cover;
-  object-position:center;
+width:100%;
+height:100%;
+object-fit:cover;
+object-position:center;
 }
 .hero-overlay{
-  position:absolute;
-  inset:0;
-  display:flex;
-  justify-content:center;
-  align-items:flex-start;
-  padding-top:40vh;
+position:absolute;
+inset:0;
+display:flex;
+justify-content:center;
+align-items:flex-start;
+padding-top:25vh;
 }
 .nav{display:flex;gap:14px;flex-wrap:wrap;justify-content:center;}
 .btn{
-  background:rgba(255,255,255,0.12);
-  border:1px solid rgba(255,255,255,0.25);
-  padding:14px 22px;
-  color:white;
-  border-radius:8px;
-  font-weight:600;
-  cursor:pointer;
-  transition:background .25s,transform .2s;
+background:rgba(255,255,255,0.12);
+border:1px solid rgba(255,255,255,0.25);
+padding:14px 22px;
+color:white;
+border-radius:8px;
+font-weight:600;
+cursor:pointer;
+transition:background .25s,transform .2s;
 }
 .btn:hover{background:rgba(255,255,255,0.3);transform:scale(1.04);}
 .btn.active{background:#fff;color:var(--dark-blue);}
+
 
 /* Galerie */
 main{position:relative;z-index:3;padding:60px 0 80px;}
 .container{width:95%;max-width:var(--max-width);margin:0 auto;}
 .gallery { display: grid; gap: 16px; }
 
+
 /* --- Galerie Koruna + Alpy --- */
 .grid-3 { grid-template-columns: repeat(3, 1fr); }
+
 
 /* --- Galerie Nepál zůstává .grid-4 beze změny --- */
 .grid-4 { grid-template-columns: repeat(4, 1fr); }
 
+
 /* Tablet (šířka pod 1000px) → stále 3 fotky */
 @media (max-width: 1000px) {
-  .grid-3 { grid-template-columns: repeat(3, 1fr); }
+.grid-3 { grid-template-columns: repeat(3, 1fr); }
 }
+
 
 /* Mobil na šířku → 2 fotky */
 @media (max-width: 800px) and (orientation: landscape) {
-  .grid-3 { grid-template-columns: repeat(2, 1fr); }
+.grid-3 { grid-template-columns: repeat(2, 1fr); }
 }
+
 
 /* Mobil na výšku → 1 fotka */
 @media (max-width: 600px) and (orientation: portrait) {
-  .grid-3 { grid-template-columns: 1fr; }
-}
-
-/* --- Modální okno (Koruna, Alpy) --- */
-.modal .img-grid {
-  display: grid;
-  gap: 10px;
-  grid-template-columns: repeat(3, 1fr);
-}
-
-/* Tablet */
-@media (max-width: 1000px) {
-  .modal .img-grid { grid-template-columns: repeat(3, 1fr); }
-}
-
-/* Mobil na šířku */
-@media (max-width: 800px) and (orientation: landscape) {
-  .modal .img-grid { grid-template-columns: repeat(2, 1fr); }
-}
-
-/* Mobil na výšku */
-@media (max-width: 600px) and (orientation: portrait) {
-  .modal .img-grid { grid-template-columns: 1fr; }
-}
-
-/* Karty */
-.photo-card{position:relative;overflow:hidden;border-radius:10px;cursor:pointer;background:#000;}
-.photo-card img.photo{width:100%;aspect-ratio:3/2;object-fit:cover;transition:transform .35s ease;}
-.photo-card:hover img.photo{transform:scale(1.04);}
-.photo-overlay{
-  position:absolute;left:0;right:0;bottom:0;padding:10px;
-  background:linear-gradient(to top,rgba(0,0,0,0.7),rgba(0,0,0,0));
-}
-.photo-title{font-weight:700;font-size:14px;}
-.photo-sub{font-size:12px;opacity:0.9;margin-top:3px;}
-
-/* Modal */
-.modal-backdrop{
-  position:fixed;inset:0;background:rgba(0,0,0,0.7);
-  display:flex;align-items:center;justify-content:center;
-  z-index:9999;padding:24px;
-  opacity:0;pointer-events:none;transition:opacity .18s;
-}
-.modal-backdrop.show{opacity:1;pointer-events:auto;}
-.modal{
-  width:100%;max-width:980px;max-height:92vh;background:#071431;
-  border-radius:10px;padding:22px 24px;color:#fff;overflow:auto;position:relative;
-}
-.modal-close{
-  position:absolute;right:16px;top:16px;background:none;border:none;
-  color:white;font-size:22px;cursor:pointer;
-}
-.modal h3{font-size:20px;font-weight:700;margin-bottom:8px;}
-.modal hr{margin:10px 0 16px 0;border:none;border-top:1px solid rgba(255,255,255,0.15);}
-.modal .meta-grid{display:grid;grid-template-columns:150px 1fr;gap:4px 10px;font-size:14px;opacity:.95;margin-bottom:10px;line-height:1.4;}
-.modal .meta-grid div:first-child{font-weight:600;color:#d8e2ff;}
-.modal .img-grid .grid-img{width:100%;aspect-ratio:3/2;object-fit:cover;border-radius:8px;cursor:pointer;}
-.modal .povidani {
-  font-size: 14px;
-  opacity: .95;
-  margin-top: 22px;
-  padding-top: 12px;
-  line-height: 1.6;
-  text-align: justify;
-  white-space: pre-line;                /* respektuje nové řádky (\n) */
-  border-top: 1px solid rgba(255,255,255,0.15); /* jemná oddělovací linka */
-}
-
-.modal .povidani br {
-  display: block;
-  margin-bottom: 6px;                  /* 🔹 menší mezera mezi odstavci */
-  content: "";
-}
-
-/* Fullscreen */
-.modal.fullscreen{background:#000;max-width:none;max-height:none;width:100%;height:100%;padding:0;display:flex;align-items:center;justify-content:center;}
-.modal.fullscreen img.main{max-height:90vh;max-width:95vw;object-fit:contain;border-radius:10px;}
-.modal.fullscreen h3{position:absolute;top:20px;left:30px;color:white;text-shadow:0 2px 5px rgba(0,0,0,0.8);}
-.modal.fullscreen .modal-close{position:absolute;top:18px;right:24px;font-size:30px;background:none;border:none;color:white;cursor:pointer;z-index:10;}
-.modal.fullscreen .nav-arrow{background:none;border:none;color:white;font-size:40px;cursor:pointer;position:absolute;top:50%;transform:translateY(-50%);padding:20px;opacity:0.6;transition:opacity .2s;}
-.modal.fullscreen .nav-arrow:hover{opacity:1;}
-.modal.fullscreen .nav-arrow.left{left:20px;}
-.modal.fullscreen .nav-arrow.right{right:20px;}
-.fade { opacity:0; transition:opacity .4s ease; }
-.fade.show { opacity:1; }
-
-@media(max-width:900px){
-  .hero-overlay{padding-top:35vh;}
-  .btn{padding:12px 18px;font-size:15px;}
-  .modal .meta-grid{grid-template-columns:120px 1fr;}
-}
-@media(max-width:600px){
-  .hero-overlay{padding-top:30vh;}
-  .nav{flex-direction:column;gap:10px;}
-  .btn{width:180px;text-align:center;}
-  .modal .meta-grid{grid-template-columns:100px 1fr;}
-}
-</style>
-</head>
-<body>
-
-<header class="hero">
-  <div class="hero-bg"><img src="https://raw.githubusercontent.com/suchanek76/website/main/images/background.jpg" alt=""></div>
-  <div class="hero-overlay">
-    <div class="nav">
-      <button class="btn active" data-route="koruna">Koruna Evropy</button>
+<button class="btn active" data-route="koruna">Koruna Evropy
       <button class="btn" data-route="alpy">Alpské čtyřtisícovky</button>
       <button class="btn" data-route="nepal">Nepál</button>
     </div>
