@@ -467,6 +467,45 @@ footer{
   </div>
 
   <div class="hero-overlay">
+    <div class="hero-title">
+    Vzít batoh na záda a jít
+  </div>
+
+    /* ---------------HERO TITLE------------------- */
+
+.hero-title{
+  color:#fff;
+  font-size:42px;
+  font-weight:700;
+  letter-spacing:0.5px;
+  margin-bottom:26px;
+  text-align:center;
+  text-shadow:0 3px 10px rgba(0,0,0,0.45);
+}
+
+/* Tablet */
+@media (max-width:1000px){
+  .hero-title{
+    font-size:34px;
+  }
+}
+
+/* Mobil NA VÝŠKU – menší písmo */
+@media (max-width:600px) and (orientation: portrait){
+  .hero-title{
+    font-size:24px;
+    margin-bottom:18px;
+  }
+}
+
+/* Mobil NA ŠÍŘKU */
+@media (max-width:800px) and (orientation: landscape){
+  .hero-title{
+    font-size:28px;
+    margin-bottom:20px;
+  }
+}
+
     <div class="nav">
       <button class="btn active" data-route="koruna">Koruna Evropy 16/43</button>
       <button class="btn" data-route="alpy">Alpské čtyřtisícovky 5/82</button>
