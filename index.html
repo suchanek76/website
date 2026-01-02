@@ -37,10 +37,11 @@ html,body{
 .hero{
   position:relative;
   width:100%;
-  height:100vh;
+  height:100vh;              /* výchozí stav */
   background:var(--dark-blue);
   overflow:hidden;
 }
+
 .hero-bg{
   position:absolute;
   inset:0;
@@ -48,6 +49,7 @@ html,body{
   justify-content:center;
   align-items:center;
 }
+
 .hero-bg img{
   width:100%;
   height:100%;
@@ -55,32 +57,50 @@ html,body{
   object-position:center;
 }
 
-/* iPad – žádný ořez */
+/* ===============================
+   iPad – žádný ořez fotky
+   =============================== */
 @media (min-width:768px) and (max-width:1024px){
   .hero-bg img{
-    object-fit: contain !important;
-    object-position: center;
-    background-color: #041633; /* pruhy splynou */
+    object-fit:contain;
+    background-color:var(--dark-blue);
   }
 }
 
-/* Mobil na výšku – fotka přes celou obrazovku, žádné pruhy */
+/* ===============================
+   Mobil NA VÝŠKU – hero MENŠÍ
+   žádné pruhy, žádný ořez ze stran
+   =============================== */
 @media (max-width:600px) and (orientation: portrait){
+  .hero{
+    height:82vh;
+    min-height:520px;
+  }
+
   .hero-bg img{
-    object-fit: cover !important;
-    object-position: center;
-    background-color: transparent !important;
+    object-fit:cover;
+    background-color:transparent;
   }
 }
 
-/* Mobil na šířku – kompromisní zarovnání bez ořezu */
+/* ===============================
+   Mobil NA ŠÍŘKU – hero lehce větší
+   =============================== */
 @media (max-width:800px) and (orientation: landscape){
+  .hero{
+    height:108vh;
+    min-height:420px;
+  }
+
   .hero-bg img{
-    object-fit: contain !important;
-    object-position: center;
-    background-color: #041633;
+    object-fit:contain;
+    background-color:var(--dark-blue);
   }
 }
+
+/* -------------------------------------------------
+   HERO overlay + navigace
+------------------------------------------------- */
 
 .hero-overlay{
   position:absolute;
@@ -90,12 +110,14 @@ html,body{
   align-items:flex-start;
   padding-top:12vh;
 }
+
 .nav{
   display:flex;
   gap:14px;
   flex-wrap:wrap;
   justify-content:center;
 }
+
 .btn{
   background:rgba(255,255,255,0.12);
   border:1px solid rgba(255,255,255,0.25);
@@ -106,24 +128,33 @@ html,body{
   cursor:pointer;
   transition:background .25s,transform .2s;
 }
+
 .btn:hover{
   background:rgba(255,255,255,0.3);
   transform:scale(1.04);
 }
+
 .btn.active{
   background:#fff;
   color:var(--dark-blue);
 }
 
-/* menší úpravy hero na menších zařízeních */
+/* Menší úpravy navigace */
 @media(max-width:900px){
   .hero-overlay{padding-top:8vh;}
   .btn{padding:12px 18px;font-size:15px;}
 }
+
 @media(max-width:600px){
   .hero-overlay{padding-top:6vh;}
-  .nav{flex-direction:column;gap:10px;}
-  .btn{width:180px;text-align:center;}
+  .nav{
+    flex-direction:column;
+    gap:10px;
+  }
+  .btn{
+    width:180px;
+    text-align:center;
+  }
 }
 
 /* -------------------------------------------------
