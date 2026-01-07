@@ -33,11 +33,12 @@ html,body{
 
 /* -------------------------------------------------
    HERO
-   ------------------------------------------------- */
+------------------------------------------------- */
+
 .hero{
   position:relative;
   width:100%;
-  height:100vh;              /* výchozí stav */
+  height:100vh;
   background:var(--dark-blue);
   overflow:hidden;
 }
@@ -57,9 +58,7 @@ html,body{
   object-position:center;
 }
 
-/* ===============================
-   iPad – žádný ořez fotky
-   =============================== */
+/* iPad – žádný ořez fotky */
 @media (min-width:768px) and (max-width:1024px){
   .hero-bg img{
     object-fit:contain;
@@ -67,10 +66,7 @@ html,body{
   }
 }
 
-/* ===============================
-   Mobil NA VÝŠKU – hero MENŠÍ
-   žádné pruhy, žádný ořez ze stran
-   =============================== */
+/* Mobil NA VÝŠKU – hero menší */
 @media (max-width:600px) and (orientation: portrait){
   .hero{
     height:82vh;
@@ -83,9 +79,7 @@ html,body{
   }
 }
 
-/* ===============================
-   Mobil NA ŠÍŘKU – hero lehce větší
-   =============================== */
+/* Mobil NA ŠÍŘKU – hero lehce větší */
 @media (max-width:800px) and (orientation: landscape){
   .hero{
     height:108vh;
@@ -99,7 +93,7 @@ html,body{
 }
 
 /* -------------------------------------------------
-   HERO overlay + navigace
+   HERO OVERLAY (buttony + nadpis)
 ------------------------------------------------- */
 
 .hero-overlay{
@@ -107,9 +101,51 @@ html,body{
   inset:0;
   display:flex;
   flex-direction:column;
-  justify-content:flex-start;
   align-items:center;
+  justify-content:flex-start;
   padding-top:12vh;
+}
+
+/* Tablet */
+@media (max-width:900px){
+  .hero-overlay{
+    padding-top:8vh;
+  }
+}
+
+/* Mobil NA VÝŠKU */
+@media (max-width:600px) and (orientation: portrait){
+  .hero-overlay{
+    padding-top:3vh;
+  }
+}
+
+/* -------------------------------------------------
+   NAV (BUTTONY)
+------------------------------------------------- */
+
+.nav{
+  display:flex;
+  gap:14px;
+  flex-wrap:wrap;
+  justify-content:center;
+  margin-bottom:38px;
+}
+
+/* Mobil NA VÝŠKU */
+@media (max-width:600px) and (orientation: portrait){
+  .nav{
+    flex-direction:column;
+    gap:10px;
+    margin-bottom:16px;
+  }
+}
+
+/* Mobil NA ŠÍŘKU */
+@media (max-width:800px) and (orientation: landscape){
+  .nav{
+    margin-bottom:16px;
+  }
 }
 
 /* -------------------------------------------------
@@ -118,10 +154,9 @@ html,body{
 
 .hero-title{
   color:#fff;
-  font-size:100px;
+  font-size:48px;
   font-weight:700;
   letter-spacing:0.5px;
-  margin-bottom:26px;
   text-align:center;
   text-shadow:0 3px 10px rgba(0,0,0,0.45);
 }
@@ -129,15 +164,14 @@ html,body{
 /* Tablet */
 @media (max-width:1000px){
   .hero-title{
-    font-size:100px;
+    font-size:38px;
   }
 }
 
-/* Mobil NA VÝŠKU – menší písmo */
+/* Mobil NA VÝŠKU */
 @media (max-width:600px) and (orientation: portrait){
   .hero-title{
     font-size:32px;
-    margin-bottom:18px;
   }
 }
 
@@ -145,81 +179,6 @@ html,body{
 @media (max-width:800px) and (orientation: landscape){
   .hero-title{
     font-size:38px;
-    margin-bottom:20px;
-  }
-}
-  
- @media (max-width:800px) and (orientation: landscape){
-  .nav{
-    margin-bottom:16px;   /* ← blíž k nadpisu */
-  }
-} 
-  
-.nav{
-  display:flex;
-  gap:14px;
-  flex-wrap:wrap;
-  justify-content:center;
-  margin-bottom:38px;   /* ← zvětšená mezera */
-}
-
-  @media (max-width:600px) and (orientation: portrait){
-  .hero-overlay{
-    padding-top:3vh;
-  }
-
-  .nav{
-    flex-direction:column;
-    gap:10px;
-    margin-bottom:16px;   /* ← 🔥 TOTO PŘIDEJ */
-  }
-
-  .btn{
-    width:180px;
-    text-align:center;
-  }
-}
-
-.btn{
-  background:rgba(255,255,255,0.12);
-  border:1px solid rgba(255,255,255,0.25);
-  padding:14px 22px;
-  color:#fff;
-  border-radius:8px;
-  font-weight:600;
-  cursor:pointer;
-  transition:background .25s,transform .2s;
-}
-
-.btn:hover{
-  background:rgba(255,255,255,0.3);
-  transform:scale(1.04);
-}
-
-.btn.active{
-  background:#fff;
-  color:var(--dark-blue);
-}
-
-/* Menší úpravy navigace */
-@media(max-width:900px){
-  .hero-overlay{padding-top:8vh;}
-  .btn{padding:12px 18px;font-size:15px;}
-}
-
-@media (max-width:600px) and (orientation: portrait){
-  .hero-overlay{
-    padding-top:3vh;   /* ← bylo 6vh */
-  }
-
-  .nav{
-    flex-direction:column;
-    gap:10px;
-  }
-
-  .btn{
-    width:180px;
-    text-align:center;
   }
 }
 
