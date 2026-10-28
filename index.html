@@ -538,6 +538,7 @@ footer{
     <button class="btn active" data-route="koruna">Koruna Evropy 21/43</button>
     <button class="btn" data-route="alpy">Alpské čtyřtisícovky 6/82</button>
     <button class="btn" data-route="nepal">Nepál</button>
+    <button class="btn" data-route="peru">Peru</button>
   </div>
 
   <div class="hero-title">
@@ -561,6 +562,11 @@ footer{
     <section id="nepal" data-route-content hidden>
       <div id="nepal-gallery" class="gallery grid-4"></div>
     </section>
+
+<section id="peru" data-route-content hidden>
+      <div id="peru-gallery" class="gallery grid-4"></div>
+    </section>
+    
   </div>
 </main>
 
@@ -586,6 +592,9 @@ const imgAlpy   = i => i===0 ? `${RAW}/4000/ctyrtisicovka000.jpg`
 
 const imgNepal  = i => i===0 ? `${RAW}/Nepal/Nepal000.jpg`
                              : `${RAW}/Nepal/Nepal${String(i).padStart(2,'0')}.jpg`;
+
+const imgPeru  = i => i===0 ? `${RAW}/Peru/Peru000.jpg`
+                             : `${RAW}/Peru/Peru${String(i).padStart(2,'0')}.jpg`;
 
 
 /* ---------- Data: Koruna Evropy ---------- */
@@ -722,12 +731,17 @@ const alpyData = [
 ];
 
   
-
 /* ==========================================================
    NEPÁL – 40 fotek
 ========================================================== */
 const nepalData  = Array.from({length:40},(_,i)=>({ idx:i, title:`Nepál ${i+1}`, img:imgNepal(i+1) }));
 
+/* ==========================================================
+   PERU – 40 fotek
+========================================================== */
+const peruData  = Array.from({length:40},(_,i)=>({ idx:i, title:`Peru ${i+1}`, img:imgPeru(i+1) }));
+
+  
 /* === MODAL CORE === */
 const modal = document.getElementById("modal-backdrop");
 const modalContent = document.getElementById("modal-content");
@@ -906,6 +920,49 @@ function updateNepalModal(first=false){
   }, first?0:150);
 }
 
+let peruIndex=0;
+
+function openPeruModal(i){
+  nepalIndex=i;
+
+  openModal(`
+    <button class="nav-arrow left" id="nav-left">❮</button>
+    <button class="nav-arrow right" id="nav-right">❯</button>
+    <h3 id="peru-title"></h3>
+    <button class="modal-close" id="close-peru">✕</button>
+    <img class="main fade" id="peru-main" src="">
+  `,true);
+
+  document.getElementById("close-peru").onclick = closeModal;
+  document.getElementById("nav-left").onclick = e=>{e.stopPropagation();changePeru(-1);};
+  document.getElementById("nav-right").onclick = e=>{e.stopPropagation();changePeru(1);};
+
+  updatePeruModal(true);
+}
+
+function changePeru(dir){
+  nepalIndex = (peruIndex + dir + peruData.length) % peruData.length;
+  updatePeruModal();
+}
+
+function updatePeruModal(first=false){
+  const it = peruData[nepalIndex];
+  const img = document.getElementById("nepal-main");
+  const title = document.getElementById("nepal-title");
+
+  if(!img || !title) return;
+
+  if(!first) img.classList.remove("show");
+
+  setTimeout(()=>{
+    img.src = it.img;
+    title.textContent = `Peru ${peruIndex+1}/${peruData.length}`;
+    img.onload = ()=>img.classList.add("show");
+  }, first?0:150);
+}
+
+
+  
 
 /* --------------------------------------------------------
    Swipe gesta — pouze listování, ne zavírání
@@ -984,6 +1041,16 @@ function cardSimple(it,i){
   return el;
 }
 
+function cardSimple(it,i){
+  const el=document.createElement("div");
+  el.className="photo-card";
+  el.innerHTML=`
+    <img class="photo" src="${it.img}" loading="lazy">
+    <div class="photo-overlay"><div class="photo-title">${it.title}</div></div>`;
+  el.onclick=()=>openPeruModal(i);
+  return el;
+}
+  
 
 /* --------------------------------------------------------
    Galerie + navigace
@@ -999,7 +1066,8 @@ document.addEventListener("DOMContentLoaded",()=>{
   renderGallery(document.getElementById("koruna-gallery"), korunaData, cardKoruna);
   renderGallery(document.getElementById("alpy-gallery"),   alpyData,   cardAlpy);
   renderGallery(document.getElementById("nepal-gallery"),  nepalData,  cardSimple);
-
+  renderGallery(document.getElementById("peru-gallery"),  nepalData,  cardSimple);
+  
   const btns = document.querySelectorAll(".btn");
   const sections = document.querySelectorAll("[data-route-content]");
 
