@@ -268,6 +268,11 @@ main{
   grid-template-columns:repeat(4,1fr);
 }
 
+/* Peru – výchozí 4 v řadě (PC + tablet) */
+#peru-gallery.grid-4{
+  grid-template-columns:repeat(4,1fr);
+}
+  
 /* Mobil na šířku – 2 v řadě */
 @media (max-width:800px) and (orientation:landscape){
   .grid-3{
@@ -946,9 +951,9 @@ function changePeru(dir){
 }
 
 function updatePeruModal(first=false){
-  const it = peruData[nepalIndex];
-  const img = document.getElementById("nepal-main");
-  const title = document.getElementById("nepal-title");
+  const it = peruData[peruIndex];
+  const img = document.getElementById("peru-main");
+  const title = document.getElementById("peru-title");
 
   if(!img || !title) return;
 
