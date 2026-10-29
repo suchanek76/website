@@ -833,9 +833,10 @@ function showDetail(data,i,imgFn,type){
 /* --------------------------------------------------------
    Fullscreen slideshow — Koruna + Alpy
    -------------------------------------------------------- */
-let activeSet=[], activeIndex=0, activeType="", activeMountainName="";
+let activeSet=[], activeIndex=0, activeType="", activeMountainName="", activeGallery="mountain";
 
 function openMountainSlideshow(index,photoIndex,type){
+  activeGallery = "mountain";
   activeType = type;
   const data = type==="koruna" ? korunaData : alpyData;
   const item = data[index];
@@ -887,6 +888,7 @@ function updateMountainModal(first=false){
 let nepalIndex=0;
 
 function openNepalModal(i){
+  activeGallery = "nepal";
   nepalIndex=i;
 
   openModal(`
@@ -928,7 +930,8 @@ function updateNepalModal(first=false){
 let peruIndex=0;
 
 function openPeruModal(i){
-  nepalIndex=i;
+  activeGallery = "peru";
+  peruIndex=i;
 
   openModal(`
     <button class="nav-arrow left" id="nav-left">❮</button>
@@ -946,7 +949,7 @@ function openPeruModal(i){
 }
 
 function changePeru(dir){
-  nepalIndex = (peruIndex + dir + peruData.length) % peruData.length;
+  peruIndex = (peruIndex + dir + peruData.length) % peruData.length;
   updatePeruModal();
 }
 
@@ -988,9 +991,11 @@ modal.addEventListener("touchend", e=>{
 
   /* horizontální swipe → slideshow */
   if(Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 50){
-    if(activeType){
+    if(activeGallery === "mountain"){
       dx > 0 ? changeMountain(-1) : changeMountain(1);
-    } else {
+    } else if(activeGallery === "peru"){
+      dx > 0 ? changePeru(-1) : changePeru(1);
+    } else if(activeGallery === "nepal"){
       dx > 0 ? changeNepal(-1) : changeNepal(1);
     }
   }
@@ -1002,8 +1007,16 @@ document.addEventListener("keydown", e=>{
   if(!modal.classList.contains("show")) return;
 
   if(e.key === "Escape") closeModal();
-  if(e.key === "ArrowLeft"){ activeType ? changeMountain(-1) : changeNepal(-1); }
-  if(e.key === "ArrowRight"){ activeType ? changeMountain(1) : changeNepal(1); }
+  if(e.key === "ArrowLeft"){
+    if(activeGallery === "mountain") changeMountain(-1);
+    else if(activeGallery === "peru") changePeru(-1);
+    else if(activeGallery === "nepal") changeNepal(-1);
+  }
+  if(e.key === "ArrowRight"){
+    if(activeGallery === "mountain") changeMountain(1);
+    else if(activeGallery === "peru") changePeru(1);
+    else if(activeGallery === "nepal") changeNepal(1);
+  }
 });
 
 
@@ -1036,7 +1049,7 @@ function cardAlpy(it,i){
   return el;
 }
 
-function cardSimple(it,i){
+function cardNepal(it,i){
   const el=document.createElement("div");
   el.className="photo-card";
   el.innerHTML=`
@@ -1046,7 +1059,7 @@ function cardSimple(it,i){
   return el;
 }
 
-function cardSimple(it,i){
+function cardPeru(it,i){
   const el=document.createElement("div");
   el.className="photo-card";
   el.innerHTML=`
@@ -1070,8 +1083,8 @@ document.addEventListener("DOMContentLoaded",()=>{
   /* Naplnění galerií */
   renderGallery(document.getElementById("koruna-gallery"), korunaData, cardKoruna);
   renderGallery(document.getElementById("alpy-gallery"),   alpyData,   cardAlpy);
-  renderGallery(document.getElementById("nepal-gallery"),  nepalData,  cardSimple);
-  renderGallery(document.getElementById("peru-gallery"),  peruData,  cardSimple);
+  renderGallery(document.getElementById("nepal-gallery"),  nepalData,  cardNepal);
+  renderGallery(document.getElementById("peru-gallery"),  peruData,  cardPeru);
   
   const btns = document.querySelectorAll(".btn");
   const sections = document.querySelectorAll("[data-route-content]");
