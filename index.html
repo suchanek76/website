@@ -258,44 +258,30 @@ main{
   gap:16px;
 }
 
-/* Koruna + Alpy – výchozí 3 v řadě */
+/* Koruna + Alpy – výchozí 3 sloupce */
 .grid-3{
-  grid-template-columns:repeat(3,1fr);
+  grid-template-columns:repeat(3,minmax(0,1fr));
 }
 
-/* Nepál – výchozí 4 v řadě (PC + tablet) */
-#nepal-gallery.grid-4{
-  grid-template-columns:repeat(4,1fr);
-}
-
-/* Peru – výchozí 4 v řadě (PC + tablet) */
+/* Nepál + Peru – 4 sloupce na PC a tabletu */
+#nepal-gallery.grid-4,
 #peru-gallery.grid-4{
-  grid-template-columns:repeat(4,1fr);
+  grid-template-columns:repeat(4,minmax(0,1fr));
 }
-  
-/* Mobil na šířku – 2 v řadě */
+
+/* Mobil na šířku – 2 sloupce */
 @media (max-width:800px) and (orientation:landscape){
-  .grid-3{
-    grid-template-columns:repeat(2,1fr);
-  }
-  #nepal-gallery.grid-4{
-    grid-template-columns:repeat(2,1fr);
-  }
-  }
+  .grid-3,
+  #nepal-gallery.grid-4,
   #peru-gallery.grid-4{
-    grid-template-columns:repeat(2,1fr);
+    grid-template-columns:repeat(2,minmax(0,1fr));
   }
 }
 
-/* Mobil na výšku – 1 v řadě */
+/* Mobil na výšku – 1 sloupec */
 @media (max-width:600px) and (orientation:portrait){
-  .grid-3{
-    grid-template-columns:1fr;
-  }
-  #nepal-gallery.grid-4{
-    grid-template-columns:1fr;
-  }
-  }
+  .grid-3,
+  #nepal-gallery.grid-4,
   #peru-gallery.grid-4{
     grid-template-columns:1fr;
   }
@@ -750,9 +736,10 @@ const alpyData = [
 const nepalData  = Array.from({length:40},(_,i)=>({ idx:i, title:`Nepál ${i+1}`, img:imgNepal(i+1) }));
 
 /* ==========================================================
-   PERU – 40 fotek
+   PERU – 64 fotek
 ========================================================== */
-const peruData  = Array.from({length:40},(_,i)=>({ idx:i, title:`Peru ${i+1}`, img:imgPeru(i+1) }));
+// Zatím je nahráno 15 fotografií. Po doplnění dalších změňte 15 na 64.
+const peruData  = Array.from({length:64},(_,i)=>({ idx:i, title:`Peru ${i+1}`, img:imgPeru(i+1) }));
 
   
 /* === MODAL CORE === */
